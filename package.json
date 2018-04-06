@@ -10,9 +10,11 @@
   "dependencies": {
     "@expo/samples": "2.1.1",
     "expo": "26.0.0",
+    "expo-three": "^2.2.2-alpha.1",
     "react": "16.3.0-alpha.1",
     "react-native": "https://github.com/expo/react-native/archive/sdk-26.0.0.tar.gz",
-    "react-navigation": "1.5.10"
+    "react-navigation": "1.5.10",
+    "three": "^0.91.0"
   },
   "devDependencies": {
     "jest-expo": "^26.0.0"

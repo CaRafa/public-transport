@@ -1,24 +1,43 @@
 import React from 'react';
 import { Platform } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-import { TabNavigator, TabBarBottom } from 'react-navigation';
+import { TabNavigator, TabBarBottom, StackNavigator } from 'react-navigation';
 
 import Colors from '../constants/Colors';
 
 import HomeScreen from '../screens/HomeScreen';
-import LinksScreen from '../screens/LinksScreen';
-import SettingsScreen from '../screens/SettingsScreen';
+import ParadaScreen from '../screens/ParadaScreen';
+import RutaScreen from '../screens/RutaScreen';
+import ConductorScreen from '../screens/ConductorScreen';
+import TransporteScreen from '../screens/TransporteScreen';
+
+
+export const RouteNavigator = StackNavigator({
+
+  Rutas: {
+    screen: RutaScreen,
+  },
+  Parada: {
+    screen: ParadaScreen,
+  },
+
+})
+
+
 
 export default TabNavigator(
   {
-    Home: {
+    Principal: {
       screen: HomeScreen,
     },
-    Links: {
-      screen: LinksScreen,
+    Transportes: {
+      screen: TransporteScreen,
     },
-    Settings: {
-      screen: SettingsScreen,
+    Rutas: {
+      screen: RouteNavigator,
+    },
+    Conductores: {
+      screen: ConductorScreen,
     },
   },
   {
@@ -27,18 +46,32 @@ export default TabNavigator(
         const { routeName } = navigation.state;
         let iconName;
         switch (routeName) {
-          case 'Home':
+          case 'Principal':
             iconName =
               Platform.OS === 'ios'
-                ? `ios-information-circle${focused ? '' : '-outline'}`
-                : 'md-information-circle';
+                ? `ios-clipboard${focused ? '' : '-outline'}`
+                : 'md-clipboard';
             break;
-          case 'Links':
-            iconName = Platform.OS === 'ios' ? `ios-link${focused ? '' : '-outline'}` : 'md-link';
-            break;
-          case 'Settings':
+            case 'Transportes':
             iconName =
-              Platform.OS === 'ios' ? `ios-options${focused ? '' : '-outline'}` : 'md-options';
+              Platform.OS === 'ios'
+                ? `ios-bus${focused ? '' : '-outline'}`
+                : 'md-bus';
+            break;
+            case 'Rutas':
+            iconName =
+              Platform.OS === 'ios'
+                ? `ios-navigate${focused ? '' : '-outline'}`
+                : 'md-locate';
+            break;
+
+            case 'Conductores':
+            iconName =
+              Platform.OS === 'ios'
+                ? `ios-man${focused ? '' : '-outline'}`
+                : 'md-person';
+            break;
+          
         }
         return (
           <Ionicons

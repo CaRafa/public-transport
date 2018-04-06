@@ -1,0 +1,60 @@
+{
+    "name": "assets/0X5xcxjszwI",
+    "displayName": "Knife",
+    "authorName": "Poly by Google",
+    "description": "#sharp #kitchen #cooking",
+    "createTime": "2017-10-23T21:28:06.956337Z",
+    "updateTime": "2018-04-05T09:20:46.670813Z",
+    "formats": [
+     {
+      "root": {
+       "relativePath": "Knife_01.obj",
+       "url": "https://poly.googleapis.com/downloads/0X5xcxjszwI/5k0ZWWQiC16/Knife_01.obj",
+       "contentType": "text/plain"
+      },
+      "resources": [
+       {
+        "relativePath": "Knife_01.mtl",
+        "url": "https://poly.googleapis.com/downloads/0X5xcxjszwI/5k0ZWWQiC16/Knife_01.mtl",
+        "contentType": "text/plain"
+       }
+      ],
+      "formatComplexity": {
+       "triangleCount": "178"
+      },
+      "formatType": "OBJ"
+     },
+     {
+      "root": {
+       "relativePath": "Knife_01.gltf",
+       "url": "https://poly.googleapis.com/downloads/0X5xcxjszwI/8exlqAhJuNp/Knife_01.gltf",
+       "contentType": "model/gltf+json"
+      },
+      "resources": [
+       {
+        "relativePath": "Knife_01.bin",
+        "url": "https://poly.googleapis.com/downloads/0X5xcxjszwI/8exlqAhJuNp/Knife_01.bin",
+        "contentType": "application/octet-stream"
+       }
+      ],
+      "formatComplexity": {
+       "triangleCount": "178"
+      },
+      "formatType": "GLTF2"
+     }
+    ],
+    "thumbnail": {
+     "relativePath": "0X5xcxjszwI.png",
+     "url": "https://lh3.googleusercontent.com/ogt3afy2UP_bx2pY1Xzr9X4zAoGIpzUOSvUMgNRMIgYnvM0HImfF0jadW_kw69xv",
+     "contentType": "image/png"
+    },
+    "license": "CREATIVE_COMMONS_BY",
+    "visibility": "PUBLIC",
+    "isCurated": true,
+    "presentationParams": {
+     "orientingRotation": {
+      "w": 1
+     },
+     "colorSpace": "LINEAR"
+    }
+   }

@@ -33,6 +33,9 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#fff',
   },
+  buttonContainer:{
+    margin: 50,
+  },
   getStartedText: {
     fontSize: 17,
     color: 'rgba(96,100,109, 1)',

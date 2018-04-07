@@ -1,11 +1,14 @@
 import React from 'react';
 import { Image, Button, Platform, ScrollView,  StyleSheet,Text,TouchableOpacity, View,} from 'react-native';
-import { Expo } from 'expo';
+import { Expo, Location, Permissions } from 'expo';
 import ExpoTHREE,{ THREE } from 'expo-three';
 import ExpoGraphics from 'expo-graphics';
 import GooglePoly from './../api/GooglePoly';
 
 import myObject from './../assets/object/myObject';
+
+console.disableYellowBox = true;
+
 
 export default class ParadaScreen extends React.Component {
 
@@ -15,11 +18,11 @@ export default class ParadaScreen extends React.Component {
 
   constructor(props){
     super(props);
-    // GooglePoly.obtainImage(ApiKeys.GooglePoly).then(function(assets){
-    //     var aux = JSON.stringify(assets);    
-    //     console.log(aux); 
-       
-    // });
+    this.googlePoly = new GooglePoly('AIzaSyAIugyzGEWDCzvhIRlK6WAvYHlb1dKvHbQ');
+    this.googlePoly.obtainImage().then( function(asset){
+
+    });
+    
 
   }
 
@@ -37,58 +40,95 @@ export default class ParadaScreen extends React.Component {
     //initialize camera
     this.camera = ExpoTHREE.createARCamera(arSession, width / scale, height / scale , 0.01, 1000);
 
-    //initialize lighting
-    // var ambientLight = new THREE.ambientLight(0xaaaaaa);
-    // this.scene.add(ambientLight);
+    // Initialize lighting...
+    var ambientLight = new THREE.AmbientLight(0xaaaaaa);
+    this.scene.add(ambientLight);
   }
 
   onRender = (delta) => {
+
+    // Rotate the object...
+    if (this.threeModel) {
+      this.threeModel.rotation.y += 2 * delta;
+    }
+
     this.renderer.render(this.scene, this.camera);
   }
 
   fixLocation = () =>{
 
-    
-    GooglePoly.GetThreeModel(myObject, function(object){
+    // Remove the current object...
+    this.onRemoveObjectPress();
 
-        console.log('entre aqui')
-        console.log(object);
-        ExpoTHREE.utils.scaleLongestSideToSize(object, 0,75);
-       // object.position.z = -3;
+
+    GooglePoly.GetThreeModel(myObject, function(object){
+        this.threeModel = object;
+        this.fixLocationPress = true;
+        ExpoTHREE.utils.scaleLongestSideToSize(object, 1);
+        object.position.z = -2;
+        object.position.y = -2; 
         this.scene.add(object);  
+        this.forceUpdate();
     }.bind(this), function(error){
         console.log(error);
     });
 
-        // GooglePoly.GetThreeModel(myObject, function(object){     
-
-
-    
-    // Console.log('Object created');    
-        
-    // //ExpoTHREE.utils.scaleLongestSideToSize(object, 0,75);
-    // object.position.z = -3;
-    // this.scene.add(object);    
-
-    // }.bind(this) , function(error){
-    //     console.log('HUBO UN ERROR');
-    //     console.log(error);
-    // });
 
   }
+
+  getLocationAsync = async () =>  {
+    console.log('ENTRE A GEOLOCATION')
+    const { status } = await Permissions.askAsync(Permissions.LOCATION);
+    console.log('ENTRE A GEOLOCATION')
+
+      if (status === 'granted') {
+          const location = await Location.getCurrentPositionAsync({
+            enableHighAccuracy: true,
+          });
+          return location;
+      }
+  }
+
+  GuardarParada = () => {
+    console.log('SE LLAMA A LA FUNCION Guardar Parada')
+
+    this.getLocationAsync().then(function(response){
+      console.log(response);  
+    });
+
+    this.props.navigation.navigate('Rutas');
+
+    
+
+  }
+
+
+  onRemoveObjectPress = () => {
+    if (this.threeModel) {
+      this.scene.remove(this.threeModel);
+    }
+  }
+
 
   render() {
     return (
 
+
+      
+      
      <View style={{flex:1}}>   
 
+        {this.threeModel ? 
+        <Button style={styles.buttonSave} title="Guardar Parada" onPress={this.GuardarParada} /> 
+        : null  }
+  
       <ExpoGraphics.View
       style={{flex:1}}
       onContextCreate={this.onContextCreate}
       onRender={this.onRender}
       arEnabled={true} 
       />
-        <Button title="fijar posicion" onPress={this.fixLocation} />
+        <Button title="Fijar posicion" onPress={this.fixLocation} />
       </View>  
 
     )
@@ -98,5 +138,9 @@ export default class ParadaScreen extends React.Component {
 }
 
 const styles = StyleSheet.create({
+
+  buttonSave:{
+    margin:30,
+  }
  
 });

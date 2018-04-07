@@ -77,9 +77,8 @@ export default class ParadaScreen extends React.Component {
   }
 
   getLocationAsync = async () =>  {
-    console.log('ENTRE A GEOLOCATION')
     const { status } = await Permissions.askAsync(Permissions.LOCATION);
-    console.log('ENTRE A GEOLOCATION')
+    
 
       if (status === 'granted') {
           const location = await Location.getCurrentPositionAsync({
@@ -90,14 +89,12 @@ export default class ParadaScreen extends React.Component {
   }
 
   GuardarParada = () => {
-    console.log('SE LLAMA A LA FUNCION Guardar Parada')
-
     this.getLocationAsync().then(function(response){
       console.log(response);  
     });
 
     this.props.navigation.navigate('Rutas');
-
+2
     
 
   }

@@ -42,30 +42,25 @@ export default class GooglePoly {
         var loader = new THREE.MTLLoader();
         loader.setCrossOrigin(true);
         loader.setTexturePath(path);
-        console.log('SE CARGO EL MTL');
         loader.load(mtl.url, function(materials){
             // Load the OBJ
             loader = new THREE.OBJLoader();
             loader.setMaterials(materials);
-            console.log('SE CARGO EL OBJ');
 
             loader.load(obj.url, async function(object){
                 // if texture apply
                 if(tex !== undefined){
                     var texUri = await AssetUtils.uriAsync(tex.url);
                     var texture = new THREE.MeshBasicMaterial({ map: await ExpoTHREE.loadAsync(texUri)});
-                    console.log('SE CARGO TEXTURA');
+                    
 
                     object.traverse((child) =>{ 
                             if(child instanceof THREE.Mesh){
                                 child.material = texture;
-                                console.log('SE CARGO NPI');
                             }
                     });
                 }
                 // Return the object created
-            
-                console.log('SE MANDA OBJETO');
                 success(object);    
 
             });

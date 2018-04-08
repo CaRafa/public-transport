@@ -10,6 +10,7 @@ import ParadaScreen from '../screens/ParadaScreen';
 import RutaScreen from '../screens/RutaScreen';
 import ConductorScreen from '../screens/ConductorScreen';
 import TransporteScreen from '../screens/TransporteScreen';
+import MapPreview from '../screens/MapPreview';
 
 
 export const RouteNavigator = StackNavigator({
@@ -19,6 +20,10 @@ export const RouteNavigator = StackNavigator({
   },
   Parada: {
     screen: ParadaScreen,
+  },
+  MapPreview :{
+    screen: MapPreview,
+
   },
 
 })

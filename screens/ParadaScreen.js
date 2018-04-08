@@ -64,7 +64,7 @@ export default class ParadaScreen extends React.Component {
     GooglePoly.GetThreeModel(myObject, function(object){
         this.threeModel = object;
         this.fixLocationPress = true;
-        ExpoTHREE.utils.scaleLongestSideToSize(object, 1);
+        ExpoTHREE.utils.scaleLongestSideToSize(object, 2);
         object.position.z = -2;
         object.position.y = -2; 
         this.scene.add(object);  

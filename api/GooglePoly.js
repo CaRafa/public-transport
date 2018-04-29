@@ -11,16 +11,6 @@ export default class GooglePoly {
         this.apiKey = apiKey;
     }
 
-    obtainImage(){
-        
-        var url = "https://poly.googleapis.com/v1/assets/b28yeHzy95B?key=AIzaSyAIugyzGEWDCzvhIRlK6WAvYHlb1dKvHbQ"        
-        return fetch(url) 
-            .then(function(response){return response.json();})
-            .then(function(data){
-             return Promise.resolve(data);   
-            });
-    }
-
 
     static GetThreeModel(objectData, success, failure){
         if(!success){ success = function(){};}

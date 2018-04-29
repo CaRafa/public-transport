@@ -46,6 +46,7 @@ export default class MapPreview extends React.Component {
         annotations={this.markers}
 
         >
+        
          <MapView.Marker
             coordinate={{latitude: this.coordenadas.latitude,
             longitude: this.coordenadas.longitude}}

@@ -4,6 +4,7 @@ import { Expo, Location, Permissions } from 'expo';
 import ExpoTHREE,{ THREE } from 'expo-three';
 import ExpoGraphics from 'expo-graphics';
 import GooglePoly from './../api/GooglePoly';
+import { Ionicons } from '@expo/vector-icons';
 
 import myObject from './../assets/object/myObject';
 
@@ -14,16 +15,13 @@ export default class ParadaScreen extends React.Component {
 
     static navigationOptions = {
     header:null,
+    tabBarVisible: false,
+
   };
 
   constructor(props){
     super(props);
-    this.googlePoly = new GooglePoly('AIzaSyAIugyzGEWDCzvhIRlK6WAvYHlb1dKvHbQ');
-    this.googlePoly.obtainImage().then( function(asset){
-
-    });
-    
-
+  
   }
 
   onContextCreate = async ({gl, scale, width, height, arSession}) => 
@@ -58,17 +56,19 @@ export default class ParadaScreen extends React.Component {
   fixLocation = () =>{
 
     // Remove the current object...
+    this.onRender();
     this.onRemoveObjectPress();
-
-
+    
     GooglePoly.GetThreeModel(myObject, function(object){
         this.threeModel = object;
         this.fixLocationPress = true;
         ExpoTHREE.utils.scaleLongestSideToSize(object, 2);
-        object.position.z = -2;
+        object.position.z = -3;
         object.position.y = -2; 
         this.scene.add(object);  
         this.forceUpdate();
+
+        
     }.bind(this), function(error){
         console.log(error);
     });
@@ -90,12 +90,10 @@ export default class ParadaScreen extends React.Component {
 
   GuardarParada = () => {
     this.getLocationAsync().then(function(response){
-      console.log(response);  
+      
+      this.respuesta = response;
     });
-
-    this.props.navigation.navigate('Rutas');
-2
-    
+    this.props.navigation.navigate('Rutas', this.respuesta);
 
   }
 
@@ -109,23 +107,26 @@ export default class ParadaScreen extends React.Component {
 
   render() {
     return (
-
-
-      
-      
+ 
      <View style={{flex:1}}>   
 
-        {this.threeModel ? 
-        <Button style={styles.buttonSave} title="Guardar Parada" onPress={this.GuardarParada} /> 
-        : null  }
-  
       <ExpoGraphics.View
-      style={{flex:1}}
-      onContextCreate={this.onContextCreate}
-      onRender={this.onRender}
-      arEnabled={true} 
+          style={{flex:1}}
+          onContextCreate={this.onContextCreate}
+          onRender={this.onRender}
+          arEnabled={true} 
       />
-        <Button title="Fijar posicion" onPress={this.fixLocation} />
+
+      <View style={styles.buttonRow}>
+          <View style={styles.button}>
+              <Ionicons name="ios-locate" size={60} backgroundColor="transparent" onPress={this.fixLocation}/>
+              {this.threeModel ? 
+              <Ionicons name="ios-checkmark" size={60}  backgroundColor="transparent" onPress={this.GuardarParada}/>
+              : null  }
+              <Ionicons name="ios-close"  size={60} backgroundColor="transparent" onPress={this.onRemoveObjectPress  }/>
+          </View>
+       </View>
+      
       </View>  
 
     )
@@ -136,8 +137,12 @@ export default class ParadaScreen extends React.Component {
 
 const styles = StyleSheet.create({
 
-  buttonSave:{
-    margin:30,
+  buttonRow:{
+    position:"absolute", bottom: 0, flex: 1, flexDirection: "row"
+  },
+
+  button:{
+     margin:20 ,flex:1, flexDirection: "row", justifyContent: "space-between"
   }
  
 });

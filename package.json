@@ -9,6 +9,7 @@
   },
   "dependencies": {
     "@expo/samples": "2.1.1",
+    "@mapbox/polyline": "^1.0.0",
     "expo": "26.0.0",
     "expo-three": "^2.2.2-alpha.1",
     "firebase": "^4.12.1",

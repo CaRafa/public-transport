@@ -1,6 +1,6 @@
 import React from 'react';
 import {Button,Image,Platform, ScrollView,StyleSheet,Text, TouchableOpacity,View,} from 'react-native';
-
+import { Expo, Location, Permissions } from 'expo';
 
 export default class RutaScreen extends React.Component {
 
@@ -8,6 +8,15 @@ export default class RutaScreen extends React.Component {
   static navigationOptions = {
     header: null,
   };
+
+  constructor(props){ 
+    super(props)
+    const {state} = props.navigation;
+    this.coordenadas = state.params;
+     console.log('parada', this.coordenadas);
+    
+   }
+
   AgregarParada = () => {
 
     this.props.navigation.navigate('Parada');
@@ -16,6 +25,7 @@ export default class RutaScreen extends React.Component {
 
 
   regionFrom(lat, lon, distance) {
+    console.log('Entre bien en region form', lat, lon, distance);
     distance = distance/2
     const circumference = 40075
     const oneDegreeOfLatitudeInMeters = 111.32 * 1000
@@ -25,7 +35,7 @@ export default class RutaScreen extends React.Component {
     const longitudeDelta = Math.abs(Math.atan2(
             Math.sin(angularDistance)*Math.cos(lat),
             Math.cos(angularDistance) - Math.sin(lat) * Math.sin(lat)))
-
+      console.log('Saldre bien de funcion');
     return result = {
         latitude: lat,
         longitude: lon,
@@ -41,6 +51,37 @@ export default class RutaScreen extends React.Component {
     this.props.navigation.navigate('MapPreview', aux);
 
   }
+
+  getLocationAsync = async () =>  {
+    const { status } = await Permissions.askAsync(Permissions.LOCATION);
+    
+
+      if (status === 'granted') {
+          const location = await Location.getCurrentPositionAsync({
+            enableHighAccuracy: true,
+          });
+
+
+          var realLoc = this.regionFrom(location.coords.latitude, location.coords.longitude, location.coords.accuracy)
+          
+          this.props.navigation.navigate('CreateRoute', realLoc); 
+      
+         
+      }
+  }
+
+  ObtenerUbicacion = () => {
+     
+    var aux;
+    this.getLocationAsync().then(function(response){
+    console.log('Pase');
+    }).catch(function(e) {
+      console.log(e); // "Uh-oh!"
+    });
+
+  }
+
+  
 
   render() {
 
@@ -62,6 +103,13 @@ export default class RutaScreen extends React.Component {
             
             onPress={this.AgregarParada}
             title="Agregar una parada!"
+            color="#841584"
+            />
+        </View>
+          <View style={styles.addNew}>
+          <Button
+            onPress={this.ObtenerUbicacion}
+            title="Crear una ruta!"
             color="#841584"
             />
         </View>

@@ -24,6 +24,11 @@ export default class ParadaScreen extends React.Component {
   
   }
 
+  componentDidMount(){
+    this._fetchParadasAsync();
+    this._fetchRoutesAsync();
+   } 
+
   onContextCreate = async ({gl, scale, width, height, arSession}) => 
   {
     //initialize renderer 
@@ -67,7 +72,6 @@ export default class ParadaScreen extends React.Component {
         object.position.y = -2; 
         this.scene.add(object);  
         this.forceUpdate();
-
         
     }.bind(this), function(error){
         console.log(error);
@@ -84,15 +88,51 @@ export default class ParadaScreen extends React.Component {
           const location = await Location.getCurrentPositionAsync({
             enableHighAccuracy: true,
           });
-          return location;
+
+          this.CreateParadaAsync(location).then(function(res){
+          console.log('RESPUESTA DE Get',res);
+          return res;
+          });
+
       }
   }
 
+  CreateParadaAsync = async (location) => {
+    try {
+      let response = await fetch('http://192.168.1.108:3000/api/parada',{
+        method: 'POST',
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          coordinates: location.coords,
+          title: 'parada x' 
+        })
+       });
+
+      let result = await response.json();
+      this.setState({result: result.par});
+      this.infoLoaded = true;
+      console.log(this.state.result, this.infoLoaded);
+
+    } catch(e) {
+      this.setState({result: e});
+      console.log(this.state.result)
+    }
+  };
+
+
   GuardarParada = () => {
-    this.getLocationAsync().then(function(response){
+
+    let response = this.getLocationAsync().then(function(response){
+    this.respuesta = response; 
       
-      this.respuesta = response;
+
+
     });
+    
+    
     this.props.navigation.navigate('Rutas', this.respuesta);
 
   }
@@ -130,9 +170,7 @@ export default class ParadaScreen extends React.Component {
       </View>  
 
     )
-  }
-
-  
+  } 
 }
 
 const styles = StyleSheet.create({

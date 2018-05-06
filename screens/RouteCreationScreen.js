@@ -3,6 +3,7 @@ import {Button,Image,Platform, ScrollView,StyleSheet,Text, TouchableOpacity,View
 } from 'react-native';
 import { MapView  } from 'expo';
 import Polyline from '@mapbox/polyline';
+import { Ionicons } from '@expo/vector-icons';
 
 export default class RouteCreation extends React.Component {
 
@@ -16,6 +17,10 @@ export default class RouteCreation extends React.Component {
     super(props)
     const {state} = props.navigation;
     this.coordenadas = state.params;
+
+    this.actual = this.coordenadas.actual;
+    this.paradas = this.coordenadas.points;
+
     this.polyline = []
     this.Nparada = 0;
     this.state = { coordsArray: [] }
@@ -35,6 +40,7 @@ export default class RouteCreation extends React.Component {
         let resp = await fetch(`https://maps.googleapis.com/maps/api/directions/json?origin=${ startLoc }&destination=${ destinationLoc }&key=AIzaSyA69jKIH6tGGGn7yyQC0HRvrfUt5ojRMlw`)
         let respJson = await resp.json();
         let points = Polyline.decode(respJson.routes[0].overview_polyline.points);
+        console.log('Info de la API', points);
         let coords = points.map((point, index) => {
             return  {
                 latitude : point[0],
@@ -45,8 +51,7 @@ export default class RouteCreation extends React.Component {
         this.state.coordsArray[this.Npolyline] = coords;
         this.Npolyline = this.Npolyline + 1;
         this.setState({ coordsArray: this.state.coordsArray })
-        console.log('Array actualizado', this.state.coordsArray)
-       
+
         return coords
     } catch(error) {
         alert(error)
@@ -57,9 +62,22 @@ export default class RouteCreation extends React.Component {
 
    
    setPolyline = (point) => {
-       this.polyline[this.Nparada] = point.coordenadas.latitude+','+point.coordenadas.longitude;     
+
+        
+        if(point.coordenadas){
+            this.polyline[this.Nparada] = point.coordenadas.latitude+','+point.coordenadas.longitude; 
+        }else{
+            this.polyline[this.Nparada] = point.coordinates.latitude+','+point.coordinates.longitude; 
+        }
+
         this.Nparada = this.Nparada + 1 ;
-        console.log('parada elegida', point.name);
+         if(point.name){
+             console.log('parada elegida', point.name);
+         }else{
+             console.log('parada elegida', point.title)
+         }
+
+
         if(this.Nparada == 2){
             this.getDirections(this.polyline[0],this.polyline[1]).then(function(response){
             
@@ -72,67 +90,67 @@ export default class RouteCreation extends React.Component {
         
         }    
 
-   
+   GuardarRuta = () => {
+
+    console.log('GUARDAR PARADA');
+    this.CreateRutaAsync();
+    this.props.navigation.navigate('Rutas');
+
+   }
  
+   CreateRutaAsync = async () => {
+    try {
+      let response = await fetch('http://192.168.1.108:3000/api/ruta',{
+        method: 'POST',
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          route: this.state.coordsArray,
+          title: 'Ruta x' 
+        })
+       });
+
+      let result = await response.json();
+      this.setState({result: result.par});
+      this.infoLoaded = true;
+      console.log(this.state.result);
+
+    } catch(e) {
+      this.setState({result: e});
+      console.log(this.state.result)
+    }
+  };
 
   render() {
-
-    // var coordinates =    
-    // [{ route: [  {latitude:10.360309547211214, longitude:-66.97492910203451 }, 
-    //     {latitude:10.358797 , longitude:-66.976382}, 
-    //     {latitude:10.359547, longitude:-66.974177}],
-    // },
-    // { route: [ 
-    //     {latitude:10.358797 , longitude:-66.976382}, 
-    //     {latitude:10.357772, longitude:-66.976943}],
-    // }
-    // ]
-    
-
-    var Ubicacion = [
-        {name:'Parada 1', key:'1' ,coordenadas:{latitude:10.360309547211214,longitude:-66.97492910203451 }},
-        {name:'Parada 2', key:'2', coordenadas:{latitude:10.358797 ,longitude:-66.976382 }},
-        {name:'Parada 3', key:'3',coordenadas:{latitude:10.359547,longitude:-66.974177 }},
-        {name:'Parada 4', key:'4',coordenadas:{latitude:10.357772,longitude:-66.976943 }},
-      ]
-        
-    
 
     return (
         <MapView
         style={{ flex: 1 }}
         initialRegion={{
-            latitude: this.coordenadas.latitude,
-            longitude: this.coordenadas.longitude,
-            latitudeDelta: this.coordenadas.latitudeDelta,
-            longitudeDelta: this.coordenadas.longitudeDelta,
+            latitude: this.actual.latitude,
+            longitude: this.actual.longitude,
+            latitudeDelta: this.actual.latitudeDelta,
+            longitudeDelta: this.actual.longitudeDelta,
           }}
         
         annotations={this.markers}
         >
 
          {
-              Ubicacion.map(el => 
+              this.paradas.map(el => 
                 <MapView.Marker
-                key={el.key}
-                coordinate={{latitude: el.coordenadas.latitude,
-                longitude: el.coordenadas.longitude}}
+                key={el._id}
+                coordinate={{latitude: el.coordinates.latitude,
+                longitude: el.coordinates.longitude}}
                 onPress={this.setPolyline.bind(this,el)}
              /> 
             )
             }
-            
-            {/* {coordinates.map((ele,index) => (    
-                <MapView.Polyline
-                key={index}
-                coordinates={ele.route}
-                strokeColor="#000"
-                fillColor="rgba(255,0,0,0.5)"
-                strokeWidth={1}/>
-            ))} */}
+         
 
             {this.state.coordsArray.map((ele,index) => (    
-                console.log('POLYLINE A CARGAR',ele , index),
                 <MapView.Polyline
                 key={index}
                 coordinates={ele}
@@ -140,7 +158,12 @@ export default class RouteCreation extends React.Component {
                 fillColor="rgba(255,0,0,0.5)"
                 strokeWidth={2}/>
             ))}
-         
+
+         <View style={styles.buttonRow}>
+            <View style={styles.button}>
+                <Ionicons name="ios-checkmark" size={70}  backgroundColor="transparent" onPress={this.GuardarRuta}/>
+            </View>
+       </View>
 
         </MapView>
     );
@@ -149,5 +172,11 @@ export default class RouteCreation extends React.Component {
 }
 
 const styles = StyleSheet.create({
- 
+ buttonRow:{
+    position:"absolute", bottom: 0, flex: 1, flexDirection: "row"
+  },
+
+  button:{
+    alignSelf:"center", margin:20 ,flex:1, flexDirection: "row", justifyContent: "space-between"
+  }
 });

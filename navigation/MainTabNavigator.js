@@ -12,6 +12,8 @@ import ConductorScreen from '../screens/ConductorScreen';
 import TransporteScreen from '../screens/TransporteScreen';
 import MapPreview from '../screens/MapPreview';
 import CreateRoute from '../screens/RouteCreationScreen';
+import mapRoutes from '../screens/mapRoutesScreen';
+import testScreen from '../screens/testScreen';
 
 
 export const RouteNavigator = StackNavigator({
@@ -20,7 +22,7 @@ export const RouteNavigator = StackNavigator({
     screen: RutaScreen,
   },
   Parada: {
-    screen: ParadaScreen,
+    screen: testScreen,
   },
   MapPreview :{
     screen: MapPreview,
@@ -28,6 +30,10 @@ export const RouteNavigator = StackNavigator({
   },
   CreateRoute :{
     screen: CreateRoute,
+
+  },
+  mapRoutes :{
+    screen: mapRoutes,
 
   },
 

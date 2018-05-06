@@ -13,9 +13,43 @@ export default class RutaScreen extends React.Component {
     super(props)
     const {state} = props.navigation;
     this.coordenadas = state.params;
-     console.log('parada', this.coordenadas);
-    
+    this.state = {
+      paradas: []
+    }
    }
+
+
+   componentDidMount(){
+    this._fetchParadasAsync();
+    this._fetchRoutesAsync();
+   } 
+
+
+   _fetchParadasAsync = async () => {
+    try {
+      let response = await fetch('http://192.168.1.108:3000/api/parada',{
+        method: 'GET'});
+      let result = await response.json();
+      this.setState({paradas: result.par});
+
+    } catch(e) {
+      this.setState({result: e});
+      console.log(this.state.result)
+    }
+  };
+
+   _fetchRoutesAsync = async () => {
+    try {
+      let response = await fetch('http://192.168.1.108:3000/api/ruta',{
+        method: 'GET'});
+      let result = await response.json();
+      this.setState({polylines: result.route});
+
+    } catch(e) {
+      this.setState({polylines: e});
+      console.log(this.state.polylines)
+    }
+  };
 
   AgregarParada = () => {
 
@@ -52,7 +86,7 @@ export default class RutaScreen extends React.Component {
 
   }
 
-  getLocationAsync = async () =>  {
+  getLocationAsync = async (flag) =>  {
     const { status } = await Permissions.askAsync(Permissions.LOCATION);
     
 
@@ -61,24 +95,37 @@ export default class RutaScreen extends React.Component {
             enableHighAccuracy: true,
           });
 
-
           var realLoc = this.regionFrom(location.coords.latitude, location.coords.longitude, location.coords.accuracy)
-          
-          this.props.navigation.navigate('CreateRoute', realLoc); 
+          console.log('FLAG ultimo nivel', flag)
+          if(flag == true){
+            this.props.navigation.navigate('mapRoutes', {
+              actual: realLoc, polylines: this.state.polylines, paradas: this.state.paradas}); 
+          }else{
+            this.props.navigation.navigate('CreateRoute', {
+              actual: realLoc, points: this.state.paradas
+            }); 
+          }
       
          
       }
   }
 
-  ObtenerUbicacion = () => {
+  ObtenerUbicacion = (flag) => {
      
-    var aux;
-    this.getLocationAsync().then(function(response){
-    console.log('Pase');
+    console.log('FLAG', flag)
+    this.getLocationAsync(flag).then(function(response){
     }).catch(function(e) {
       console.log(e); // "Uh-oh!"
     });
 
+  }
+
+  verRutas = () => {
+    this.ObtenerUbicacion(true)
+  }
+
+  crearRutas = () => {
+    this.ObtenerUbicacion(false)
   }
 
   
@@ -95,37 +142,60 @@ export default class RutaScreen extends React.Component {
       {name:'Parada 7',key:'7', coordenadas:{latitude:'1.1200', longitude:'60.22222',accuracy: "48" }},
     ]
       
-
-    return (
-      <View style={styles.container}>
+      return (
+        <View style={styles.container}>
+  
+            <View style={styles.addNew}>
+            <Button
+              
+              onPress={this.AgregarParada}
+              title="Agregar una parada!"
+              color="#841584"
+              />
+          </View>
+          
           <View style={styles.addNew}>
-          <Button
-            
-            onPress={this.AgregarParada}
-            title="Agregar una parada!"
-            color="#841584"
-            />
+            <Button
+              
+              onPress={this.verRutas}
+              title="Ver todas las rutas!"
+              color="#40c0ce"
+              />
+          </View>
+            <View style={styles.addNew}>
+            <Button
+              onPress={this.crearRutas}
+              title="Crear una ruta!"
+              color="#841584"
+              />
+          </View>
+  
+        { !this.state.paradas ? <View style={styles.container}>
+                                <Text style={styles.getStartedText}>    
+                                LOADING!
+                                </Text>
+                            </View>
+                            :
+              <ScrollView>
+              {
+                this.state.paradas.map(el => 
+                <View style={styles.buttonContainer}>
+                <Button title={el.title} key={el._id} onPress={this.verLocation.bind(this,el.coordinates)} />
+                </View>
+              )
+              }
+            </ScrollView>
+          
+        }
+  
         </View>
-          <View style={styles.addNew}>
-          <Button
-            onPress={this.ObtenerUbicacion}
-            title="Crear una ruta!"
-            color="#841584"
-            />
-        </View>
-
+      );
         
-            {
-              Ubicacion.map(el => 
-              <View style={styles.buttonContainer}>
-              <Button title={el.name} key={el.key} onPress={this.verLocation.bind(this,el.coordenadas)} />
-              </View>
-            )
-            }
-        
+    
+    
 
-      </View>
-    );
+
+    
   }
 
 }
@@ -136,7 +206,7 @@ const styles = StyleSheet.create({
     borderRadius: 16,
     borderWidth: 1,
     borderColor: 'blue',
-    margin: 50,
+    marginTop: 35,
 
   },
   container: {

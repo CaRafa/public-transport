@@ -1,24 +1,67 @@
 import React from 'react';
-import {Image,Platform, ScrollView,StyleSheet,Text, TouchableOpacity,View,} from 'react-native';
+import {Button,Image,Platform, ScrollView,StyleSheet,Text, TouchableOpacity,View,} from 'react-native';
 
 
 export default class TransporteScreen extends React.Component {
   static navigationOptions = {
     header: null,
   };
+  constructor(props){ 
+    super(props)
+    
+   }
+
+   componentDidMount(){
+    this._fetchRoutesAsync()
+   }
+
+  AgregarTransporte = () => {
+
+    this.props.navigation.navigate('FormCT', this.state.routes) 
+  }
+
+  _fetchRoutesAsync = async () => {
+    try {
+      let response = await fetch('http://192.168.1.108:3000/api/ruta',{
+        method: 'GET'});
+      let result = await response.json();
+      this.setState({routes: result.route});
+
+    } catch(e) {
+      this.setState({routes: e});
+    }
+  }; 
 
   render() {
     return (
       <View style={styles.container}>
-            <Text style={styles.getStartedText}>
-              Change this text and your app will automatically reload.
-            </Text>
-      </View>
+  
+            <View style={styles.addNew}>
+            <Button
+              
+              onPress={this.AgregarTransporte}
+              title="Agregar un transporte!"
+              color="#000"
+              />
+            </View>
+          
+          
+  
+
+        </View>
     );
   }
 }
 
 const styles = StyleSheet.create({
+  addNew:{
+    backgroundColor: '#cafc80',
+    borderRadius: 16,
+    borderWidth: 1,
+    borderColor: '#000',
+    marginTop: 35,
+
+  },
   container: {
     flex: 1,
     backgroundColor: '#fff',

@@ -20,10 +20,10 @@ export default class RouteCreation extends React.Component {
 
     this.actual = this.coordenadas.actual;
     this.paradas = this.coordenadas.points;
-
     this.polyline = []
     this.Nparada = 0;
-    this.state = { coordsArray: [] }
+    this.state = { coordsArray: [],
+    pointArray:[] }
     this.Npolyline = 0;
 
     this.states = {
@@ -93,8 +93,8 @@ export default class RouteCreation extends React.Component {
    GuardarRuta = () => {
 
     console.log('GUARDAR PARADA');
-    this.CreateRutaAsync();
-    this.props.navigation.navigate('Rutas');
+    //this.CreateRutaAsync();
+    this.props.navigation.navigate('FormCR', this.state.coordsArray);
 
    }
  
@@ -114,12 +114,9 @@ export default class RouteCreation extends React.Component {
 
       let result = await response.json();
       this.setState({result: result.par});
-      this.infoLoaded = true;
-      console.log(this.state.result);
 
     } catch(e) {
       this.setState({result: e});
-      console.log(this.state.result)
     }
   };
 
@@ -138,14 +135,23 @@ export default class RouteCreation extends React.Component {
         annotations={this.markers}
         >
 
-         {
+             {
               this.paradas.map(el => 
-                <MapView.Marker
-                key={el._id}
-                coordinate={{latitude: el.coordinates.latitude,
-                longitude: el.coordinates.longitude}}
-                onPress={this.setPolyline.bind(this,el)}
-             /> 
+                el.type == true ? <MapView.Marker
+                    key={el._id}
+                    coordinate={{latitude: el.coordinates.latitude,
+                    longitude: el.coordinates.longitude}}
+                    onPress={this.setPolyline.bind(this,el) }
+                    pinColor={'blue'}
+                 /> : <MapView.Marker
+                 key={el._id}
+                 coordinate={{latitude: el.coordinates.latitude,
+                 longitude: el.coordinates.longitude}}
+                 onPress={this.setPolyline.bind(this,el)}
+                /> 
+            
+                
+                
             )
             }
          

@@ -7,8 +7,9 @@ import myObject from './../assets/object/myObject';
 import GooglePoly from './../api/GooglePoly';
 import { Ionicons } from '@expo/vector-icons';
 import {Location, Permissions } from 'expo';
+console.disableYellowBox = true;
 
-export default class testScreen extends React.Component {
+export default class ParadaSetScreen extends React.Component {
 
     static navigationOptions = {
         header:null,
@@ -34,7 +35,7 @@ export default class testScreen extends React.Component {
             <View style={styles.buttonRow}>
                 <View style={styles.button}>
                     <Ionicons name="ios-locate" size={70} backgroundColor="transparent" onPress={this.fixLocation}/>
-                    <Ionicons name="ios-checkmark" size={100}  backgroundColor="transparent" onPress={this.GuardarParada}/>
+                    <Ionicons name="ios-checkmark" size={90}  backgroundColor="transparent" onPress={this.GuardarParada}/>
                     <Ionicons name="ios-close"  size={70} backgroundColor="transparent" onPress={this.onRemoveObjectPress  }/>
                 </View>
             </View>
@@ -44,30 +45,7 @@ export default class testScreen extends React.Component {
     );
   }
 
-  CreateParadaAsync = async (location) => {
-    try {
-      let response = await fetch('http://192.168.1.108:3000/api/parada',{
-        method: 'POST',
-        headers: {
-          'Accept': 'application/json',
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-          coordinates: location.coords,
-          title: 'parada x' 
-        })
-       });
-
-      let result = await response.json();
-      this.setState({result: result.par});
-      this.infoLoaded = true;
-      console.log(this.state.result, this.infoLoaded);
-
-    } catch(e) {
-      this.setState({result: e});
-      console.log(this.state.result)
-    }
-  };
+  
 
   getLocationAsync = async () =>  {
     const { status } = await Permissions.askAsync(Permissions.LOCATION);
@@ -78,20 +56,20 @@ export default class testScreen extends React.Component {
             enableHighAccuracy: true,
           });
 
-          this.CreateParadaAsync(location).then(function(res){
-          console.log('RESPUESTA DE Get',res);
-          return res;
-          });
+          //this.CreateParadaAsync(location).then(function(res){
+          this.props.navigation.navigate('FormCP', location);
+          
+         // });
 
       }
   }
 
   GuardarParada = () => {
 
-    let response = this.getLocationAsync().then(function(response){
-    this.respuesta = response; 
+    this.getLocationAsync().then(function(response){
+    console.log('exito');
     });
-    this.props.navigation.navigate('Rutas', this.respuesta);
+    
 
   }
 
@@ -99,6 +77,7 @@ export default class testScreen extends React.Component {
     if (this.threeModel) {
       this.scene.remove(this.threeModel);
       this.noObject = false;
+      this.threeModel = null;
 
     }
   }
@@ -111,7 +90,7 @@ export default class testScreen extends React.Component {
         this.fixLocationPress = true;
         ExpoTHREE.utils.scaleLongestSideToSize(object, 1);
         object.position.z = -0.4;
-        object.position.y = -0.2; 
+        object.position.y = -1; 
         this.scene.add(object); 
         this.noObject = true;
 
@@ -154,9 +133,6 @@ export default class testScreen extends React.Component {
     // );
     // cube.position.z = -0.6;
     // scene.add(cube);
-
-
-
 
     // Main loop
     const render = () => {

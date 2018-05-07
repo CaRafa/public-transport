@@ -79,10 +79,10 @@ export default class RutaScreen extends React.Component {
 }
 
 
-  verLocation = (coordenadas) => {
-    var aux = this.regionFrom(coordenadas.latitude, coordenadas.longitude,coordenadas.accuracy );
-    
-    this.props.navigation.navigate('MapPreview', aux);
+  verLocation = (object) => {
+
+    var aux = this.regionFrom( object.coordinates.latitude, object.coordinates.longitude, object.coordinates.accuracy );    
+    this.props.navigation.navigate('MapPreview', {type: object.type, coords: aux});
 
   }
 
@@ -180,7 +180,7 @@ export default class RutaScreen extends React.Component {
               {
                 this.state.paradas.map(el => 
                 <View style={styles.buttonContainer}>
-                <Button title={el.title} key={el._id} onPress={this.verLocation.bind(this,el.coordinates)} />
+                <Button title={el.title} key={el._id} onPress={this.verLocation.bind(this,el)} />
                 </View>
               )
               }

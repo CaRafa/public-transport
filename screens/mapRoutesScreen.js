@@ -19,6 +19,7 @@ export default class mapRoutes extends React.Component {
     this.coordenadas = state.params;
     this.actual = this.coordenadas.actual;
     this.polylines = this.coordenadas.polylines;
+    console.log('this.polyline', this.polylines);
     this.paradas = this.coordenadas.paradas;
    }
 
@@ -46,42 +47,45 @@ export default class mapRoutes extends React.Component {
             <View>
             {
             this.polylines.map(el => 
-                
-               el.route.map(ele =>           
-                    <MapView.Polyline
-                    key={el._id}
-                    coordinates={ele}
-                    strokeColor="#000"
-                    fillColor="rgba(255,0,0,0.5)"
-                    strokeWidth={2}/>
-            
-            ) 
-                   
-            )
-            }
+              el.type == "Urb" ?el.route.map(ele =>           
+                                <MapView.Polyline
+                                key={el._id}
+                                coordinates={ele}
+                                strokeColor="#4286f4"
+                                fillColor="rgba(255,0,0,0.5)"
+                                strokeWidth={6}/>   
+            ) : el.type == "subUrb" ?  el.route.map(ele =>           
+                                    <MapView.Polyline
+                                    key={el._id}
+                                    coordinates={ele}
+                                    strokeColor="#f4f141"
+                                    fillColor="rgba(255,0,0,0.5)"
+                                    strokeWidth={3}/>   ) :  
+                        el.route.map(ele =>           
+                        <MapView.Polyline
+                        key={el._id}
+                        coordinates={ele}
+                        strokeColor="#d82b48"
+                        fillColor="rgba(255,0,0,0.5)"
+                        strokeWidth={1}/>   )
+          
+          )}
             </View>
             }
-
-
-            {
+           {
               this.paradas.map(el => 
-                <MapView.Marker
-                key={el._id}
-                coordinate={{latitude: el.coordinates.latitude,
-                longitude: el.coordinates.longitude}}
-             /> 
-            )
+                el.type == true ? <MapView.Marker
+                    key={el._id}
+                    coordinate={{latitude: el.coordinates.latitude,
+                    longitude: el.coordinates.longitude}}
+                    pinColor={'blue'}
+                 /> : <MapView.Marker
+                 key={el._id}
+                 coordinate={{latitude: el.coordinates.latitude,
+                 longitude: el.coordinates.longitude}}
+                />  
+             )
             }
-         
-
-            {/* // {this.state.coordsArray.map((ele,index) => (    
-            //     <MapView.Polyline
-            //     key={index}
-            //     coordinates={ele}
-            //     strokeColor="#000"
-            //     fillColor="rgba(255,0,0,0.5)"
-            //     strokeWidth={2}/>
-            // ))} } */}
 
          
 

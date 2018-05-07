@@ -6,15 +6,16 @@ import { TabNavigator, TabBarBottom, StackNavigator } from 'react-navigation';
 import Colors from '../constants/Colors';
 
 import HomeScreen from '../screens/HomeScreen';
-import ParadaScreen from '../screens/ParadaScreen';
 import RutaScreen from '../screens/RutaScreen';
 import ConductorScreen from '../screens/ConductorScreen';
 import TransporteScreen from '../screens/TransporteScreen';
-import MapPreview from '../screens/MapPreview';
 import CreateRoute from '../screens/RouteCreationScreen';
 import mapRoutes from '../screens/mapRoutesScreen';
-import testScreen from '../screens/testScreen';
-
+import ParadaSetScreen from '../screens/ParadaSetScreen';
+import FormCP from '../screens/formCP';
+import FormCR from '../screens/formCR';
+import FormCT from '../screens/formCT';
+import MapPreview from '../screens/MapPreview';
 
 export const RouteNavigator = StackNavigator({
 
@@ -22,11 +23,10 @@ export const RouteNavigator = StackNavigator({
     screen: RutaScreen,
   },
   Parada: {
-    screen: testScreen,
+    screen: ParadaSetScreen,
   },
   MapPreview :{
     screen: MapPreview,
-
   },
   CreateRoute :{
     screen: CreateRoute,
@@ -36,7 +36,23 @@ export const RouteNavigator = StackNavigator({
     screen: mapRoutes,
 
   },
+  FormCP :{
+    screen: FormCP,
+  },
+  FormCR :{
+    screen: FormCR,
+  },
 
+})
+export const TransportNavigator = StackNavigator({
+
+  Transportes: {
+    screen: TransporteScreen,
+  },
+  FormCT: {
+    screen: FormCT,
+  },
+  
 })
 
 
@@ -47,7 +63,7 @@ export default TabNavigator(
       screen: HomeScreen,
     },
     Transportes: {
-      screen: TransporteScreen,
+      screen: TransportNavigator,
     },
     Rutas: {
       screen: RouteNavigator,
@@ -56,6 +72,7 @@ export default TabNavigator(
       screen: ConductorScreen,
     },
   },
+
   {
     navigationOptions: ({ navigation }) => ({
       tabBarIcon: ({ focused }) => {

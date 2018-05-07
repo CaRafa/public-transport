@@ -13,16 +13,8 @@ export default class MapPreview extends React.Component {
   constructor(props){ 
     super(props)
     const {state} = props.navigation;
-    this.coordenadas = state.params;
-
-    this.markers = [
-        {
-            latitude: this.coordenadas.latitude,
-            longitude:this.coordenadas.longitude,
-            title: 'Parada 1',
-            subtitle: ' casa'
-        }
-    ]
+    this.object = state.params;
+    console.log('parada que llega en mapreview', this.object);
 
    }
    
@@ -37,22 +29,26 @@ export default class MapPreview extends React.Component {
         <MapView
         style={{ flex: 1 }}
         initialRegion={{
-            latitude: this.coordenadas.latitude,
-            longitude: this.coordenadas.longitude,
-            latitudeDelta: this.coordenadas.latitudeDelta,
-            longitudeDelta: this.coordenadas.longitudeDelta,
+            latitude: this.object.coords.latitude,
+            longitude: this.object.coords.longitude,
+            latitudeDelta: this.object.coords.latitudeDelta,
+            longitudeDelta: this.object.coords.longitudeDelta,
           }}
         
         annotations={this.markers}
 
         >
         
-         <MapView.Marker
-            coordinate={{latitude: this.coordenadas.latitude,
-            longitude: this.coordenadas.longitude}}
-            title={"Parada 1"}
-            description={"casa"}
-         /> 
+        {this.object.type == true ? <MapView.Marker
+                    
+                    coordinate={{latitude: this.object.coords.latitude,
+                    longitude: this.object.coords.longitude}}
+                    pinColor={'blue'}
+                 /> : <MapView.Marker
+                 
+                 coordinate={{latitude: this.object.coords.latitude,
+                 longitude: this.object.coords.longitude}}
+                 />  }
 
         </MapView>
     );

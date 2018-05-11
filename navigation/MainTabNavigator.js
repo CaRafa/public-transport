@@ -15,6 +15,7 @@ import ParadaSetScreen from '../screens/ParadaSetScreen';
 import FormCP from '../screens/formCP';
 import FormCR from '../screens/formCR';
 import FormCT from '../screens/formCT';
+import FormCC from '../screens/formCC';
 import MapPreview from '../screens/MapPreview';
 
 export const RouteNavigator = StackNavigator({
@@ -54,6 +55,16 @@ export const TransportNavigator = StackNavigator({
   },
   
 })
+export const ConductorNavigator = StackNavigator({
+
+  Conductores: {
+    screen: ConductorScreen,
+  },
+  FormCC: {
+    screen: FormCC,
+  },
+  
+})
 
 
 
@@ -69,7 +80,7 @@ export default TabNavigator(
       screen: RouteNavigator,
     },
     Conductores: {
-      screen: ConductorScreen,
+      screen: ConductorNavigator,
     },
   },
 

@@ -8,11 +8,14 @@ export default class TransporteScreen extends React.Component {
   };
   constructor(props){ 
     super(props)
-    
+    this.state = {
+      transporte: []
+    }
    }
 
    componentDidMount(){
     this._fetchRoutesAsync()
+    this._fetchTransportesAsync()
    }
 
   AgregarTransporte = () => {
@@ -30,7 +33,24 @@ export default class TransporteScreen extends React.Component {
     } catch(e) {
       this.setState({routes: e});
     }
-  }; 
+  } 
+
+  _fetchTransportesAsync = async () => {
+    try {
+      let response = await fetch('http://192.168.1.108:3000/api/transporte',{
+        method: 'GET'});
+      let result = await response.json();
+      console.log('RESULTADO FETCH',result.transporte);
+      this.setState({transporte: result.transporte});
+
+    } catch(e) {
+      this.setState({transporte: e});
+    }
+  } 
+
+  verDetallado = (transporte) => {
+    console.log('Seleccionado', transporte);
+  }
 
   render() {
     return (
@@ -45,7 +65,23 @@ export default class TransporteScreen extends React.Component {
               />
             </View>
           
+            { !this.state.transporte ? <View style={styles.container}>
+                                <Text style={styles.getStartedText}>    
+                                LOADING!
+                                </Text>
+                            </View>
+                            :
+              <ScrollView>
+              {
+                this.state.transporte.map(el => 
+                <View style={styles.buttonContainer}>
+                <Button title={el.modelo} key={el._id} onPress={this.verDetallado.bind(this,el)} />
+                </View>
+              )
+              }
+            </ScrollView>
           
+        }
   
 
         </View>
@@ -61,6 +97,13 @@ const styles = StyleSheet.create({
     borderColor: '#000',
     marginTop: 35,
 
+  },
+  buttonContainer:{
+    backgroundColor: 'white',
+    borderRadius: 16,
+    borderWidth: 1,
+    borderColor: 'black',
+    margin: 20,
   },
   container: {
     flex: 1,

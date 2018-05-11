@@ -88,7 +88,7 @@ export default class ParadaSetScreen extends React.Component {
     GooglePoly.GetThreeModel(myObject, function(object){
         this.threeModel = object;
         this.fixLocationPress = true;
-        ExpoTHREE.utils.scaleLongestSideToSize(object, 1);
+        ExpoTHREE.utils.scaleLongestSideToSize(object, 1.5);
         object.position.z = -0.4;
         object.position.y = -1; 
         this.scene.add(object); 
@@ -127,17 +127,17 @@ export default class ParadaSetScreen extends React.Component {
     this.scene.add(ambientLight);
     
 
-    // Rotating cube
+    //Rotating cube
     // const cube = new THREE.Mesh(
-    //   new THREE.BoxGeometry(0.08, 1.6, 0.08),
+    //   new THREE.BoxGeometry(0.08, 0.08, 0.08),
     // );
-    // cube.position.z = -0.6;
+    // cube.position.z = -0.4;
     // scene.add(cube);
 
     // Main loop
     const render = () => {
       // Rotate cube
-    //   cube.rotation.y += 0.04;
+     //cube.rotation.y += 0.04;
       if (this.threeModel) {
         this.threeModel.rotation.y += 0.04;
       }

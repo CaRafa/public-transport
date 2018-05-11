@@ -82,7 +82,7 @@ export default class RutaScreen extends React.Component {
   verLocation = (object) => {
 
     var aux = this.regionFrom( object.coordinates.latitude, object.coordinates.longitude, object.coordinates.accuracy );    
-    this.props.navigation.navigate('MapPreview', {type: object.type, coords: aux});
+    this.props.navigation.navigate('MapPreview', {type: object.type, coords: aux, density: object.density});
 
   }
 

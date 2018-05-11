@@ -78,8 +78,49 @@ export default class mapRoutes extends React.Component {
                     key={el._id}
                     coordinate={{latitude: el.coordinates.latitude,
                     longitude: el.coordinates.longitude}}
-                    pinColor={'blue'}
-                 /> : <MapView.Marker
+                    pinColor={'black'}
+                 /> : 
+                 el.density == "D1"?
+                 <MapView.Marker
+                 key={el._id}
+                 coordinate={{latitude: el.coordinates.latitude,
+                 longitude: el.coordinates.longitude}}
+                 pinColor={'red'}
+                />  
+                : 
+                 el.density == "D2"?
+                 <MapView.Marker
+                 key={el._id}
+                 coordinate={{latitude: el.coordinates.latitude,
+                 longitude: el.coordinates.longitude}}
+                 pinColor={'orange'}
+                />  
+                : 
+                 el.density == "D3"?
+                 <MapView.Marker
+                 key={el._id}
+                 coordinate={{latitude: el.coordinates.latitude,
+                 longitude: el.coordinates.longitude}}
+                 pinColor={'yellow'}
+                />  
+                : 
+                 el.density == "D4"?
+                 <MapView.Marker
+                 key={el._id}
+                 coordinate={{latitude: el.coordinates.latitude,
+                 longitude: el.coordinates.longitude}}
+                 pinColor={'green'}
+                />  
+                : 
+                 el.density == "D5"?
+                 <MapView.Marker
+                 key={el._id}
+                 coordinate={{latitude: el.coordinates.latitude,
+                 longitude: el.coordinates.longitude}}
+                 pinColor={'blue'}
+                />  
+                : 
+                <MapView.Marker
                  key={el._id}
                  coordinate={{latitude: el.coordinates.latitude,
                  longitude: el.coordinates.longitude}}

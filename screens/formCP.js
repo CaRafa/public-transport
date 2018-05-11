@@ -16,7 +16,9 @@ export default class FormCP extends React.Component {
     this.coordinates = state.params;
     console.log(this.coordinates);
     this.state = {
-      formData:{}
+      formData:{
+        type: false
+      }
     }
 
   }
@@ -47,7 +49,8 @@ export default class FormCP extends React.Component {
           title: info.nombre,
           coordinates : location.coords,
           description : info.direccion,
-          type: info.type
+          type: info.type,
+          density: info.density
         })
        });
 
@@ -122,11 +125,20 @@ export default class FormCP extends React.Component {
             style={{ height: 200} }/>
 
           <Separator />
-        
           <SwitchField label='Parada tipo terminal'
             ref="type"
             helpText='Si esta seleccionado la parada es de tipo terminal'/>
-          
+
+            {this.state.formData.type == false? <PickerField ref='density'
+            label='Densidad poblacional'
+            options={{
+              D1: '0-20%',
+              D2: '20%-40%',
+              D3:'40%-60%',
+              D4:'60%-80%',
+              D5:'80%-100%'
+            }}/> : null}
+
           </Form>
           <Text>{JSON.stringify(this.state.formData)}</Text>
           <View style={styles.buttonContainer}>

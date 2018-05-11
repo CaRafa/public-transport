@@ -1,24 +1,113 @@
+
 import React from 'react';
-import {Image,Platform, ScrollView,StyleSheet,Text, TouchableOpacity,View,} from 'react-native';
+import {Button,Image,Platform, ScrollView,StyleSheet,Text, TouchableOpacity,View,} from 'react-native';
 
 
 export default class ConductorScreen extends React.Component {
   static navigationOptions = {
     header: null,
   };
+  constructor(props){ 
+    super(props)
+    this.state = {
+      transporte: [],
+      conductor:[]
+    }
+   }
+
+   componentDidMount(){
+    this._fetchTransportesAsync()
+    this._fetchConductoresAsync()
+   }
+
+   AgregarConductor = () => {
+
+    this.props.navigation.navigate('FormCC', this.state.transporte) 
+  }
+
+  _fetchTransportesAsync = async () => {
+    try {
+      let response = await fetch('http://192.168.1.108:3000/api/transporte',{
+        method: 'GET'});
+      let result = await response.json();
+      console.log('RESULTADO FETCH',result.transporte);
+      this.setState({transporte: result.transporte}); 
+
+    } catch(e) {
+      this.setState({transporte: e});
+    }
+  }
+  
+  _fetchConductoresAsync = async () => {
+    try {
+      let response = await fetch('http://192.168.1.108:3000/api/conductor',{
+        method: 'GET'});
+      let result = await response.json();
+      console.log('RESULTADO FETCH',result.conductor);
+      this.setState({conductor: result.conductor});
+
+    } catch(e) {
+      this.setState({conductor: e});
+    }
+  } 
+
+  verDetallado = (transporte) => {
+    console.log('Seleccionado', transporte);
+  }
 
   render() {
     return (
       <View style={styles.container}>
-            <Text style={styles.getStartedText}>
-              Change this text and your app will automatically reload.
-            </Text>
-      </View>
+  
+            <View style={styles.addNew}>
+            <Button
+              
+              onPress={this.AgregarConductor}
+              title="Agregar un Conductor!"
+              color="#000"
+              />
+            </View>
+          
+            { !this.state.conductor ? <View style={styles.container}>
+                                <Text style={styles.getStartedText}>    
+                                LOADING!
+                                </Text>
+                            </View>
+                            :
+              <ScrollView>
+              {
+                this.state.conductor.map(el => 
+                <View style={styles.buttonContainer}>
+                <Button title={el.name} key={el._id} onPress={this.verDetallado.bind(this,el)} />
+                </View>
+              )
+              }
+            </ScrollView>
+          
+        }
+  
+
+        </View>
     );
   }
 }
 
 const styles = StyleSheet.create({
+  addNew:{
+    backgroundColor: '#cafc80',
+    borderRadius: 16,
+    borderWidth: 1,
+    borderColor: '#000',
+    marginTop: 35,
+
+  },
+  buttonContainer:{
+    backgroundColor: 'white',
+    borderRadius: 16,
+    borderWidth: 1,
+    borderColor: 'black',
+    margin: 20,
+  },
   container: {
     flex: 1,
     backgroundColor: '#fff',

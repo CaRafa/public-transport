@@ -27,7 +27,7 @@ export default class RutaScreen extends React.Component {
 
    _fetchParadasAsync = async () => {
     try {
-      let response = await fetch('http://10.4.2.18:3000/api/parada',{
+      let response = await fetch('http://192.168.1.106:3000/api/parada',{
         method: 'GET'});
       let result = await response.json();
       this.setState({paradas: result.par});
@@ -40,7 +40,7 @@ export default class RutaScreen extends React.Component {
 
    _fetchRoutesAsync = async () => {
     try {
-      let response = await fetch('http://10.4.2.18:3000/api/ruta',{
+      let response = await fetch('http://192.168.1.106:3000/api/ruta',{
         method: 'GET'});
       let result = await response.json();
       this.setState({polylines: result.route});

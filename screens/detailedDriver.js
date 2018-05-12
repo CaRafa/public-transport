@@ -18,6 +18,7 @@ export default class DetailedDriver extends React.Component {
    
    verAutobus(obj){
        console.log(obj);
+       this.props.navigation.navigate('DetailedTransport',{transporte: obj});
    }
 
    crearHorario = () =>{
@@ -29,7 +30,7 @@ export default class DetailedDriver extends React.Component {
   render() {
     return (
       <View style={styles.container}>
-
+          <ScrollView>
 
             <Text style={styles.getStartedTexthead}>
               Perfil de {this.object.name}, {this.object.lastName}
@@ -48,6 +49,18 @@ export default class DetailedDriver extends React.Component {
               Telefono: {this.object.tel}
             </Text>
 
+            {this.object.horario ? 
+              
+              this.object.horario.map(el => 
+              
+              <Text style={styles.getStartedText}>
+                {el.dia} : {el.asig == "descanso"? "Descanso" : el.asig.modelo} 
+              </Text>  
+              ) : <Text style={styles.getStartedText}>
+              No se ha asignado un horario
+            </Text> }
+                
+             
             <View style={styles.addNew}>
             <Button
               
@@ -56,8 +69,8 @@ export default class DetailedDriver extends React.Component {
               color="#000"
               />
             </View>
-
-            <ScrollView>
+            
+            
               {
                 this.trans.map(el => 
                 <View style={styles.buttonContainer}>
@@ -66,6 +79,9 @@ export default class DetailedDriver extends React.Component {
               )
               }
             </ScrollView>
+            
+            
+
 
       </View>
     );

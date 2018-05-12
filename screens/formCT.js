@@ -47,7 +47,7 @@ export default class FormCT extends React.Component {
 
   CreateTranAsync = async () => {
     try {
-      let response = await fetch('http://10.4.2.18:3000/api/transporte',{
+      let response = await fetch('http://192.168.1.106:3000/api/transporte',{
         method: 'POST',
         headers: {
           'Accept': 'application/json',

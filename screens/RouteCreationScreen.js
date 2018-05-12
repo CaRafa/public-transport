@@ -25,7 +25,8 @@ export default class RouteCreation extends React.Component {
     this.state = { coordsArray: [],
     pointArray:[] }
     this.Npolyline = 0;
-
+    this.comDis = 0;
+    this.pointsToCompare = []
     this.states = {
         latitude: null,
         longitude: null,
@@ -65,13 +66,20 @@ export default class RouteCreation extends React.Component {
             dis = dis + this.distance(coords[i].latitude, coords[i].longitude, coords[i+1].latitude,coords[i+1].longitude, "K")
           }
         if(dis*1000 > 200){
+
+            this.comDis = this.comDis + (dis*1000)
+            console.log('total de distancia', this.comDis);
+            this.verify(true);
             this.state.coordsArray[this.Npolyline] = coords;
             this.Npolyline = this.Npolyline + 1;
             this.setState({ coordsArray: this.state.coordsArray })
-            return coords
+            this.agregarTramo = true;
+            return true
         }
         else{
             alert('Este tramo de la ruta es menor a 200 mts, elija otros puntos.');
+            this.verify(false);
+            return false
         }
         
     } catch(error) {
@@ -80,11 +88,44 @@ export default class RouteCreation extends React.Component {
     }
 }
 
+verify(response){
 
+    if(response == true){
+        
+            
+        if(this.state.pointArray.length != 0){
+            for(var i=0; i < this.pointsToCompare.length; i++){
+                var find = false;
+                console.log('length del pointarray', this.state.pointArray.length);
+                for(var j=0; j < this.state.pointArray.length; j ++){
+                    console.log('compare if', this.pointsToCompare[i] , this.state.pointArray[j]);
+                    if(this.pointsToCompare[i]._id == this.state.pointArray[j]){
+                        find = true;
+                    }
+                }
+                if(find == true){
+
+                } else{
+                    this.state.pointArray.push(this.pointsToCompare[i]._id);
+                }
+            }
+            }else{
+                this.state.pointArray.push(this.pointsToCompare[0]._id);
+                this.state.pointArray.push(this.pointsToCompare[1]._id);
+            }
+        
+        this.pointsToCompare.splice(0,2)
+    }else{
+        console.log('no se agregaran estas paradas');
+        this.pointsToCompare.splice(0,2)
+    }
+
+    console.log('Resultados del verify', this.state.pointArray, 'activos', this.pointsToCompare  );
+}
    
    setPolyline = (point) => {
 
-        
+        this.pointsToCompare.push(point);
         if(point.coordenadas){
             this.polyline[this.Nparada] = point.coordenadas.latitude+','+point.coordenadas.longitude; 
         }else{
@@ -92,19 +133,19 @@ export default class RouteCreation extends React.Component {
         }
 
         this.Nparada = this.Nparada + 1 ;
-         if(point.name){
-             console.log('parada elegida', point.name);
-         }else{
-             console.log('parada elegida', point.title)
-         }
+         
 
 
         if(this.Nparada == 2){
 
             this.getDirections(this.polyline[0],this.polyline[1]).then(function(response){
+                
             }).catch(function(e){
                 console.log(e);
             })
+
+            
+
             this.Nparada = 0;
             }
         
@@ -114,13 +155,13 @@ export default class RouteCreation extends React.Component {
 
     console.log('GUARDAR PARADA');
     //this.CreateRutaAsync();
-    this.props.navigation.navigate('FormCR', this.state.coordsArray);
+    this.props.navigation.navigate('FormCR', {cord:this.state.coordsArray,par: this.state.pointArray, dis: this.comDis});
 
    }
  
    CreateRutaAsync = async () => {
     try {
-      let response = await fetch('http://10.4.2.18:3000/api/ruta',{
+      let response = await fetch('http://192.168.1.106:3000/api/ruta',{
         method: 'POST',
         headers: {
           'Accept': 'application/json',

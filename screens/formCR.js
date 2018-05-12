@@ -13,8 +13,8 @@ export default class FormCR extends React.Component {
   constructor(props){
     super(props);
     const {state} = props.navigation;
-    this.polylines = state.params; 
-       
+    this.object = state.params; 
+    console.log('data que llega al crear ruta', this.object);   
     this.state = {
       formData:{}
     }
@@ -30,7 +30,7 @@ export default class FormCR extends React.Component {
 
   CreateRutaAsync = async () => {
     try {
-      let response = await fetch('http://10.4.2.18:3000/api/ruta',{
+      let response = await fetch('http://192.168.1.106:3000/api/ruta',{
         method: 'POST',
         headers: {
           'Accept': 'application/json',
@@ -38,9 +38,11 @@ export default class FormCR extends React.Component {
         },
         body: JSON.stringify({
             title: this.state.formData.nombre,
-            route: this.polylines,
+            route: this.object.cord,
             description: this.state.formData.des,
             type: this.state.formData.type,
+            distance: this.object.dis,
+            paradas: this.object.par
         })
        });
 

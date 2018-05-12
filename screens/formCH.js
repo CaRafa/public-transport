@@ -55,7 +55,7 @@ export default class FormCH extends React.Component {
 
   UpdateHorarioAsync = async () => {
     try {
-      let response = await fetch('http://10.4.2.18:3000/api/conductor/'+this.id,{
+      let response = await fetch('http://192.168.1.106:3000/api/conductor/'+this.id,{
         method: 'PUT',
         headers: {
           'Accept': 'application/json',
@@ -84,32 +84,39 @@ export default class FormCH extends React.Component {
     console.log('Se creara el array de horarios');
     this.horario = []
     if(this.state.formData.lunes){
-        this.horario.push(this.transJson[this.state.formData.lunes-1]);
+        var aux = {dia: 'lunes', asig: this.transJson[this.state.formData.lunes-1]}
+        this.horario.push(aux);
     }
     if(this.state.formData.martes){
-        this.horario.push(this.transJson[this.state.formData.martes-1]);
+      var aux = {dia: 'martes', asig: this.transJson[this.state.formData.martes-1]}
+        this.horario.push(aux);
     }
     if(this.state.formData.miercoles){
-        this.horario.push(this.transJson[this.state.formData.miercoles-1]);
+      var aux = {dia: 'miercoles', asig: this.transJson[this.state.formData.miercoles-1]}
+        this.horario.push(aux);
     }
     if(this.state.formData.jueves){
-        this.horario.push(this.transJson[this.state.formData.jueves-1]);
+      var aux = {dia: 'jueves', asig: this.transJson[this.state.formData.jueves-1]}
+        this.horario.push(aux);
     }
     if(this.state.formData.viernes){
-        this.horario.push(this.transJson[this.state.formData.viernes-1]);
+      var aux = {dia: 'viernes', asig: this.transJson[this.state.formData.viernes-1]}
+        this.horario.push(aux);
     }
     if(this.state.formData.sabado){
-        this.horario.push(this.transJson[this.state.formData.sabado-1]);
+      var aux = {dia: 'sabado', asig: this.transJson[this.state.formData.sabado-1]}
+        this.horario.push(aux);
     }
     if(this.state.formData.domingo){
-        this.horario.push(this.transJson[this.state.formData.domingo-1]);
+      var aux = {dia: 'domingo', asig: this.transJson[this.state.formData.domingo-1]}
+        this.horario.push(aux);
     }
 
     console.log('horario final',this.horario);
     this.UpdateHorarioAsync().then(function(res){
-        this.props.navigation.navigate('')
+      
     })
-
+    this.props.navigation.goBack(null)
   }
   
   render() {

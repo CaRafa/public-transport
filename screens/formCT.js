@@ -47,7 +47,7 @@ export default class FormCT extends React.Component {
 
   CreateTranAsync = async () => {
     try {
-      let response = await fetch('http://192.168.1.108:3000/api/transporte',{
+      let response = await fetch('http://10.4.2.18:3000/api/transporte',{
         method: 'POST',
         headers: {
           'Accept': 'application/json',
@@ -59,7 +59,8 @@ export default class FormCT extends React.Component {
           modelo: this.state.formData.model,
           year: this.state.formData.year,
           route: this.addingRoutes,
-          type: this.state.formData.type
+          type: this.state.formData.type,
+          placa: this.state.formData.placa
         })
        });
 
@@ -131,10 +132,16 @@ export default class FormCT extends React.Component {
             ref='model'
             label='Modelo'
             placeholder='marca del tranporte'/>
+            <InputField
+            ref='placa'
+            label='Placa'
+            placeholder='Placa del transporte'/>
           <DatePickerField ref='year'
             minimumDate={new Date('1/1/1900')}
             maximumDate={new Date()}
-            placeholder='Año de transporte'/>
+            placeholder='Año de transporte'
+            
+            />
           <Separator />
           <PickerField ref='type'
             label='Tipo de vehiculo'

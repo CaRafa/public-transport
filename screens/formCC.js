@@ -47,7 +47,7 @@ export default class FormCC extends React.Component {
 
   CreateCondAsync = async () => {
     try {
-      let response = await fetch('http://192.168.1.108:3000/api/conductor',{
+      let response = await fetch('http://10.4.2.18:3000/api/conductor',{
         method: 'POST',
         headers: {
           'Accept': 'application/json',
@@ -60,7 +60,8 @@ export default class FormCC extends React.Component {
             tran: this.addingTran,
             licencia: parseInt(this.state.formData.licencia),
             fN: this.state.formData.fN,
-            tel: this.state.formData.tel
+            tel: this.state.formData.tel,
+            status: true
         })
        });
 

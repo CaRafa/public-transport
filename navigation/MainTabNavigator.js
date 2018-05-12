@@ -16,7 +16,10 @@ import FormCP from '../screens/formCP';
 import FormCR from '../screens/formCR';
 import FormCT from '../screens/formCT';
 import FormCC from '../screens/formCC';
+import FormCH from '../screens/formCH';
 import MapPreview from '../screens/MapPreview';
+import DetailedTransport from '../screens/detailedTransport'
+import DetailedDriver from '../screens/detailedDriver'
 
 export const RouteNavigator = StackNavigator({
 
@@ -53,6 +56,9 @@ export const TransportNavigator = StackNavigator({
   FormCT: {
     screen: FormCT,
   },
+  DetailedTransport: {
+    screen: DetailedTransport,
+  },
   
 })
 export const ConductorNavigator = StackNavigator({
@@ -62,6 +68,12 @@ export const ConductorNavigator = StackNavigator({
   },
   FormCC: {
     screen: FormCC,
+  },
+  FormCH: {
+    screen: FormCH,
+  },
+  DetailedDriver: {
+    screen: DetailedDriver,
   },
   
 })

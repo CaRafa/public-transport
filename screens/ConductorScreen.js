@@ -27,7 +27,7 @@ export default class ConductorScreen extends React.Component {
 
   _fetchTransportesAsync = async () => {
     try {
-      let response = await fetch('http://192.168.1.108:3000/api/transporte',{
+      let response = await fetch('http://10.4.2.18:3000/api/transporte',{
         method: 'GET'});
       let result = await response.json();
       console.log('RESULTADO FETCH',result.transporte);
@@ -40,7 +40,7 @@ export default class ConductorScreen extends React.Component {
   
   _fetchConductoresAsync = async () => {
     try {
-      let response = await fetch('http://192.168.1.108:3000/api/conductor',{
+      let response = await fetch('http://10.4.2.18:3000/api/conductor',{
         method: 'GET'});
       let result = await response.json();
       console.log('RESULTADO FETCH',result.conductor);
@@ -51,8 +51,22 @@ export default class ConductorScreen extends React.Component {
     }
   } 
 
-  verDetallado = (transporte) => {
-    console.log('Seleccionado', transporte);
+  
+  verDetallado = (conductor) => {
+    
+    var taux = conductor.transporte;  
+    var transSend = [];
+    taux.map(el => {
+        for(var i=0; i < this.state.transporte.length; i++){
+          if(this.state.transporte[i]._id == el){
+            transSend.push(this.state.transporte[i]);
+          }
+
+        }
+      }
+    )
+
+    this.props.navigation.navigate('DetailedDriver',{cond:conductor, trans: transSend});
   }
 
   render() {

@@ -15,6 +15,7 @@ export default class FormCH extends React.Component {
     const {state} = props.navigation;
     this.transportes = state.params.transportes; 
     this.id = state.params.id
+    this.horario = state.params.horario
     this.state = {
       formData:{},
       paradas:[]
@@ -62,7 +63,9 @@ export default class FormCH extends React.Component {
           'Content-Type': 'application/json'
         },
         body: JSON.stringify({
-          horario: this.horario
+          horario: this.horario,
+          data: false
+
         })
        });
 
@@ -120,80 +123,113 @@ export default class FormCH extends React.Component {
   }
   
   render() {
-    return (
 
-      
+    
+      return (
+
         <ScrollView keyboardShouldPersistTaps="always" style={{paddingLeft:10,paddingRight:10, height:200}}>
-        <View style={styles.container}>
-            <Text style={styles.getStartedText}>
-              Crear un horario
-            </Text>
-        </View>
-        <Form
-          ref='registrationForm'
-          onFocus={this.handleFormFocus.bind(this)}
-          onChange={this.handleFormChange.bind(this)}
-          >
-          <Separator />
-            {/* esto es lo que se debe intentar mejorar */}
-           {this.ready === false ?
-            null
-            :  <PickerField ref='lunes'
-            label='Lunes'
-            options={this.state.paradas}/> 
-            }
-           {this.ready === false ?
-            null
-            :  <PickerField ref='martes'
-            label='martes'
-            options={this.state.paradas}/> 
-            }
-           {this.ready === false ?
-            null
-            :  <PickerField ref='miercoles'
-            label='miercoles'
-            options={this.state.paradas}/> 
-            }
-           {this.ready === false ?
-            null
-            :  <PickerField ref='jueves'
-            label='jueves'
-            options={this.state.paradas}/> 
-            }
-           {this.ready === false ?
-            null
-            :  <PickerField ref='viernes'
-            label='viernes'
-            options={this.state.paradas}/> 
-            }
-           {this.ready === false ?
-            null
-            :  <PickerField ref='sabado'
-            label='sabado'
-            options={this.state.paradas}/> 
-            }
-           {this.ready === false ?
-            null
-            :  <PickerField ref='domingo'
-            label='domingo'
-            options={this.state.paradas}/> 
-            }
-            {/* esto es lo que se debe intentar mejorar */}
-            <Separator />
-            
+          {this.horario? <Text style={styles.horarioTitle}>
+          Horario
+           </Text>: null
 
-          </Form>
-          <Text>{JSON.stringify(this.state.formData)}</Text>
-          <View style={styles.buttonContainer}>
-                <Button title={'Guardar'} onPress={this.setHorario } />
-          </View>
-        </ScrollView>
+          }
+
+          {this.horario? this.horario.map(el => 
+          
+          <Text style={styles.horarioText}>
+            - {el.dia} : {el.asig == "descanso"? "Descanso" : el.asig.modelo} 
+          </Text>  
+          ) : 
+           <View style={styles.container}>
+           <Text style={styles.getStartedText}>
+             Crear un horario
+           </Text>
+       </View>
+          }
+          <Form
+            ref='registrationForm'
+            onFocus={this.handleFormFocus.bind(this)}
+            onChange={this.handleFormChange.bind(this)}
+            >
+            <Separator />
+              {/* esto es lo que se debe intentar mejorar */}
+            {this.ready === false ?
+              null
+              :  <PickerField ref='lunes'
+              label='Lunes'
+              options={this.state.paradas}/> 
+              }
+            {this.ready === false ?
+              null
+              :  <PickerField ref='martes'
+              label='martes'
+              options={this.state.paradas}/> 
+              }
+            {this.ready === false ?
+              null
+              :  <PickerField ref='miercoles'
+              label='miercoles'
+              options={this.state.paradas}/> 
+              }
+            {this.ready === false ?
+              null
+              :  <PickerField ref='jueves'
+              label='jueves'
+              options={this.state.paradas}/> 
+              }
+            {this.ready === false ?
+              null
+              :  <PickerField ref='viernes'
+              label='viernes'
+              options={this.state.paradas}/> 
+              }
+            {this.ready === false ?
+              null
+              :  <PickerField ref='sabado'
+              label='sabado'
+              options={this.state.paradas}/> 
+              }
+            {this.ready === false ?
+              null
+              :  <PickerField ref='domingo'
+              label='domingo'
+              options={this.state.paradas}/> 
+              }
+              {/* esto es lo que se debe intentar mejorar */}
+              <Separator />
+              
+
+            </Form>
+            <Text>{JSON.stringify(this.state.formData)}</Text>
+            {!this.horario? 
+            <View style={styles.addNew}>
+                  <Button title={'Guardar'} color="black" onPress={this.setHorario } />
+            </View>: 
+            <View style={styles.addNew}>
+            <Button title={'Actualizar'} color="black" onPress={this.setHorario } />
+      </View>
+            }
+          </ScrollView>
+      
+        
 
     );
-  }
+
+    }  
+  
 }
 
 const styles = StyleSheet.create({
+  addNew:{
+    backgroundColor: '#dde9ff',
+    borderRadius: 16,
+    borderWidth: 1,
+    borderColor: 'grey',
+    marginTop: 35,
+    marginLeft: 60,
+    marginRight: 60,
+    marginBottom:30
+  },
   container: {
     flex: 1,
   },
@@ -203,6 +239,20 @@ const styles = StyleSheet.create({
     lineHeight: 24,
     textAlign: 'center',
     margin: 40,
+  },
+  horarioTitle: {
+    fontSize: 25,
+    color: 'black',
+    lineHeight: 24,
+    textAlign: 'center',
+    marginTop: 50,
+  },
+  horarioText: {
+    fontSize: 16,
+    color: 'black',
+    lineHeight: 22,
+    textAlign: 'center',
+    marginTop: 20,
   },
   buttonContainer:{
     backgroundColor: 'white',

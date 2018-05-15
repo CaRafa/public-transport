@@ -5,21 +5,30 @@ import { Form,
     SwitchField, PickerField,DatePickerField,TimePickerField
   } from 'react-native-form-generator';
 
-export default class FormCR extends React.Component {
+export default class updateT extends React.Component {
   static navigationOptions = {
     header: true,
-    title: 'Crear ruta'
+    title: 'Modificar transporte'
   };
   constructor(props){
-    super(props);
+    super(props);    
     const {state} = props.navigation;
-    this.object = state.params; 
-    console.log('data que llega al crear ruta', this.object);   
+    this.object = state.params.trans; 
+    this.routes = state.params.routes
     this.state = {
-      formData:{}
+      formData:{},
+      Transportes:[]
     }
-
+    
+    this.addingRoutes = []
   }
+
+  componentDidMount(){
+    
+   }
+
+  
+
   handleFormChange(formData){ 
     this.setState({formData:formData})
     this.props.onFormChange && this.props.onFormChange(formData);
@@ -27,27 +36,22 @@ export default class FormCR extends React.Component {
   handleFormFocus(e, component){
   }
 
-
-  CreateRutaAsync = async () => {
+  UpdateTranAsync = async () => {
     try {
-      let response = await fetch('http://192.168.1.106:3000/api/ruta',{
-        method: 'POST',
+      let response = await fetch('http://192.168.1.106:3000/api/tranporte/'+this.object._id,{
+        method: 'PUT',
         headers: {
           'Accept': 'application/json',
           'Content-Type': 'application/json'
         },
         body: JSON.stringify({
-            title: this.state.formData.nombre,
-            route: this.object.cord,
             description: this.state.formData.des,
-            type: this.state.formData.type,
-            distance: this.object.dis,
-            paradas: this.object.par
+          route: this.addingRoutes,
         })
        });
 
       let result = await response.json();
-      this.setState({result: result.par});
+      this.setState({result: result.con});
       this.infoLoaded = true;
       console.log(this.state.result);
 
@@ -56,11 +60,31 @@ export default class FormCR extends React.Component {
       console.log(this.state.result)
     }
   }
+  
 
-  guardarRuta = () => {
-      console.log('Guardar Ruta',this.polylines, this.state.formData);
-      this.CreateRutaAsync();
-      this.props.navigation.navigate('Rutas');
+  updateTransporte = () => {
+      console.log('Guardar Conductor', this.state.formData,this.addingTran);
+      //this.tran = this.Transporte[parseInt(this.state.formData.route)-1]._id;
+      this.UpdateTranAsync();
+      this.props.navigation.goBack(null);
+  }
+
+ 
+  agregarRuta = (object, index) => {
+    if(this.addingRoutes.length == 0){
+      this.addingRoutes.push(object._id)
+    }else{
+      var splice = false;
+      for(var i=0; i < this.addingRoutes.length; i++ ){
+        if(this.addingRoutes[i] == object._id){
+          this.addingRoutes.splice(i,1)
+          splice=true;
+        }
+      }
+      if(splice == false){
+          this.addingRoutes.push(object._id)
+      }
+    }
   }
   
   render() {
@@ -70,7 +94,7 @@ export default class FormCR extends React.Component {
         <ScrollView keyboardShouldPersistTaps="always" style={{paddingLeft:10,paddingRight:10, height:200}}>
         <View style={styles.container}>
             <Text style={styles.getStartedText}>
-              Informacion de la ruta
+              Editar datos del transporte
             </Text>
         </View>
         <Form
@@ -79,61 +103,31 @@ export default class FormCR extends React.Component {
           onChange={this.handleFormChange.bind(this)}
           >
           <Separator />
-          <InputField
-            ref='nombre'
-            label='Nombre'
-            placeholder='Nombre de la ruta'
-            helpText={((self)=>{
-  
-              if(Object.keys(self.refs).length !== 0){
-                if(!self.refs.registrationForm.refs.nombre.valid){
-                  return self.refs.registrationForm.refs.nombre.validationErrors.join("\n");
-                }
-  
-              }
-              
-            })(this)}
-            validationFunction={[(value)=>{
-              
-  
-              if(value == '') return "Required";
-              if(!value) return true;
-              
-  
-              //return true;
-            }, (value)=>{
-              ///Initial state is null/undefined
-              if(!value) return true;
-              if(value.indexOf('4')!=-1){
-                return "I can't stand number 4";
-              }
-              return true;
-            }]}
-            />
-          
-          <Separator />
-          <InputField
-            multiline={true}
+
+            
+            <InputField
             ref='des'
-            placeholder='descripción'
-            helpText='Algun comentario sobre esta ruta' 
+            placeholder='Descripcion'
+            helpText='Algun comentario sobre el transporte' 
             style={{ height: 200} }/>
           <Separator />
-        
+
           
-          <PickerField ref='type'
-            label='Tipo de ruta'
-            options={{
-              "": '',
-              subUrb: 'Sub urbano',
-              Urb: 'Urbano',
-              Int:'Inter Urbano'
-            }}/>
             
+          <Separator />
+          
+            {/* Esto se busca mejorar */}
+            { this.routes.map( (el,index) =>
+              
+              <SwitchField label={el.title}
+              ref={el.title}
+              onValueChange={this.agregarRuta.bind(this,el,index)}/>
+            
+            ) }
           </Form>
           <Text>{JSON.stringify(this.state.formData)}</Text>
           <View style={styles.addNew}>
-                <Button title={'Guardar'} color="black" onPress={this.guardarRuta } />
+                <Button title={'Actualizar'} color="black" onPress={this.updateTransporte } />
           </View>
         </ScrollView>
 
@@ -149,8 +143,7 @@ const styles = StyleSheet.create({
     borderColor: 'grey',
     marginTop: 35,
     marginLeft: 60,
-    marginRight: 60,
-    marginBottom:30
+    marginRight: 60
   },
   container: {
     flex: 1,

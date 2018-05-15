@@ -141,8 +141,8 @@ export default class FormCP extends React.Component {
 
           </Form>
           <Text>{JSON.stringify(this.state.formData)}</Text>
-          <View style={styles.buttonContainer}>
-                <Button title={'Guardar'} onPress={this.guardarParada } />
+          <View style={styles.addNew}>
+                <Button title={'Guardar'} color="black" onPress={this.guardarParada } />
           </View>
         </ScrollView>
 
@@ -151,6 +151,16 @@ export default class FormCP extends React.Component {
 }
 
 const styles = StyleSheet.create({
+  addNew:{
+    backgroundColor: '#dde9ff',
+    borderRadius: 16,
+    borderWidth: 1,
+    borderColor: 'grey',
+    marginTop: 35,
+    marginLeft: 60,
+    marginRight: 60,
+    marginBottom:30
+  },
   container: {
     flex: 1,
   },

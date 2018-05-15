@@ -10,8 +10,20 @@ export default class HomeScreen extends React.Component {
   render() {
     return (
       <View style={styles.container}>
-            <Text style={styles.getStartedText}>
-              Change this text and your app will automatically reload.
+            
+            <View style={{ justifyContent: 'center',
+            alignItems: 'center', marginTop:30}}>
+            <Image 
+            style={{width: 200, height: 200,}}
+            source={
+              require('./../assets/images/hatillo9.jpg')
+              }
+              
+              
+            />
+              </View>
+              <Text style={styles.getStartedText}>
+              Bienvenido.
             </Text>
       </View>
     );
@@ -24,10 +36,10 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
   },
   getStartedText: {
-    fontSize: 17,
-    color: 'rgba(96,100,109, 1)',
-    lineHeight: 24,
+    fontSize: 28,
+    color: 'black',
+    lineHeight: 30,
     textAlign: 'center',
-    margin: 40,
+    margin: 5,
   }
 });

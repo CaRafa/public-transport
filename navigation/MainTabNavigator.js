@@ -12,6 +12,7 @@ import TransporteScreen from '../screens/TransporteScreen';
 import CreateRoute from '../screens/RouteCreationScreen';
 import mapRoutes from '../screens/mapRoutesScreen';
 import ParadaSetScreen from '../screens/ParadaSetScreen';
+import paradasModule from '../screens/paradasModule';
 import FormCP from '../screens/formCP';
 import FormCR from '../screens/formCR';
 import FormCT from '../screens/formCT';
@@ -20,11 +21,17 @@ import FormCH from '../screens/formCH';
 import MapPreview from '../screens/MapPreview';
 import DetailedTransport from '../screens/detailedTransport'
 import DetailedDriver from '../screens/detailedDriver'
+import detailedRoute from '../screens/detailedRoute'
+import updateC from '../screens/updateC'
+import updateT from '../screens/updateT'
 
 export const RouteNavigator = StackNavigator({
 
   Rutas: {
     screen: RutaScreen,
+  },
+  paradasModule: {
+    screen: paradasModule,
   },
   Parada: {
     screen: ParadaSetScreen,
@@ -34,6 +41,10 @@ export const RouteNavigator = StackNavigator({
   },
   CreateRoute :{
     screen: CreateRoute,
+
+  },
+  detailedRoute :{
+    screen: detailedRoute,
 
   },
   mapRoutes :{
@@ -59,6 +70,9 @@ export const TransportNavigator = StackNavigator({
   DetailedTransport: {
     screen: DetailedTransport,
   },
+  updateT: {
+    screen: updateT,
+  },
   
 })
 export const ConductorNavigator = StackNavigator({
@@ -74,6 +88,9 @@ export const ConductorNavigator = StackNavigator({
   },
   DetailedDriver: {
     screen: DetailedDriver,
+  },
+  updateC: {
+    screen: updateC,
   },
   
 })

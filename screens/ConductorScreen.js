@@ -1,6 +1,7 @@
 
 import React from 'react';
 import {Button,Image,Platform, ScrollView,StyleSheet,Text, TouchableOpacity,View,} from 'react-native';
+import { ListItem } from 'react-native-elements'
 
 
 export default class ConductorScreen extends React.Component {
@@ -66,41 +67,50 @@ export default class ConductorScreen extends React.Component {
       }
     )
 
-    this.props.navigation.navigate('DetailedDriver',{cond:conductor, trans: transSend});
+    this.props.navigation.navigate('DetailedDriver',{cond:conductor, trans: transSend, allTrans: this.state.transporte});
   }
 
   render() {
     return (
       <View style={styles.container}>
-  
-            <View style={styles.addNew}>
-            <Button
-              
-              onPress={this.AgregarConductor}
-              title="Agregar un Conductor!"
-              color="#000"
-              />
-            </View>
-          
-            { !this.state.conductor ? <View style={styles.container}>
+        <ScrollView>
+          <View style={styles.container}>
+                  <Text style={styles.tituloPrincipal}>    
+                  Conductores
+                  </Text>
+              </View>
+              <View style={styles.listContainer}>
+              { !this.state.conductor ? <View style={styles.container}>
                                 <Text style={styles.getStartedText}>    
                                 LOADING!
                                 </Text>
                             </View>
                             :
-              <ScrollView>
-              {
-                this.state.conductor.map(el => 
-                <View style={styles.buttonContainer}>
-                <Button title={el.name} key={el._id} onPress={this.verDetallado.bind(this,el)} />
-                </View>
+              
+                this.state.conductor.map((el,i) => 
+                
+                <ListItem
+                key={i}
+                title={el.lastName+','+el.name}
+                subtitle={"Cedula: "+el.ci}
+                onPress={this.verDetallado.bind(this,el)}
+              />
               )
-              }
-            </ScrollView>
+            
           
-        }
+        } </View>
+            <View style={styles.addNew}>
+            <Button
+              
+              onPress={this.AgregarConductor}
+              title="Agregar un Conductor"
+              color="#000"
+              />
+            </View>
+          
+           
   
-
+            </ScrollView>
         </View>
     );
   }
@@ -108,11 +118,13 @@ export default class ConductorScreen extends React.Component {
 
 const styles = StyleSheet.create({
   addNew:{
-    backgroundColor: '#cafc80',
+    backgroundColor: '#dde9ff',
     borderRadius: 16,
     borderWidth: 1,
-    borderColor: '#000',
+    borderColor: 'grey',
     marginTop: 35,
+    marginLeft: 60,
+    marginRight: 60
 
   },
   buttonContainer:{
@@ -132,5 +144,23 @@ const styles = StyleSheet.create({
     lineHeight: 24,
     textAlign: 'center',
     margin: 40,
+  },
+  listContainer:{
+   
+    marginTop: 20,
+    borderBottomWidth: 0.5,
+    borderTopWidth: 1,
+    borderColor: 'grey',
+    marginLeft: 10,
+    marginRight: 10
+  },
+  
+  tituloPrincipal:{
+    fontSize: 30,
+    color: 'black',
+    lineHeight: 50,
+    textAlign: 'center',
+    marginTop: 30,
+    marginBottom: 10,
   }
 });

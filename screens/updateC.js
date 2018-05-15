@@ -5,15 +5,16 @@ import { Form,
     SwitchField, PickerField,DatePickerField,TimePickerField
   } from 'react-native-form-generator';
 
-export default class FormCC extends React.Component {
+export default class updateC extends React.Component {
   static navigationOptions = {
     header: true,
-    title: 'Crear Conductor'
+    title: 'Modificar Conductor'
   };
   constructor(props){
     super(props);    
     const {state} = props.navigation;
-    this.Transporte = state.params; 
+    this.Transporte = state.params.transportes; 
+    this.id = state.params.id
     this.state = {
       formData:{},
       Transportes:[]
@@ -35,23 +36,19 @@ export default class FormCC extends React.Component {
   handleFormFocus(e, component){
   }
 
-  CreateCondAsync = async () => {
+  UpdateCondAsync = async () => {
     try {
-      let response = await fetch('http://192.168.1.106:3000/api/conductor',{
-        method: 'POST',
+      let response = await fetch('http://192.168.1.106:3000/api/conductor/'+this.id,{
+        method: 'PUT',
         headers: {
           'Accept': 'application/json',
           'Content-Type': 'application/json'
         },
         body: JSON.stringify({
-            name: this.state.formData.name,
-            lastName: this.state.formData.lastName,
-            ci: parseInt(this.state.formData.ci),
             tran: this.addingTran,
-            licencia: parseInt(this.state.formData.licencia),
-            fN: this.state.formData.fN,
             tel: this.state.formData.tel,
-            status: true
+            status: this.state.formData.status,
+            data: true
         })
        });
 
@@ -70,8 +67,8 @@ export default class FormCC extends React.Component {
   guardarConductor = () => {
       console.log('Guardar Conductor', this.state.formData,this.addingTran);
       //this.tran = this.Transporte[parseInt(this.state.formData.route)-1]._id;
-      this.CreateCondAsync();
-      this.props.navigation.navigate('Conductores');
+      this.UpdateCondAsync();
+      this.props.navigation.goBack(null);
   }
 
   agregarTran = (object, index) => {
@@ -99,7 +96,7 @@ export default class FormCC extends React.Component {
         <ScrollView keyboardShouldPersistTaps="always" style={{paddingLeft:10,paddingRight:10, height:200}}>
         <View style={styles.container}>
             <Text style={styles.getStartedText}>
-              Agregar un Conductor
+              Editar datos del conductor
             </Text>
         </View>
         <Form
@@ -108,38 +105,18 @@ export default class FormCC extends React.Component {
           onChange={this.handleFormChange.bind(this)}
           >
           <Separator />
-          <InputField
-            ref='name'
-            label='Nombre'
-            placeholder='Nombre del Conductor' />
-          <InputField
-            ref='lastName'
-            label='Apellido'
-            placeholder='Apellido del Conductor' />
-            <InputField
-            ref='ci'
-            placeholder='Cedula'
-            label='v-'/>
+
+             <SwitchField label={'Estado'}
+              ref={'status'}/>
+            
             <InputField
             ref='tel'
             placeholder='Telefono'
-            label='tel'/>
-            <Separator />
-            <InputField
-            ref='licencia'
-            label='#Licencia'
-            placeholder='Numero de licencia'/>
-            <DatePickerField ref='fN'
-            minimumDate={new Date('1/1/1900')}
-            maximumDate={new Date('1/1/2000')}
-            placeholder='Fecha de Nacimiento'/>
+            label='Telefono'/>
+            
+            
           <Separator />
-          {/* {this.ready === false ?
-            null
-            :  <PickerField ref='route'
-            label='Transporte asignado'
-            options={this.state.Transportes}/> 
-            } */}
+          
             {/* Esto se busca mejorar */}
             { this.Transporte.map( (el,index) =>
               <SwitchField label={parseInt(el.numero)+" - "+el.modelo}
@@ -149,7 +126,7 @@ export default class FormCC extends React.Component {
           </Form>
           <Text>{JSON.stringify(this.state.formData)}</Text>
           <View style={styles.addNew}>
-                <Button title={'Guardar'} color="black" onPress={this.guardarConductor } />
+                <Button title={'Actualizar'} color="black" onPress={this.guardarConductor } />
           </View>
         </ScrollView>
 

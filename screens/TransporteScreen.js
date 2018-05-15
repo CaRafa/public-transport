@@ -1,6 +1,6 @@
 import React from 'react';
-import {Button,Image,Platform, ScrollView,StyleSheet,Text, TouchableOpacity,View,} from 'react-native';
-
+import {Button,Image,Platform, ScrollView,StyleSheet,Text, TouchableOpacity,View, Touchable} from 'react-native';
+import { ListItem } from 'react-native-elements'
 
 export default class TransporteScreen extends React.Component {
   static navigationOptions = {
@@ -71,42 +71,52 @@ export default class TransporteScreen extends React.Component {
     var routes = this.obtainRoutes(transporte);
     this.props.navigation.navigate('DetailedTransport', {
       transporte: transporte,
-      routes: routes
+      routes: routes,
+      allRoutes: this.state.routes
     });
   }
 
   render() {
     return (
       <View style={styles.container}>
-  
-            <View style={styles.addNew}>
-            <Button
+         <ScrollView>
+            
+            <View style={styles.container}>
+                  <Text style={styles.tituloPrincipal}>    
+                  Transportes
+                  </Text>
+              </View>
               
-              onPress={this.AgregarTransporte}
-              title="Agregar un transporte!"
-              color="#000"
-              />
-            </View>
-          
+        <View style={styles.listContainer}>
             { !this.state.transporte ? <View style={styles.container}>
                                 <Text style={styles.getStartedText}>    
                                 LOADING!
                                 </Text>
                             </View>
                             :
-              <ScrollView>
-              {
-                this.state.transporte.map(el => 
-                <View style={styles.buttonContainer}>
-                <Button title={el.modelo} key={el._id} onPress={this.verDetallado.bind(this,el)} />
-                </View>
+              
+                this.state.transporte.map((el,i) => 
+                  <ListItem
+                  key={i}
+                  
+                  title={el.modelo+' - '+el.numero}
+                  subtitle={el.placa}
+                  onPress={this.verDetallado.bind(this,el)}
+                />
               )
-              }
-            </ScrollView>
+              
           
-        }
-  
-
+        } </View>
+           <View style={styles.addNew}>
+            <Button
+              
+              onPress={this.AgregarTransporte}
+              title="Agregar un transporte"
+              color="#000"
+              />
+            </View>
+           
+          </ScrollView>
         </View>
     );
   }
@@ -114,19 +124,35 @@ export default class TransporteScreen extends React.Component {
 
 const styles = StyleSheet.create({
   addNew:{
-    backgroundColor: '#cafc80',
+    backgroundColor: '#dde9ff',
     borderRadius: 16,
     borderWidth: 1,
-    borderColor: '#000',
+    borderColor: 'grey',
     marginTop: 35,
+    marginLeft: 60,
+    marginRight: 60
 
   },
+  buttonStyle:{
+    textAlign: 'left',
+  flex:1 
+},
+
   buttonContainer:{
+    height: 45,
+    marginTop:10,
     backgroundColor: 'white',
-    borderRadius: 16,
-    borderWidth: 1,
-    borderColor: 'black',
-    margin: 20,
+    borderTopWidth: 1,
+    borderColor: 'grey',
+  },
+  listContainer:{
+   
+    marginTop: 20,
+    borderBottomWidth: 0.5,
+    borderTopWidth: 1,
+    borderColor: 'grey',
+    marginLeft: 10,
+    marginRight: 10
   },
   container: {
     flex: 1,
@@ -138,5 +164,14 @@ const styles = StyleSheet.create({
     lineHeight: 24,
     textAlign: 'center',
     margin: 40,
+  },
+  
+  tituloPrincipal:{
+    fontSize: 30,
+    color: 'black',
+    lineHeight: 50,
+    textAlign: 'center',
+    marginTop: 30,
+    marginBottom: 10,
   }
 });

@@ -19,8 +19,7 @@ export default class FormCT extends React.Component {
       paradas:[]
     }
     this.addingRoutes = []
-    //this.ready = false;
-   // this.obtainOptions();
+    
 
   }
 
@@ -28,15 +27,7 @@ export default class FormCT extends React.Component {
     
    }
 
-  //  obtainOptions = () => {
-  //   for(var i = 0; i < this.rutas.length; i++){
-  //       var aux = JSON.stringify(this.rutas[i].title)
-  //       this.state.paradas[i+1] = aux;
-  //       console.log(this.state.paradas);
-  //       this.setState({ paradas: this.state.paradas })
-  //   }
-  //   this.ready = true;
-  //  }
+  
 
   handleFormChange(formData){ 
     this.setState({formData:formData})
@@ -60,7 +51,8 @@ export default class FormCT extends React.Component {
           year: this.state.formData.year,
           route: this.addingRoutes,
           type: this.state.formData.type,
-          placa: this.state.formData.placa
+          placa: this.state.formData.placa,
+          t_type: this.state.formData.t_type
         })
        });
 
@@ -136,41 +128,43 @@ export default class FormCT extends React.Component {
             ref='placa'
             label='Placa'
             placeholder='Placa del transporte'/>
-          <DatePickerField ref='year'
-            minimumDate={new Date('1/1/1900')}
-            maximumDate={new Date()}
-            placeholder='Año de transporte'
-            
-            />
-          <Separator />
-          <PickerField ref='type'
+            <InputField
+            ref='year'
+            label='Año'/>
+          
+          <PickerField ref='t_type'
             label='Tipo de vehiculo'
             options={{
               "": '',
-              subUrb: 'Sub urbano',
-              Urb: 'Urbano',
-              rural:'Rural'
+              Mt: 'Moto taxi',
+              taxi: 'Taxi',
+              TransP:'Transporte pequeño',
+              TransG:'Transporte grande'
             }}/>
-            {/* esto es lo que se debe intentar mejorar */}
-           {/* {this.ready === false ?
-            null
-            :  <PickerField ref='route'
-            label='Ruta que cubre'
-            options={this.state.paradas}/> } */}
-            {/* esto es lo que se debe intentar mejorar */}
+
+          
+            
+
             <Separator />
             <Text  style={{marginBottom:20,marginTop:20 }}>Marque las rutas que recorrera este transporte:</Text>
-            { this.rutas.map( (el,index) =>
+            
+            {  this.rutas.map( (el,index) =>
+              
               
               <SwitchField label={el.title}
               ref={el.title}
               onValueChange={this.agregarRuta.bind(this,el,index)}/>
-            )}
+            
+              
+            ) 
+            
+            }
+            
 
           </Form>
           <Text>{JSON.stringify(this.state.formData)}</Text>
-          <View style={styles.buttonContainer}>
-                <Button title={'Guardar'} onPress={this.guardarTransporte } />
+          <View style={styles.addNew}>
+                <Button title={'Guardar'} color="black" onPress={this.guardarTransporte } />
           </View>
         </ScrollView>
 
@@ -179,6 +173,16 @@ export default class FormCT extends React.Component {
 }
 
 const styles = StyleSheet.create({
+  addNew:{
+    backgroundColor: '#dde9ff',
+    borderRadius: 16,
+    borderWidth: 1,
+    borderColor: 'grey',
+    marginTop: 35,
+    marginLeft: 60,
+    marginRight: 60,
+    marginBottom:30
+  },
   container: {
     flex: 1,
   },

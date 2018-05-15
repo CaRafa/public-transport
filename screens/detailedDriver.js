@@ -1,6 +1,9 @@
 import React from 'react';
 import {Button,Image,Platform, ScrollView,StyleSheet,Text, TouchableOpacity,View,} from 'react-native';
-
+import {
+  Separator
+} from 'react-native-form-generator';
+import { ListItem } from 'react-native-elements'
 
 export default class DetailedDriver extends React.Component {
   static navigationOptions = {
@@ -12,19 +15,64 @@ export default class DetailedDriver extends React.Component {
     const {state} = props.navigation;
     this.object = state.params.cond;
     this.trans = state.params.trans
+    this.allTrans = state.params.allTrans
     console.log('parada que llega en mapreview', this.object , this.trans);
 
    }
-   
+   componentDidMount(){
+    this._fetchRoutesAsync();
+   } 
+
+   _fetchRoutesAsync = async () => {
+    try {
+      let response = await fetch('http://192.168.1.106:3000/api/ruta',{
+        method: 'GET'});
+      let result = await response.json();
+      this.setState({routes: result.route});
+
+    } catch(e) {
+      this.setState({routes: e});
+      console.log(this.state.polylines)
+    }
+  };
+
+  obtainRoutes(obj){
+
+    var aux = [];
+    console.log('tamanos de los vectores', obj.route.length , this.state.routes.length)
+    for(var i = 0; i < obj.route.length ; i++){
+      for(var j = 0; j < this.state.routes.length; j++){
+        console.log('comparacion',obj.route[i] , this.state.routes[j]._id );
+          if(obj.route[i] == this.state.routes[j]._id){
+            aux.push(this.state.routes[j]);
+          }
+
+      }
+
+    }
+    console.log('Resultado', aux);
+    return aux
+  }
+
    verAutobus(obj){
        console.log(obj);
-       this.props.navigation.navigate('DetailedTransport',{transporte: obj});
+       var routes = this.obtainRoutes(obj);
+    this.props.navigation.navigate('DetailedTransport', {
+      transporte: obj,
+      routes: routes
+    });
+
+   }
+
+   updateInfo = () => {
+
+     this.props.navigation.navigate('updateC',{transportes: this.allTrans, id: this.object._id});
    }
 
    crearHorario = () =>{
     console.log('asignar horario');
 
-    this.props.navigation.navigate('FormCH',{transportes: this.trans, id: this.object._id});
+    this.props.navigation.navigate('FormCH',{transportes: this.trans, id: this.object._id, horario: this.object.horario});
    }
 
   render() {
@@ -32,36 +80,47 @@ export default class DetailedDriver extends React.Component {
       <View style={styles.container}>
           <ScrollView>
 
-            <Text style={styles.getStartedTexthead}>
+            <Text style={styles.perfilTitle}>
               Perfil de {this.object.name}, {this.object.lastName}
             </Text>
             <Text style={styles.getStartedText}>
-              CI: {this.object.ci}
+              CI: {this.object.ci} ,{"\n"}  Telefono: {this.object.tel}
             </Text>
             { this.object.status == true? <Text style={styles.getStartedText}>
-              conduntor activo!
+              conductor activo
             </Text>: 
             <Text style={styles.getStartedText}>
-              conduntor inactivo!
+              conductor inactivo
             </Text>
             }
-            <Text style={styles.getStartedText}>
-              Telefono: {this.object.tel}
-            </Text>
 
-            {this.object.horario ? 
-              
-              this.object.horario.map(el => 
-              
-              <Text style={styles.getStartedText}>
-                {el.dia} : {el.asig == "descanso"? "Descanso" : el.asig.modelo} 
-              </Text>  
-              ) : <Text style={styles.getStartedText}>
-              No se ha asignado un horario
-            </Text> }
+            
+            <Text style={styles.perfilTitle}>
+              Transportes Asignados
+            </Text>
+            <View style={styles.listContainer}>
+              {
+                this.trans.map((el,i) => 
                 
-             
-            <View style={styles.addNew}>
+                <ListItem
+                key={i}
+                  
+                  title={el.modelo+' - '+el.numero}
+                  subtitle={el.placa}
+                onPress={this.verAutobus.bind(this,el)}
+              />
+              )
+              }</View>
+
+          
+          {this.object.horario? <View style={styles.seeMore}>
+            <Button
+              
+              onPress={this.crearHorario}
+              title="Ver Horario"
+              color="#000"
+              />
+            </View>: <View style={styles.addNew}>
             <Button
               
               onPress={this.crearHorario}
@@ -69,15 +128,17 @@ export default class DetailedDriver extends React.Component {
               color="#000"
               />
             </View>
-            
-            
-              {
-                this.trans.map(el => 
-                <View style={styles.buttonContainer}>
-                <Button title={parseInt(el.numero)+" - "+el.modelo} key={el._id} onPress={this.verAutobus.bind(this,el)} />
-                </View>
-              )
-              }
+
+          }
+            <View style={styles.addNew}>
+            <Button
+              
+              onPress={this.updateInfo}
+              title="Modificar datos"
+              color="#000"
+              />
+            </View>
+
             </ScrollView>
             
             
@@ -89,14 +150,25 @@ export default class DetailedDriver extends React.Component {
 }
 
 const styles = StyleSheet.create({
-    addNew:{
-        backgroundColor: '#cafc80',
-        borderRadius: 16,
-        borderWidth: 1,
-        borderColor: '#000',
-        marginTop: 35,
-    
-      },
+
+  addNew:{
+    backgroundColor: '#dde9ff',
+    borderRadius: 16,
+    borderWidth: 1,
+    borderColor: 'grey',
+    marginTop: 35,
+    marginLeft: 60,
+    marginRight: 60
+  },
+  seeMore:{
+    backgroundColor: '#f4f8ff',
+    borderRadius: 16,
+    borderWidth: 1,
+    borderColor: 'grey',
+    marginTop: 35,
+    marginLeft: 60,
+    marginRight: 60
+  },
   container: {
     flex: 1,
     backgroundColor: '#fff',
@@ -112,6 +184,22 @@ const styles = StyleSheet.create({
     fontSize: 17,
     color: 'black',
     lineHeight: 24,
+    textAlign: 'center',
+    marginTop: 70,
+  },
+  listContainer:{
+   
+    marginTop: 20,
+    borderBottomWidth: 0.5,
+    borderTopWidth: 1,
+    borderColor: 'grey',
+    marginLeft: 10,
+    marginRight: 10
+  },
+  perfilTitle:{
+    fontSize: 24,
+    color: 'black',
+    lineHeight: 26,
     textAlign: 'center',
     marginTop: 70,
   }

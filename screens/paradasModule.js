@@ -3,7 +3,7 @@ import {Button,Image,Platform, ScrollView,StyleSheet,Text, TouchableOpacity,View
 import { Expo, Location, Permissions } from 'expo';
 import { ListItem } from 'react-native-elements'
 
-export default class RutaScreen extends React.Component {
+export default class paradasModule extends React.Component {
 
   
   static navigationOptions = {
@@ -12,8 +12,7 @@ export default class RutaScreen extends React.Component {
 
   constructor(props){ 
     super(props)
-    const {state} = props.navigation;
-    this.coordenadas = state.params;
+    
     this.state = {
       paradas: []
     }
@@ -22,7 +21,6 @@ export default class RutaScreen extends React.Component {
 
    componentDidMount(){
     this._fetchParadasAsync();
-    this._fetchRoutesAsync();
    } 
 
 
@@ -37,28 +35,14 @@ export default class RutaScreen extends React.Component {
       this.setState({result: e});
       console.log(this.state.result)
     }
-  }
-
-   _fetchRoutesAsync = async () => {
-    try {
-      let response = await fetch('http://192.168.1.106:3000/api/ruta',{
-        method: 'GET'});
-      let result = await response.json();
-      console.log('REsultado del fetch a ruta', result.route);
-      this.setState({polylines: result.route});
-
-    } catch(e) {
-      this.setState({polylines: e});
-      console.log(this.state.polylines)
-    }
   };
+
+  
 
   AgregarParada = () => {
 
-    this.props.navigation.navigate('paradasModule');
+    this.props.navigation.navigate('Parada');
   }
-
-
 
   regionFrom(lat, lon, distance) {
     console.log('Entre bien en region form', lat, lon, distance);
@@ -81,35 +65,12 @@ export default class RutaScreen extends React.Component {
 }
 
 
-  
-verRuta = (ruta) => {
+  verLocation = (object) => {
 
-  this.rutaToSee = ruta;
-  console.log('RUTA ELEGDA',this.rutaToSee);
-  this.ObtenerUbicacion(3)
-}
+    var aux = this.regionFrom( object.coordinates.latitude, object.coordinates.longitude, object.coordinates.accuracy );    
+    this.props.navigation.navigate('MapPreview', {type: object.type, coords: aux, density: object.density});
 
-obtenerParadas = () => {
-
-  var paradas = []
-
-    for(var i=0; i < this.rutaToSee.paradas.length; i++){
-
-        for(var j=0 ; j< this.state.paradas.length; j++){
-          console.log('');
-            if(this.state.paradas[j]._id == this.rutaToSee.paradas[i]){
-              paradas.push(this.state.paradas[j])
-            }
-
-
-        }
-
-
-    }
-    console.log('Paradas buscadas', paradas);
-    return paradas
-}
-
+  }
 
   getLocationAsync = async (flag) =>  {
     const { status } = await Permissions.askAsync(Permissions.LOCATION);
@@ -122,17 +83,13 @@ obtenerParadas = () => {
 
           var realLoc = this.regionFrom(location.coords.latitude, location.coords.longitude, location.coords.accuracy)
           console.log('FLAG ultimo nivel', flag)
-          if(flag == 1){
+          if(flag == true){
             this.props.navigation.navigate('mapRoutes', {
               actual: realLoc, polylines: this.state.polylines, paradas: this.state.paradas}); 
-          }else if(flag == 2){
+          }else{
             this.props.navigation.navigate('CreateRoute', {
               actual: realLoc, points: this.state.paradas
             }); 
-          }else{
-            var paradas = this.obtenerParadas();
-            this.props.navigation.navigate('detailedRoute', {
-              actual: realLoc, polylines: this.rutaToSee, paradas: paradas}); 
           }
       
          
@@ -149,76 +106,51 @@ obtenerParadas = () => {
 
   }
 
-  verRutas = () => {
-    this.ObtenerUbicacion(1)
-  }
 
-  crearRutas = () => {
-    this.ObtenerUbicacion(2)
-  }
 
   
 
   render() {
 
-    
+   
+      
       return (
         <View style={styles.container}>
-          <ScrollView>
-              <View style={styles.container}>
+        <ScrollView>
+            
+            <View style={styles.container}>
                   <Text style={styles.tituloPrincipal}>    
-                  Rutas
+                  Paradas
                   </Text>
               </View>
-
               <View style={styles.listContainer}>
-              { !this.state.polylines ? <View style={styles.container}>
+        { !this.state.paradas ? <View style={styles.container}>
                                 <Text style={styles.getStartedText}>    
                                 LOADING!
                                 </Text>
                             </View>
                             :
-             
               
-                this.state.polylines.map((el,i) =>  
+                this.state.paradas.map((el,i) => 
                 <ListItem
-                key={i}
-                title={el.title}
-                subtitle={el.distance+"mts"}
-                onPress={this.verRuta.bind(this,el)}
+                    key={i}
+                    title={el.title}
+                    subtitle={el.type? 'Terminal': 'Toque y despegue'}
+                    onPress={this.verLocation.bind(this,el)}
               />
               )
               
-            
           
-            }</View>
-            <View style={styles.seeMore}>
-            <Button
-              
-              onPress={this.verRutas}
-              title="Ver mapa "
-              color="black"
-              />
-          </View>
-            <View style={styles.seeMore}>
+        }</View>
+  
+         <View style={styles.addNew}>
             <Button
               
               onPress={this.AgregarParada}
-              title="Ver paradas"
+              title="Agregar una parada"
               color="black"
               />
           </View>
-          
-          
-            <View style={styles.addNew}>
-            <Button
-              onPress={this.crearRutas}
-              title="Crear una ruta"
-              color="black"
-              />
-          </View>
-  
-        
           </ScrollView>
         </View>
       );
@@ -240,16 +172,8 @@ const styles = StyleSheet.create({
     borderColor: 'grey',
     marginTop: 35,
     marginLeft: 60,
-    marginRight: 60
-  },
-  seeMore:{
-    backgroundColor: '#f4f8ff',
-    borderRadius: 16,
-    borderWidth: 1,
-    borderColor: 'grey',
-    marginTop: 35,
-    marginLeft: 60,
-    marginRight: 60
+    marginRight: 60,
+    marginBottom:30
   },
   container: {
     flex: 1,
@@ -286,5 +210,4 @@ const styles = StyleSheet.create({
     marginTop: 30,
     marginBottom: 10,
   }
-
 });

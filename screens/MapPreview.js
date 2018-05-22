@@ -14,7 +14,6 @@ export default class MapPreview extends React.Component {
     super(props)
     const {state} = props.navigation;
     this.object = state.params;
-    console.log('parada que llega en mapreview', this.object);
 
    }
    

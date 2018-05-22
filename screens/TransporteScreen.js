@@ -25,7 +25,7 @@ export default class TransporteScreen extends React.Component {
 
   _fetchRoutesAsync = async () => {
     try {
-      let response = await fetch('http://192.168.1.106:3000/api/ruta',{
+      let response = await fetch('http://192.168.137.1:3000/api/ruta',{
         method: 'GET'});
       let result = await response.json();
       this.setState({routes: result.route});
@@ -37,10 +37,9 @@ export default class TransporteScreen extends React.Component {
 
   _fetchTransportesAsync = async () => {
     try {
-      let response = await fetch('http://192.168.1.106:3000/api/transporte',{
+      let response = await fetch('http://192.168.137.1:3000/api/transporte',{
         method: 'GET'});
       let result = await response.json();
-      console.log('RESULTADO FETCH',result.transporte);
       this.setState({transporte: result.transporte});
 
     } catch(e) {
@@ -51,10 +50,8 @@ export default class TransporteScreen extends React.Component {
   obtainRoutes(obj){
 
     var aux = [];
-    console.log('tamanos de los vectores', obj.route.length , this.state.routes.length)
     for(var i = 0; i < obj.route.length ; i++){
       for(var j = 0; j < this.state.routes.length; j++){
-        console.log('comparacion',obj.route[i] , this.state.routes[j]._id );
           if(obj.route[i] == this.state.routes[j]._id){
             aux.push(this.state.routes[j]);
           }
@@ -62,12 +59,10 @@ export default class TransporteScreen extends React.Component {
       }
 
     }
-    console.log('Resultado', aux);
     return aux
   }
 
   verDetallado = (transporte) => {
-    console.log('Seleccionado', transporte);
     var routes = this.obtainRoutes(transporte);
     this.props.navigation.navigate('DetailedTransport', {
       transporte: transporte,

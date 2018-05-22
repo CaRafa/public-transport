@@ -26,14 +26,13 @@ export default class paradasModule extends React.Component {
 
    _fetchParadasAsync = async () => {
     try {
-      let response = await fetch('http://192.168.1.106:3000/api/parada',{
+      let response = await fetch('http://192.168.137.1:3000/api/parada',{
         method: 'GET'});
       let result = await response.json();
       this.setState({paradas: result.par});
 
     } catch(e) {
       this.setState({result: e});
-      console.log(this.state.result)
     }
   };
 
@@ -45,7 +44,6 @@ export default class paradasModule extends React.Component {
   }
 
   regionFrom(lat, lon, distance) {
-    console.log('Entre bien en region form', lat, lon, distance);
     distance = distance/2
     const circumference = 40075
     const oneDegreeOfLatitudeInMeters = 111.32 * 1000
@@ -55,7 +53,6 @@ export default class paradasModule extends React.Component {
     const longitudeDelta = Math.abs(Math.atan2(
             Math.sin(angularDistance)*Math.cos(lat),
             Math.cos(angularDistance) - Math.sin(lat) * Math.sin(lat)))
-      console.log('Saldre bien de funcion');
     return result = {
         latitude: lat,
         longitude: lon,
@@ -82,7 +79,7 @@ export default class paradasModule extends React.Component {
           });
 
           var realLoc = this.regionFrom(location.coords.latitude, location.coords.longitude, location.coords.accuracy)
-          console.log('FLAG ultimo nivel', flag)
+         
           if(flag == true){
             this.props.navigation.navigate('mapRoutes', {
               actual: realLoc, polylines: this.state.polylines, paradas: this.state.paradas}); 

@@ -14,7 +14,6 @@ export default class FormCR extends React.Component {
     super(props);
     const {state} = props.navigation;
     this.object = state.params; 
-    console.log('data que llega al crear ruta', this.object);   
     this.state = {
       formData:{}
     }
@@ -30,7 +29,7 @@ export default class FormCR extends React.Component {
 
   CreateRutaAsync = async () => {
     try {
-      let response = await fetch('http://192.168.1.106:3000/api/ruta',{
+      let response = await fetch('http://192.168.137.1:3000/api/ruta',{
         method: 'POST',
         headers: {
           'Accept': 'application/json',
@@ -49,16 +48,13 @@ export default class FormCR extends React.Component {
       let result = await response.json();
       this.setState({result: result.par});
       this.infoLoaded = true;
-      console.log(this.state.result);
 
     } catch(e) {
       this.setState({result: e});
-      console.log(this.state.result)
     }
   }
 
   guardarRuta = () => {
-      console.log('Guardar Ruta',this.polylines, this.state.formData);
       this.CreateRutaAsync();
       this.props.navigation.navigate('Rutas');
   }
@@ -131,7 +127,6 @@ export default class FormCR extends React.Component {
             }}/>
             
           </Form>
-          <Text>{JSON.stringify(this.state.formData)}</Text>
           <View style={styles.addNew}>
                 <Button title={'Guardar'} color="black" onPress={this.guardarRuta } />
           </View>

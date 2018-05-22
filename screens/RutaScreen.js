@@ -28,28 +28,25 @@ export default class RutaScreen extends React.Component {
 
    _fetchParadasAsync = async () => {
     try {
-      let response = await fetch('http://192.168.1.106:3000/api/parada',{
+      let response = await fetch('http://192.168.137.1:3000/api/parada',{
         method: 'GET'});
       let result = await response.json();
       this.setState({paradas: result.par});
 
     } catch(e) {
       this.setState({result: e});
-      console.log(this.state.result)
     }
   }
 
    _fetchRoutesAsync = async () => {
     try {
-      let response = await fetch('http://192.168.1.106:3000/api/ruta',{
+      let response = await fetch('http://192.168.137.1:3000/api/ruta',{
         method: 'GET'});
       let result = await response.json();
-      console.log('REsultado del fetch a ruta', result.route);
       this.setState({polylines: result.route});
 
     } catch(e) {
       this.setState({polylines: e});
-      console.log(this.state.polylines)
     }
   };
 
@@ -61,7 +58,6 @@ export default class RutaScreen extends React.Component {
 
 
   regionFrom(lat, lon, distance) {
-    console.log('Entre bien en region form', lat, lon, distance);
     distance = distance/2
     const circumference = 40075
     const oneDegreeOfLatitudeInMeters = 111.32 * 1000
@@ -71,7 +67,6 @@ export default class RutaScreen extends React.Component {
     const longitudeDelta = Math.abs(Math.atan2(
             Math.sin(angularDistance)*Math.cos(lat),
             Math.cos(angularDistance) - Math.sin(lat) * Math.sin(lat)))
-      console.log('Saldre bien de funcion');
     return result = {
         latitude: lat,
         longitude: lon,
@@ -85,7 +80,6 @@ export default class RutaScreen extends React.Component {
 verRuta = (ruta) => {
 
   this.rutaToSee = ruta;
-  console.log('RUTA ELEGDA',this.rutaToSee);
   this.ObtenerUbicacion(3)
 }
 
@@ -96,7 +90,6 @@ obtenerParadas = () => {
     for(var i=0; i < this.rutaToSee.paradas.length; i++){
 
         for(var j=0 ; j< this.state.paradas.length; j++){
-          console.log('');
             if(this.state.paradas[j]._id == this.rutaToSee.paradas[i]){
               paradas.push(this.state.paradas[j])
             }
@@ -106,7 +99,6 @@ obtenerParadas = () => {
 
 
     }
-    console.log('Paradas buscadas', paradas);
     return paradas
 }
 
@@ -121,18 +113,19 @@ obtenerParadas = () => {
           });
 
           var realLoc = this.regionFrom(location.coords.latitude, location.coords.longitude, location.coords.accuracy)
-          console.log('FLAG ultimo nivel', flag)
+         
           if(flag == 1){
             this.props.navigation.navigate('mapRoutes', {
               actual: realLoc, polylines: this.state.polylines, paradas: this.state.paradas}); 
           }else if(flag == 2){
             this.props.navigation.navigate('CreateRoute', {
-              actual: realLoc, points: this.state.paradas
+              actual: realLoc, points: this.state.paradas, update: false
             }); 
           }else{
             var paradas = this.obtenerParadas();
+          
             this.props.navigation.navigate('detailedRoute', {
-              actual: realLoc, polylines: this.rutaToSee, paradas: paradas}); 
+              actual: realLoc, route: this.rutaToSee, paradas: paradas}); 
           }
       
          
@@ -141,7 +134,6 @@ obtenerParadas = () => {
 
   ObtenerUbicacion = (flag) => {
      
-    console.log('FLAG', flag)
     this.getLocationAsync(flag).then(function(response){
     }).catch(function(e) {
       console.log(e); // "Uh-oh!"
@@ -181,10 +173,11 @@ obtenerParadas = () => {
              
               
                 this.state.polylines.map((el,i) =>  
+                
                 <ListItem
                 key={i}
-                title={el.title}
-                subtitle={el.distance+"mts"}
+                title={el.title }
+                subtitle={(el.type == 'Urb'? 'Urbana' : el.type == 'subUrb'? 'Sub urbana': 'Inter Urbana')+' - '+Math.round(el.distance)/1000+"km" }
                 onPress={this.verRuta.bind(this,el)}
               />
               )

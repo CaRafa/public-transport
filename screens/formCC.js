@@ -37,7 +37,7 @@ export default class FormCC extends React.Component {
 
   CreateCondAsync = async () => {
     try {
-      let response = await fetch('http://192.168.1.106:3000/api/conductor',{
+      let response = await fetch('http://192.168.137.1:3000/api/conductor',{
         method: 'POST',
         headers: {
           'Accept': 'application/json',
@@ -58,17 +58,14 @@ export default class FormCC extends React.Component {
       let result = await response.json();
       this.setState({result: result.con});
       this.infoLoaded = true;
-      console.log(this.state.result);
 
     } catch(e) {
       this.setState({result: e});
-      console.log(this.state.result)
     }
   }
   
 
   guardarConductor = () => {
-      console.log('Guardar Conductor', this.state.formData,this.addingTran);
       //this.tran = this.Transporte[parseInt(this.state.formData.route)-1]._id;
       this.CreateCondAsync();
       this.props.navigation.navigate('Conductores');
@@ -89,7 +86,6 @@ export default class FormCC extends React.Component {
           this.addingTran.push(object._id)
       }
     }
-    console.log(this.addingTran);
   }
   
   render() {
@@ -147,7 +143,6 @@ export default class FormCC extends React.Component {
               onValueChange={this.agregarTran.bind(this,el,index)}/>
             )}
           </Form>
-          <Text>{JSON.stringify(this.state.formData)}</Text>
           <View style={styles.addNew}>
                 <Button title={'Guardar'} color="black" onPress={this.guardarConductor } />
           </View>

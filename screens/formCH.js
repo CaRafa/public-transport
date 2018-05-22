@@ -21,7 +21,6 @@ export default class FormCH extends React.Component {
       paradas:[]
     }
     this.transJson = []
-    console.log('INFO QUE LLEGA AL SCREEN', this.transportes);
     //this.ready = false;
    this.obtainOptions();
 
@@ -32,14 +31,12 @@ export default class FormCH extends React.Component {
    }
 
    obtainOptions = () => {
-       console.log('Tamano en obtain', this.transportes.length)
        
     for(var i = 0; i < this.transportes.length; i++){
         var number = this.transportes[i].numero
         this.transJson.push(this.transportes[i])
         var aux =  number+' - '+JSON.stringify(this.transportes[i].modelo)
         this.state.paradas[i+1] = aux;
-        console.log(this.state.paradas);
         this.setState({ paradas: this.state.paradas })
     }
     this.transJson.push("descanso")
@@ -56,7 +53,7 @@ export default class FormCH extends React.Component {
 
   UpdateHorarioAsync = async () => {
     try {
-      let response = await fetch('http://192.168.1.106:3000/api/conductor/'+this.id,{
+      let response = await fetch('http://192.168.137.1:3000/api/conductor/'+this.id,{
         method: 'PUT',
         headers: {
           'Accept': 'application/json',
@@ -72,11 +69,9 @@ export default class FormCH extends React.Component {
       let result = await response.json();
       this.setState({result: result.cond});
       this.infoLoaded = true;
-      console.log(this.state.result);
 
     } catch(e) {
       this.setState({result: e});
-      console.log(this.state.result)
     }
   }
   
@@ -84,7 +79,6 @@ export default class FormCH extends React.Component {
  
 
   setHorario = () => {
-    console.log('Se creara el array de horarios');
     this.horario = []
     if(this.state.formData.lunes){
         var aux = {dia: 'lunes', asig: this.transJson[this.state.formData.lunes-1]}
@@ -115,7 +109,6 @@ export default class FormCH extends React.Component {
         this.horario.push(aux);
     }
 
-    console.log('horario final',this.horario);
     this.UpdateHorarioAsync().then(function(res){
       
     })
@@ -200,7 +193,6 @@ export default class FormCH extends React.Component {
               
 
             </Form>
-            <Text>{JSON.stringify(this.state.formData)}</Text>
             {!this.horario? 
             <View style={styles.addNew}>
                   <Button title={'Guardar'} color="black" onPress={this.setHorario } />

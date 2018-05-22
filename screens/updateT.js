@@ -38,7 +38,7 @@ export default class updateT extends React.Component {
 
   UpdateTranAsync = async () => {
     try {
-      let response = await fetch('http://192.168.1.106:3000/api/tranporte/'+this.object._id,{
+      let response = await fetch('http://192.168.137.1:3000/api/tranporte/'+this.object._id,{
         method: 'PUT',
         headers: {
           'Accept': 'application/json',
@@ -53,17 +53,14 @@ export default class updateT extends React.Component {
       let result = await response.json();
       this.setState({result: result.con});
       this.infoLoaded = true;
-      console.log(this.state.result);
 
     } catch(e) {
       this.setState({result: e});
-      console.log(this.state.result)
     }
   }
   
 
   updateTransporte = () => {
-      console.log('Guardar Conductor', this.state.formData,this.addingTran);
       //this.tran = this.Transporte[parseInt(this.state.formData.route)-1]._id;
       this.UpdateTranAsync();
       this.props.navigation.goBack(null);
@@ -125,7 +122,6 @@ export default class updateT extends React.Component {
             
             ) }
           </Form>
-          <Text>{JSON.stringify(this.state.formData)}</Text>
           <View style={styles.addNew}>
                 <Button title={'Actualizar'} color="black" onPress={this.updateTransporte } />
           </View>

@@ -3,9 +3,8 @@ import {Button,Image,Platform, ScrollView,StyleSheet,Text, TouchableOpacity,View
 } from 'react-native';
 import { MapView  } from 'expo';
 import Polyline from '@mapbox/polyline';
-import { Ionicons } from '@expo/vector-icons';
 
-export default class mapRoutes extends React.Component {
+export default class detailedRouteMap extends React.Component {
 
   
   static navigationOptions = {
@@ -20,6 +19,9 @@ export default class mapRoutes extends React.Component {
     this.actual = this.coordenadas.actual;
     this.polylines = this.coordenadas.polylines;
     this.paradas = this.coordenadas.paradas;
+
+
+
    }
 
    
@@ -45,30 +47,36 @@ export default class mapRoutes extends React.Component {
                         :
             <View>
             {
-            this.polylines.map(el => 
-              el.type == "Urb" ?el.route.map(ele =>           
+            
+              this.polylines.type == "Urb" ? this.polylines.route.map(ele =>           
                                 <MapView.Polyline
-                                key={el._id}
+                                key={this.polylines._id}
                                 coordinates={ele}
                                 strokeColor="#4286f4"
                                 fillColor="rgba(255,0,0,0.5)"
                                 strokeWidth={10}/>   
-            ) : el.type == "subUrb" ?  el.route.map(ele =>           
+            ) : this.polylines.type == "subUrb" ?  this.polylines.route.map(ele =>           
                                     <MapView.Polyline
-                                    key={el._id}
+                                    key={this.polylines._id}
                                     coordinates={ele}
                                     strokeColor="#ef3eef"
                                     fillColor="rgba(255,0,0,0.5)"
                                     strokeWidth={6}/>   ) :  
-                        el.route.map(ele =>           
+                        this.polylines.route.map(ele =>           
                         <MapView.Polyline
-                        key={el._id}
+                        key={this.polylines._id}
                         coordinates={ele}
                         strokeColor="#43ef3e"
                         fillColor="rgba(255,0,0,0.5)"
-                        strokeWidth={3}/>   )
+                        strokeWidth={3}/> 
+                    
+                    )
+
+                    
+
+
           
-          )}
+          }
             </View>
             }
            {

@@ -14,7 +14,6 @@ export default class FormCP extends React.Component {
     super(props);
     const {state} = props.navigation;
     this.coordinates = state.params;
-    console.log(this.coordinates);
     this.state = {
       formData:{
         type: false
@@ -39,7 +38,7 @@ export default class FormCP extends React.Component {
 
   CreateParadaAsync = async (location, info) => {
     try {
-      let response = await fetch('http://192.168.1.106:3000/api/parada',{
+      let response = await fetch('http://192.168.137.1:3000/api/parada',{
         method: 'POST',
         headers: {
           'Accept': 'application/json',
@@ -57,7 +56,6 @@ export default class FormCP extends React.Component {
       let result = await response.json();
     } catch(e) {
       this.setState({result: e});
-      console.log(this.state.result)
     }
   };
 
@@ -140,7 +138,6 @@ export default class FormCP extends React.Component {
             }}/> : null}
 
           </Form>
-          <Text>{JSON.stringify(this.state.formData)}</Text>
           <View style={styles.addNew}>
                 <Button title={'Guardar'} color="black" onPress={this.guardarParada } />
           </View>

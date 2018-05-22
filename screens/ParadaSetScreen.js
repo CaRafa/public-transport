@@ -67,7 +67,6 @@ export default class ParadaSetScreen extends React.Component {
   GuardarParada = () => {
 
     this.getLocationAsync().then(function(response){
-    console.log('exito');
     });
     
 

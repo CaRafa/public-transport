@@ -21,9 +21,11 @@ import FormCH from '../screens/formCH';
 import MapPreview from '../screens/MapPreview';
 import DetailedTransport from '../screens/detailedTransport'
 import DetailedDriver from '../screens/detailedDriver'
+import detailedRouteMap from '../screens/detailedRouteMap'
 import detailedRoute from '../screens/detailedRoute'
 import updateC from '../screens/updateC'
 import updateT from '../screens/updateT'
+import updateR from '../screens/updateR'
 
 export const RouteNavigator = StackNavigator({
 
@@ -43,6 +45,10 @@ export const RouteNavigator = StackNavigator({
     screen: CreateRoute,
 
   },
+  detailedRouteMap :{
+    screen: detailedRouteMap,
+
+  },
   detailedRoute :{
     screen: detailedRoute,
 
@@ -56,6 +62,9 @@ export const RouteNavigator = StackNavigator({
   },
   FormCR :{
     screen: FormCR,
+  },
+  updateR: {
+    screen: updateR,
   },
 
 })

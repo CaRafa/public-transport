@@ -1,154 +1,204 @@
 import React from 'react';
-import {Button,Image,Platform, ScrollView,StyleSheet,Text, TouchableOpacity,View
-} from 'react-native';
-import { MapView  } from 'expo';
-import Polyline from '@mapbox/polyline';
+import {Button,Image,Platform, ScrollView,StyleSheet,Text, TouchableOpacity,View,} from 'react-native';
+import {
+  Separator
+} from 'react-native-form-generator';
+import { ListItem } from 'react-native-elements'
 
-export default class detailedRoute extends React.Component {
-
-  
+export default class DetailedRoute extends React.Component {
   static navigationOptions = {
     header: null,
-    tabBarVisible: false,
   };
 
   constructor(props){ 
     super(props)
     const {state} = props.navigation;
-    this.coordenadas = state.params;
-    this.actual = this.coordenadas.actual;
-    this.polylines = this.coordenadas.polylines;
-    this.paradas = this.coordenadas.paradas;
-
-
+    this.route = state.params.route
+    this.paradas = state.params.paradas
+    this.actual = state.params.actual
 
    }
-
    
-   
-   
-  render() {
+   componentDidMount(){
+    this._fetchParadasAsync();
+   } 
 
 
-    return (
-        <MapView
-        style={{ flex: 1 }}
-        initialRegion={{
-            latitude: this.actual.latitude,
-            longitude: this.actual.longitude,
-            latitudeDelta: this.actual.latitudeDelta,
-            longitudeDelta: this.actual.longitudeDelta,
-          }}
-        
-        annotations={this.markers}
-        >
-        
-        { !this.polylines ? null
-                        :
-            <View>
-            {
-            
-              this.polylines.type == "Urb" ? this.polylines.route.map(ele =>           
-                                <MapView.Polyline
-                                key={this.polylines._id}
-                                coordinates={ele}
-                                strokeColor="#4286f4"
-                                fillColor="rgba(255,0,0,0.5)"
-                                strokeWidth={10}/>   
-            ) : this.polylines.type == "subUrb" ?  this.polylines.route.map(ele =>           
-                                    <MapView.Polyline
-                                    key={this.polylines._id}
-                                    coordinates={ele}
-                                    strokeColor="#ef3eef"
-                                    fillColor="rgba(255,0,0,0.5)"
-                                    strokeWidth={6}/>   ) :  
-                        this.polylines.route.map(ele =>           
-                        <MapView.Polyline
-                        key={this.polylines._id}
-                        coordinates={ele}
-                        strokeColor="#43ef3e"
-                        fillColor="rgba(255,0,0,0.5)"
-                        strokeWidth={3}/> 
-                    
-                    )
+   _fetchParadasAsync = async () => {
+    try {
+      let response = await fetch('http://192.168.137.1:3000/api/parada',{
+        method: 'GET'});
+      let result = await response.json();
+      this.setState({points: result.par});
 
-                    
-
-
-          
-          }
-            </View>
-            }
-           {
-              this.paradas.map(el => 
-                el.type == true ? <MapView.Marker
-                    key={el._id}
-                    coordinate={{latitude: el.coordinates.latitude,
-                    longitude: el.coordinates.longitude}}
-                    pinColor={'black'}
-                 /> : 
-                 el.density == "D1"?
-                 <MapView.Marker
-                 key={el._id}
-                 coordinate={{latitude: el.coordinates.latitude,
-                 longitude: el.coordinates.longitude}}
-                 pinColor={'red'}
-                />  
-                : 
-                 el.density == "D2"?
-                 <MapView.Marker
-                 key={el._id}
-                 coordinate={{latitude: el.coordinates.latitude,
-                 longitude: el.coordinates.longitude}}
-                 pinColor={'orange'}
-                />  
-                : 
-                 el.density == "D3"?
-                 <MapView.Marker
-                 key={el._id}
-                 coordinate={{latitude: el.coordinates.latitude,
-                 longitude: el.coordinates.longitude}}
-                 pinColor={'yellow'}
-                />  
-                : 
-                 el.density == "D4"?
-                 <MapView.Marker
-                 key={el._id}
-                 coordinate={{latitude: el.coordinates.latitude,
-                 longitude: el.coordinates.longitude}}
-                 pinColor={'green'}
-                />  
-                : 
-                 el.density == "D5"?
-                 <MapView.Marker
-                 key={el._id}
-                 coordinate={{latitude: el.coordinates.latitude,
-                 longitude: el.coordinates.longitude}}
-                 pinColor={'blue'}
-                />  
-                : 
-                <MapView.Marker
-                 key={el._id}
-                 coordinate={{latitude: el.coordinates.latitude,
-                 longitude: el.coordinates.longitude}}
-                />  
-             )
-            }
-
-         
-
-        </MapView>
-    );
+    } catch(e) {
+      this.setState({result: e});
+    }
   }
 
+
+   updateRoute = () => {
+    this.props.navigation.navigate('CreateRoute', {
+        actual: this.actual, points: this.state.points, update: true, id: this.route._id
+      }); 
+   }
+
+   verParada = (object) => {
+    var aux = this.regionFrom( object.coordinates.latitude, object.coordinates.longitude, object.coordinates.accuracy );    
+    this.props.navigation.navigate('MapPreview', {type: object.type, coords: aux, density: object.density});
+
+
+
+}
+    verRuta = () => {
+        
+        this.props.navigation.navigate('detailedRouteMap', {
+                actual: this.actual, polylines: this.route, paradas: this.paradas}); 
+            
+    }
+   
+
+    regionFrom(lat, lon, distance) {
+        distance = distance/2
+        const circumference = 40075
+        const oneDegreeOfLatitudeInMeters = 111.32 * 1000
+        const angularDistance = distance/circumference
+    
+        const latitudeDelta = distance / oneDegreeOfLatitudeInMeters
+        const longitudeDelta = Math.abs(Math.atan2(
+                Math.sin(angularDistance)*Math.cos(lat),
+                Math.cos(angularDistance) - Math.sin(lat) * Math.sin(lat)))
+        return result = {
+            latitude: lat,
+            longitude: lon,
+            latitudeDelta,
+            longitudeDelta,
+        }
+    }
+
+  render() {
+    return (
+      <View style={styles.container}>
+          <ScrollView>
+
+            <Text style={styles.perfilTitle}>
+              Ruta: {this.route.title}
+            </Text>
+            <Text style={styles.getStartedText}>
+              {this.route.description}
+            </Text>
+            { this.route.type == 'Urb'? <Text style={styles.getStartedText}>
+              Ruta Urbana
+            </Text>: this.route.type == 'subUrb'?
+            <Text style={styles.getStartedText}>
+              Ruta Sub Urbana
+            </Text>:
+            <Text style={styles.getStartedText}>
+              Ruta Inter Urbana
+             </Text>
+            }
+            <Text style={styles.getStartedText}>
+             Distancia aproximada: {Math.round(this.route.distance)/1000} km
+            </Text>
+
+            
+            <Text style={styles.perfilTitle}>
+              Paradas que cubre:
+            </Text>
+            <View style={styles.listContainer}>
+              {
+                this.paradas.map((el,i) => 
+                
+                <ListItem
+                key={i}
+                  
+                  title={el.title}
+                  subtitle={el.type == true? 'Terminal' : 'Toque y despegue'}
+                  onPress={this.verParada.bind(this,el)}
+              />
+              )
+              }</View>
+
+          <View style={styles.seeMore}>
+            <Button
+              
+              onPress={this.verRuta}
+              title="Ver en mapa "
+              color="black"
+              />
+          </View>
+
+            <View style={styles.addNew}>
+            <Button
+              
+              onPress={this.updateRoute}
+              title="Modificar ruta"
+              color="#000"
+              />
+            </View>
+
+            </ScrollView>
+            
+            
+
+
+      </View>
+    );
+  }
 }
 
 const styles = StyleSheet.create({
- buttonRow:{
-    position:"absolute", bottom: 0, flex: 1, flexDirection: "row"
-  },
 
-  button:{
-    alignSelf:"center", margin:20 ,flex:1, flexDirection: "row", justifyContent: "space-between"
+  addNew:{
+    backgroundColor: '#dde9ff',
+    borderRadius: 16,
+    borderWidth: 1,
+    borderColor: 'grey',
+    marginTop: 35,
+    marginLeft: 60,
+    marginRight: 60
+  },
+  seeMore:{
+    backgroundColor: '#f4f8ff',
+    borderRadius: 16,
+    borderWidth: 1,
+    borderColor: 'grey',
+    marginTop: 35,
+    marginLeft: 60,
+    marginRight: 60
+  },
+  container: {
+    flex: 1,
+    backgroundColor: '#fff',
+  },
+  getStartedText: {
+    fontSize: 17,
+    color: 'black',
+    lineHeight: 24,
+    textAlign: 'center',
+    marginTop: 30,
+  },
+  getStartedTexthead: {
+    fontSize: 17,
+    color: 'black',
+    lineHeight: 24,
+    textAlign: 'center',
+    marginTop: 70,
+  },
+  listContainer:{
+   
+    marginTop: 20,
+    borderBottomWidth: 0.5,
+    borderTopWidth: 1,
+    borderColor: 'grey',
+    marginLeft: 10,
+    marginRight: 10
+  },
+  perfilTitle:{
+    fontSize: 24,
+    color: 'black',
+    lineHeight: 26,
+    textAlign: 'center',
+    marginTop: 70,
   }
 });

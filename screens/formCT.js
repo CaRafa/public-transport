@@ -38,7 +38,7 @@ export default class FormCT extends React.Component {
 
   CreateTranAsync = async () => {
     try {
-      let response = await fetch('http://192.168.1.106:3000/api/transporte',{
+      let response = await fetch('http://192.168.137.1:3000/api/transporte',{
         method: 'POST',
         headers: {
           'Accept': 'application/json',
@@ -59,17 +59,14 @@ export default class FormCT extends React.Component {
       let result = await response.json();
       this.setState({result: result.par});
       this.infoLoaded = true;
-      console.log(this.state.result);
 
     } catch(e) {
       this.setState({result: e});
-      console.log(this.state.result)
     }
   }
   
 
   guardarTransporte = () => {
-      console.log('Guardar Ruta', this.state.formData);
       this.CreateTranAsync();
       this.props.navigation.navigate('Transportes');
   }
@@ -162,7 +159,6 @@ export default class FormCT extends React.Component {
             
 
           </Form>
-          <Text>{JSON.stringify(this.state.formData)}</Text>
           <View style={styles.addNew}>
                 <Button title={'Guardar'} color="black" onPress={this.guardarTransporte } />
           </View>

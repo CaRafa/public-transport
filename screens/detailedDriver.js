@@ -16,7 +16,6 @@ export default class DetailedDriver extends React.Component {
     this.object = state.params.cond;
     this.trans = state.params.trans
     this.allTrans = state.params.allTrans
-    console.log('parada que llega en mapreview', this.object , this.trans);
 
    }
    componentDidMount(){
@@ -25,24 +24,21 @@ export default class DetailedDriver extends React.Component {
 
    _fetchRoutesAsync = async () => {
     try {
-      let response = await fetch('http://192.168.1.106:3000/api/ruta',{
+      let response = await fetch('http://192.168.137.1:3000/api/ruta',{
         method: 'GET'});
       let result = await response.json();
       this.setState({routes: result.route});
 
     } catch(e) {
       this.setState({routes: e});
-      console.log(this.state.polylines)
     }
   };
 
   obtainRoutes(obj){
 
     var aux = [];
-    console.log('tamanos de los vectores', obj.route.length , this.state.routes.length)
     for(var i = 0; i < obj.route.length ; i++){
       for(var j = 0; j < this.state.routes.length; j++){
-        console.log('comparacion',obj.route[i] , this.state.routes[j]._id );
           if(obj.route[i] == this.state.routes[j]._id){
             aux.push(this.state.routes[j]);
           }
@@ -50,12 +46,10 @@ export default class DetailedDriver extends React.Component {
       }
 
     }
-    console.log('Resultado', aux);
     return aux
   }
 
    verAutobus(obj){
-       console.log(obj);
        var routes = this.obtainRoutes(obj);
     this.props.navigation.navigate('DetailedTransport', {
       transporte: obj,
@@ -70,8 +64,6 @@ export default class DetailedDriver extends React.Component {
    }
 
    crearHorario = () =>{
-    console.log('asignar horario');
-
     this.props.navigation.navigate('FormCH',{transportes: this.trans, id: this.object._id, horario: this.object.horario});
    }
 

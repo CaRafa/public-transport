@@ -18,7 +18,6 @@ export default class DetailedTransport extends React.Component {
     this.object = state.params.transporte;
     this.allRoutes = state.params.allRoutes
     this.routes = state.params.routes;
-    console.log('parada que llega en mapreview', this.object);
 
    }
 
@@ -29,19 +28,17 @@ export default class DetailedTransport extends React.Component {
 
    _fetchParadasAsync = async () => {
     try {
-      let response = await fetch('http://192.168.1.106:3000/api/parada',{
+      let response = await fetch('http://192.168.137.1:3000/api/parada',{
         method: 'GET'});
       let result = await response.json();
       this.setState({paradas: result.par});
 
     } catch(e) {
       this.setState({paradas: e});
-      console.log(this.state.result)
     }
   }
 
   regionFrom(lat, lon, distance) {
-    console.log('Entre bien en region form', lat, lon, distance);
     distance = distance/2
     const circumference = 40075
     const oneDegreeOfLatitudeInMeters = 111.32 * 1000
@@ -51,7 +48,6 @@ export default class DetailedTransport extends React.Component {
     const longitudeDelta = Math.abs(Math.atan2(
             Math.sin(angularDistance)*Math.cos(lat),
             Math.cos(angularDistance) - Math.sin(lat) * Math.sin(lat)))
-      console.log('Saldre bien de funcion');
     return result = {
         latitude: lat,
         longitude: lon,
@@ -67,7 +63,6 @@ obtenerParadas = () => {
     for(var i=0; i < this.rutaToSee.paradas.length; i++){
 
         for(var j=0 ; j< this.state.paradas.length; j++){
-          console.log('');
             if(this.state.paradas[j]._id == this.rutaToSee.paradas[i]){
               paradas.push(this.state.paradas[j])
             }
@@ -77,7 +72,6 @@ obtenerParadas = () => {
 
 
     }
-    console.log('Paradas buscadas', paradas);
     return paradas
 }
 
@@ -95,7 +89,7 @@ obtenerParadas = () => {
           var paradas = this.obtenerParadas();
 
           
-            this.props.navigation.navigate('detailedRoute', {
+            this.props.navigation.navigate('detailedRouteMap', {
               actual: realLoc, polylines: this.rutaToSee, paradas: paradas}); 
           
       }
@@ -119,7 +113,6 @@ obtenerParadas = () => {
   verRutas = (ruta) => {
 
     this.rutaToSee = ruta;
-    console.log('RUTA ELEGDA',this.rutaToSee);
     this.ObtenerUbicacion(true)
   }
 
@@ -145,7 +138,7 @@ obtenerParadas = () => {
                 <ListItem
                 key={i}
                 title={el.title}
-                subtitle={el.distance+"mts"}
+                subtitle={Math.round(el.distance)/1000+"km"}
                 onPress={this.verRutas.bind(this,el)}
               />
               ): null

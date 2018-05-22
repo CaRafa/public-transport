@@ -17,9 +17,12 @@ export default class RouteCreation extends React.Component {
     super(props)
     const {state} = props.navigation;
     this.coordenadas = state.params;
-
     this.actual = this.coordenadas.actual;
     this.paradas = this.coordenadas.points;
+    this.update = this.coordenadas.update;
+    if(this.coordenadas.id){
+        this.id = this.coordenadas.id
+    }
     this.polyline = []
     this.Nparada = 0;
     this.state = { coordsArray: [],
@@ -68,7 +71,6 @@ export default class RouteCreation extends React.Component {
         if(dis*1000 > 200){
 
             this.comDis = this.comDis + (dis*1000)
-            console.log('total de distancia', this.comDis);
             this.verify(true);
             this.state.coordsArray[this.Npolyline] = coords;
             this.Npolyline = this.Npolyline + 1;
@@ -96,9 +98,7 @@ verify(response){
         if(this.state.pointArray.length != 0){
             for(var i=0; i < this.pointsToCompare.length; i++){
                 var find = false;
-                console.log('length del pointarray', this.state.pointArray.length);
                 for(var j=0; j < this.state.pointArray.length; j ++){
-                    console.log('compare if', this.pointsToCompare[i] , this.state.pointArray[j]);
                     if(this.pointsToCompare[i]._id == this.state.pointArray[j]){
                         find = true;
                     }
@@ -116,11 +116,9 @@ verify(response){
         
         this.pointsToCompare.splice(0,2)
     }else{
-        console.log('no se agregaran estas paradas');
         this.pointsToCompare.splice(0,2)
     }
 
-    console.log('Resultados del verify', this.state.pointArray, 'activos', this.pointsToCompare  );
 }
    
    setPolyline = (point) => {
@@ -153,15 +151,20 @@ verify(response){
 
    GuardarRuta = () => {
 
-    console.log('GUARDAR PARADA');
     //this.CreateRutaAsync();
-    this.props.navigation.navigate('FormCR', {cord:this.state.coordsArray,par: this.state.pointArray, dis: this.comDis});
+    if(this.update == false){
+        this.props.navigation.navigate('FormCR', {cord:this.state.coordsArray,par: this.state.pointArray, dis: this.comDis});
 
+    }
+    else{
+        this.props.navigation.navigate('updateR', {cord:this.state.coordsArray,par: this.state.pointArray, dis: this.comDis
+        , id: this.id});
+    }
    }
  
    CreateRutaAsync = async () => {
     try {
-      let response = await fetch('http://192.168.1.106:3000/api/ruta',{
+      let response = await fetch('http://192.168.137.1:3000/api/ruta',{
         method: 'POST',
         headers: {
           'Accept': 'application/json',

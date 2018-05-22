@@ -81,7 +81,7 @@ export default class detailedRouteMap extends React.Component {
             }
            {
               this.paradas.map(el => 
-                el.type == true ? <MapView.Marker
+                el.terminal == true ? <MapView.Marker
                     key={el._id}
                     coordinate={{latitude: el.coordinates.latitude,
                     longitude: el.coordinates.longitude}}

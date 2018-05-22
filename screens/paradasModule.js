@@ -26,7 +26,7 @@ export default class paradasModule extends React.Component {
 
    _fetchParadasAsync = async () => {
     try {
-      let response = await fetch('http://192.168.137.1:3000/api/parada',{
+      let response = await fetch('http://192.168.1.106:3000/api/parada',{
         method: 'GET'});
       let result = await response.json();
       this.setState({paradas: result.par});
@@ -65,7 +65,7 @@ export default class paradasModule extends React.Component {
   verLocation = (object) => {
 
     var aux = this.regionFrom( object.coordinates.latitude, object.coordinates.longitude, object.coordinates.accuracy );    
-    this.props.navigation.navigate('MapPreview', {type: object.type, coords: aux, density: object.density});
+    this.props.navigation.navigate('MapPreview', {terminal: object.terminal, coords: aux, density: object.density});
 
   }
 
@@ -132,7 +132,7 @@ export default class paradasModule extends React.Component {
                 <ListItem
                     key={i}
                     title={el.title}
-                    subtitle={el.type? 'Terminal': 'Toque y despegue'}
+                    subtitle={el.terminal? 'Terminal': 'Toque y despegue'}
                     onPress={this.verLocation.bind(this,el)}
               />
               )

@@ -37,8 +37,9 @@ export default class FormCT extends React.Component {
   }
 
   CreateTranAsync = async () => {
+    console.log('tipo de vehiculo',this.state.formData.t_type );
     try {
-      let response = await fetch('http://192.168.137.1:3000/api/transporte',{
+      let response = await fetch('http://192.168.1.106:3000/api/transporte',{
         method: 'POST',
         headers: {
           'Accept': 'application/json',
@@ -50,7 +51,6 @@ export default class FormCT extends React.Component {
           modelo: this.state.formData.model,
           year: this.state.formData.year,
           route: this.addingRoutes,
-          type: this.state.formData.type,
           placa: this.state.formData.placa,
           t_type: this.state.formData.t_type
         })

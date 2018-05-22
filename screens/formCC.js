@@ -37,7 +37,7 @@ export default class FormCC extends React.Component {
 
   CreateCondAsync = async () => {
     try {
-      let response = await fetch('http://192.168.137.1:3000/api/conductor',{
+      let response = await fetch('http://192.168.1.106:3000/api/conductor',{
         method: 'POST',
         headers: {
           'Accept': 'application/json',
@@ -138,8 +138,8 @@ export default class FormCC extends React.Component {
             } */}
             {/* Esto se busca mejorar */}
             { this.Transporte.map( (el,index) =>
-              <SwitchField label={parseInt(el.numero)+" - "+el.modelo}
-              ref={parseInt(el.numero)}
+              <SwitchField label={parseInt(el.number)+" - "+el.model}
+              ref={parseInt(el.number)}
               onValueChange={this.agregarTran.bind(this,el,index)}/>
             )}
           </Form>

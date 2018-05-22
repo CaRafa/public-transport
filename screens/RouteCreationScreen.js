@@ -164,7 +164,7 @@ verify(response){
  
    CreateRutaAsync = async () => {
     try {
-      let response = await fetch('http://192.168.137.1:3000/api/ruta',{
+      let response = await fetch('http://192.168.1.106:3000/api/ruta',{
         method: 'POST',
         headers: {
           'Accept': 'application/json',
@@ -201,7 +201,7 @@ verify(response){
 
              {
               this.paradas.map(el => 
-                el.type == true ? <MapView.Marker
+                el.terminal == true ? <MapView.Marker
               coordinate={{latitude: el.coordinates.latitude,
               longitude: el.coordinates.longitude}}
               onPress={this.setPolyline.bind(this,el)}

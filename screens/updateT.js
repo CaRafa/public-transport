@@ -38,7 +38,7 @@ export default class updateT extends React.Component {
 
   UpdateTranAsync = async () => {
     try {
-      let response = await fetch('http://192.168.137.1:3000/api/tranporte/'+this.object._id,{
+      let response = await fetch('http://192.168.1.106:3000/api/tranporte/'+this.object._id,{
         method: 'PUT',
         headers: {
           'Accept': 'application/json',

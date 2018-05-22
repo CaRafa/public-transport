@@ -26,7 +26,7 @@ export default class DetailedRoute extends React.Component {
 
    _fetchParadasAsync = async () => {
     try {
-      let response = await fetch('http://192.168.137.1:3000/api/parada',{
+      let response = await fetch('http://192.168.1.106:3000/api/parada',{
         method: 'GET'});
       let result = await response.json();
       this.setState({points: result.par});
@@ -45,7 +45,7 @@ export default class DetailedRoute extends React.Component {
 
    verParada = (object) => {
     var aux = this.regionFrom( object.coordinates.latitude, object.coordinates.longitude, object.coordinates.accuracy );    
-    this.props.navigation.navigate('MapPreview', {type: object.type, coords: aux, density: object.density});
+    this.props.navigation.navigate('MapPreview', {terminal: object.terminal, coords: aux, density: object.density});
 
 
 
@@ -88,13 +88,13 @@ export default class DetailedRoute extends React.Component {
               {this.route.description}
             </Text>
             { this.route.type == 'Urb'? <Text style={styles.getStartedText}>
-              Ruta Urbana
+              Ruta tipo Urbana
             </Text>: this.route.type == 'subUrb'?
             <Text style={styles.getStartedText}>
-              Ruta Sub Urbana
+              Ruta tipo Sub Urbana
             </Text>:
             <Text style={styles.getStartedText}>
-              Ruta Inter Urbana
+              Ruta tipo Inter Urbana
              </Text>
             }
             <Text style={styles.getStartedText}>
@@ -113,7 +113,7 @@ export default class DetailedRoute extends React.Component {
                 key={i}
                   
                   title={el.title}
-                  subtitle={el.type == true? 'Terminal' : 'Toque y despegue'}
+                  subtitle={el.terminal == true? 'Terminal' : 'Toque y despegue'}
                   onPress={this.verParada.bind(this,el)}
               />
               )

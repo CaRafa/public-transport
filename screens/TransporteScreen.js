@@ -25,7 +25,7 @@ export default class TransporteScreen extends React.Component {
 
   _fetchRoutesAsync = async () => {
     try {
-      let response = await fetch('http://192.168.137.1:3000/api/ruta',{
+      let response = await fetch('http://192.168.1.106:3000/api/ruta',{
         method: 'GET'});
       let result = await response.json();
       this.setState({routes: result.route});
@@ -37,7 +37,7 @@ export default class TransporteScreen extends React.Component {
 
   _fetchTransportesAsync = async () => {
     try {
-      let response = await fetch('http://192.168.137.1:3000/api/transporte',{
+      let response = await fetch('http://192.168.1.106:3000/api/transporte',{
         method: 'GET'});
       let result = await response.json();
       this.setState({transporte: result.transporte});
@@ -94,8 +94,8 @@ export default class TransporteScreen extends React.Component {
                   <ListItem
                   key={i}
                   
-                  title={el.modelo+' - '+el.numero}
-                  subtitle={el.placa}
+                  title={el.model+' - '+el.number}
+                  subtitle={el.licPlate}
                   onPress={this.verDetallado.bind(this,el)}
                 />
               )

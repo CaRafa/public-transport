@@ -28,7 +28,7 @@ export default class DetailedTransport extends React.Component {
 
    _fetchParadasAsync = async () => {
     try {
-      let response = await fetch('http://192.168.137.1:3000/api/parada',{
+      let response = await fetch('http://192.168.1.106:3000/api/parada',{
         method: 'GET'});
       let result = await response.json();
       this.setState({paradas: result.par});
@@ -60,10 +60,10 @@ obtenerParadas = () => {
 
   var paradas = []
 
-    for(var i=0; i < this.rutaToSee.paradas.length; i++){
+    for(var i=0; i < this.rutaToSee.stops.length; i++){
 
         for(var j=0 ; j< this.state.paradas.length; j++){
-            if(this.state.paradas[j]._id == this.rutaToSee.paradas[i]){
+            if(this.state.paradas[j]._id == this.rutaToSee.stops[i]){
               paradas.push(this.state.paradas[j])
             }
 
@@ -89,9 +89,10 @@ obtenerParadas = () => {
           var paradas = this.obtenerParadas();
 
           
-            this.props.navigation.navigate('detailedRouteMap', {
-              actual: realLoc, polylines: this.rutaToSee, paradas: paradas}); 
-          
+            // this.props.navigation.navigate('detailedRouteMap', {
+            //   actual: realLoc, polylines: this.rutaToSee, paradas: paradas}); 
+              this.props.navigation.navigate('detailedRoute', {
+                actual: realLoc, route: this.rutaToSee, paradas: paradas}); 
       }
   }
 
@@ -124,8 +125,8 @@ obtenerParadas = () => {
               Informacion del transporte {this.object.numero}
             </Text>
             <Text style={styles.getStartedText}>
-             Placa:{this.object.placa} {"\n"}Marca: {this.object.modelo}{"\n"}Año: {this.object.year}{"\n"}Informacion relevante: {this.object.description}{"\n"}Tipo de transporte: 
-             {this.object.t_type == "TransP"? 'Transporte Pequeño': this.object.t_type == "TransG" ? "Transporte Grande": this.object.t_type == "Mt"? "Moto taxi" : this.object.t_type } 
+             Placa:{this.object.licPlate} {"\n"}Marca: {this.object.model}{"\n"}Año: {this.object.year}{"\n"}Informacion relevante: {this.object.description}{"\n"}Tipo de transporte: 
+             {this.object.vehType == "TransP"? 'Transporte Pequeño': this.object.vehType == "TransG" ? "Transporte Grande": this.object.vehType == "Mt"? "Moto taxi" : this.object.vehType } 
             </Text>
             <Separator/>
             <Text style={styles.getStartedTextSubtitle}>

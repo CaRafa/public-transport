@@ -29,7 +29,7 @@ export default class FormCR extends React.Component {
 
   CreateRutaAsync = async () => {
     try {
-      let response = await fetch('http://192.168.137.1:3000/api/ruta',{
+      let response = await fetch('http://192.168.1.106:3000/api/ruta',{
         method: 'POST',
         headers: {
           'Accept': 'application/json',

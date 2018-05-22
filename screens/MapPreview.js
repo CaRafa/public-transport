@@ -39,7 +39,7 @@ export default class MapPreview extends React.Component {
         >
         
         { 
-              this.object.type == true ? <MapView.Marker
+              this.object.terminal == true ? <MapView.Marker
               coordinate={{latitude: this.object.coords.latitude,
               longitude: this.object.coords.longitude}}
               pinColor={'black'}

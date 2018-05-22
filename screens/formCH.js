@@ -33,9 +33,9 @@ export default class FormCH extends React.Component {
    obtainOptions = () => {
        
     for(var i = 0; i < this.transportes.length; i++){
-        var number = this.transportes[i].numero
+        var number = this.transportes[i].number
         this.transJson.push(this.transportes[i])
-        var aux =  number+' - '+JSON.stringify(this.transportes[i].modelo)
+        var aux =  number+' - '+JSON.stringify(this.transportes[i].model)
         this.state.paradas[i+1] = aux;
         this.setState({ paradas: this.state.paradas })
     }
@@ -53,7 +53,7 @@ export default class FormCH extends React.Component {
 
   UpdateHorarioAsync = async () => {
     try {
-      let response = await fetch('http://192.168.137.1:3000/api/conductor/'+this.id,{
+      let response = await fetch('http://192.168.1.106:3000/api/conductor/'+this.id,{
         method: 'PUT',
         headers: {
           'Accept': 'application/json',
@@ -130,7 +130,7 @@ export default class FormCH extends React.Component {
           {this.horario? this.horario.map(el => 
           
           <Text style={styles.horarioText}>
-            - {el.dia} : {el.asig == "descanso"? "Descanso" : el.asig.modelo} 
+            - {el.dia} : {el.asig == "descanso"? "Descanso" : el.asig.model} 
           </Text>  
           ) : 
            <View style={styles.container}>

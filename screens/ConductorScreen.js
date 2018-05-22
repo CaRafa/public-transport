@@ -28,7 +28,7 @@ export default class ConductorScreen extends React.Component {
 
   _fetchTransportesAsync = async () => {
     try {
-      let response = await fetch('http://192.168.137.1:3000/api/transporte',{
+      let response = await fetch('http://192.168.1.106:3000/api/transporte',{
         method: 'GET'});
       let result = await response.json();
       this.setState({transporte: result.transporte}); 
@@ -40,7 +40,7 @@ export default class ConductorScreen extends React.Component {
   
   _fetchConductoresAsync = async () => {
     try {
-      let response = await fetch('http://192.168.137.1:3000/api/conductor',{
+      let response = await fetch('http://192.168.1.106:3000/api/conductor',{
         method: 'GET'});
       let result = await response.json();
       this.setState({conductor: result.conductor});
@@ -53,7 +53,7 @@ export default class ConductorScreen extends React.Component {
   
   verDetallado = (conductor) => {
     
-    var taux = conductor.transporte;  
+    var taux = conductor.transports;  
     var transSend = [];
     taux.map(el => {
         for(var i=0; i < this.state.transporte.length; i++){

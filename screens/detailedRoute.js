@@ -5,6 +5,7 @@ import {
 } from 'react-native-form-generator';
 import { ListItem } from 'react-native-elements'
 
+
 export default class DetailedRoute extends React.Component {
   static navigationOptions = {
     header: null,
@@ -110,9 +111,8 @@ export default class DetailedRoute extends React.Component {
                 this.paradas.map((el,i) => 
                 
                 <ListItem
-                key={i}
-                  
-                  title={el.title}
+                   key={i}
+                  title={el.title+"-"+(i+1)}
                   subtitle={el.terminal == true? 'Terminal' : 'Toque y despegue'}
                   onPress={this.verParada.bind(this,el)}
               />

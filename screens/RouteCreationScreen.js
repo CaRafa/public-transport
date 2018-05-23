@@ -35,6 +35,7 @@ export default class RouteCreation extends React.Component {
         longitude: null,
         error:null,
         coords: [],
+        polyline: []
     };
    }
 
@@ -76,11 +77,16 @@ export default class RouteCreation extends React.Component {
             this.Npolyline = this.Npolyline + 1;
             this.setState({ coordsArray: this.state.coordsArray })
             this.agregarTramo = true;
+            var aux = {add:true , num: this.Npolyline}
+            this.checkSelectedPoints(aux)
             return true
         }
         else{
             alert('Este tramo de la ruta es menor a 200 mts, elija otros puntos.');
+            this.agregarTramo = false;
             this.verify(false);
+            var aux = {add:false , num: this.Npolyline}
+            this.checkSelectedPoints(aux)
             return false
         }
         
@@ -92,51 +98,79 @@ export default class RouteCreation extends React.Component {
 
 verify(response){
 
-    if(response == true){
+    if(response == true ){
         
             
-        if(this.state.pointArray.length != 0){
-            for(var i=0; i < this.pointsToCompare.length; i++){
-                var find = false;
-                for(var j=0; j < this.state.pointArray.length; j ++){
-                    if(this.pointsToCompare[i]._id == this.state.pointArray[j]){
-                        find = true;
-                    }
-                }
-                if(find == true){
+         if(this.state.pointArray.length != 0){
+            // for(var i=0; i < this.pointsToCompare.length; i++){
+            //     var find = false;
+            //     for(var j=0; j < this.state.pointArray.length; j ++){
+            //         if(this.pointsToCompare[i]._id == this.state.pointArray[j]){
+            //             find = true;
+            //         }
+            //     }
+            //     if(find == true){
 
-                } else{
-                    this.state.pointArray.push(this.pointsToCompare[i]._id);
-                }
+            //     } else{
+                this.state.pointArray.push(this.pointsToCompare[1]._id);
+            //     }
             }
-            }else{
+            else{
                 this.state.pointArray.push(this.pointsToCompare[0]._id);
                 this.state.pointArray.push(this.pointsToCompare[1]._id);
             }
-        
-        this.pointsToCompare.splice(0,2)
-    }else{
+        console.log('se agregara este tramo');
+        this.pointsToCompare.splice(0,1)
+        console.log(this.pointsToCompare);
+
+    }else if( this.Npolyline > 0 && response == false ){
+        console.log('existe la ruta 1 y no se agregara este punto');
+        this.pointsToCompare.splice(1,1)
+    }
+    else{
+        console.log('no existe la ruta 1 y no se agregara este tramo');
         this.pointsToCompare.splice(0,2)
     }
 
+}
+
+checkSelectedPoints(response){
+    if(response.add && response.num >= 0 ){
+        console.log(this.state.polyline)
+        console.log('Se agrego tramo y existe posicion 1 entonces se limpia solo primera pos');
+        this.polyline.splice(0,1)
+        console.log(this.polyline)
+        this.Nparada = 1;
+    }
+    else if( response.add == false && response.num == 0 ){
+        console.log('no se agrego tramo y no existe posicion 1 entonces se limpia ambas pos');
+        this.polyline.splice(0,2)
+        console.log(this.polyline)
+        this.Nparada = 0;
+    }
+    else if( response.add == false && response.num > 0 ){
+        console.log('no se agrego tramo y  existe posicion 1 entonces se limpia primera pos');
+        this.polyline.splice(0,1)
+        console.log(this.polyline)
+        this.Nparada = 1;
+
+    }else{
+        console.log('caso no reconocido');
+    }
 }
    
    setPolyline = (point) => {
 
         this.pointsToCompare.push(point);
-        if(point.coordenadas){
-            this.polyline[this.Nparada] = point.coordenadas.latitude+','+point.coordenadas.longitude; 
-        }else{
-            this.polyline[this.Nparada] = point.coordinates.latitude+','+point.coordinates.longitude; 
-        }
-
+        this.polyline[this.Nparada] = point.coordinates.latitude+','+point.coordinates.longitude; 
+        
         this.Nparada = this.Nparada + 1 ;
          
-
-
         if(this.Nparada == 2){
+            this.setState({ polyline: this.polyline })
 
-            this.getDirections(this.polyline[0],this.polyline[1]).then(function(response){
+            this.getDirections(this.polyline[0],this.polyline[1]).then(function(response ){
+                
                 
             }).catch(function(e){
                 console.log(e);
@@ -144,7 +178,7 @@ verify(response){
 
             
 
-            this.Nparada = 0;
+            
             }
         
         }    
@@ -162,27 +196,27 @@ verify(response){
     }
    }
  
-   CreateRutaAsync = async () => {
-    try {
-      let response = await fetch('http://192.168.1.106:3000/api/ruta',{
-        method: 'POST',
-        headers: {
-          'Accept': 'application/json',
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-          route: this.state.coordsArray,
-          title: 'Ruta x' 
-        })
-       });
+//    CreateRutaAsync = async () => {
+//     try {
+//       let response = await fetch('http://192.168.1.106:3000/api/ruta',{
+//         method: 'POST',
+//         headers: {
+//           'Accept': 'application/json',
+//           'Content-Type': 'application/json'
+//         },
+//         body: JSON.stringify({
+//           route: this.state.coordsArray,
+//           title: 'Ruta x' 
+//         })
+//        });
 
-      let result = await response.json();
-      this.setState({result: result.par});
+//       let result = await response.json();
+//       this.setState({result: result.par});
 
-    } catch(e) {
-      this.setState({result: e});
-    }
-  };
+//     } catch(e) {
+//       this.setState({result: e});
+//     }
+//   };
 
   render() {
 

@@ -104,7 +104,7 @@ export default class DetailedRoute extends React.Component {
 
             
             <Text style={styles.perfilTitle}>
-              Paradas que cubre:
+              Trayectoria de la ruta:
             </Text>
             <View style={styles.listContainer}>
               {

@@ -70,7 +70,7 @@ export default class updateR extends React.Component {
             <ScrollView keyboardShouldPersistTaps="always" style={{paddingLeft:10,paddingRight:10, height:200}}>
             <View style={styles.container}>
                 <Text style={styles.getStartedText}>
-                  Actualizar Ruta
+                  Editar datos de la ruta
                 </Text>
             </View>
             <Form

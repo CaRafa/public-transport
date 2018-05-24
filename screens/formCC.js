@@ -1,5 +1,5 @@
 import React from 'react';
-import {Image,Platform, ScrollView,StyleSheet,Text, TouchableOpacity,View,Button} from 'react-native';
+import {TouchableWithoutFeedback,Image,Platform, ScrollView,StyleSheet,Text, TouchableOpacity,View,Button,Keyboard} from 'react-native';
 import { Form,
     Separator,InputField, LinkField,
     SwitchField, PickerField,DatePickerField,TimePickerField
@@ -68,7 +68,7 @@ export default class FormCC extends React.Component {
   guardarConductor = () => {
       //this.tran = this.Transporte[parseInt(this.state.formData.route)-1]._id;
       this.CreateCondAsync();
-      this.props.navigation.navigate('Conductores');
+      this.props.navigation.goBack(null)
   }
 
   agregarTran = (object, index) => {
@@ -91,7 +91,7 @@ export default class FormCC extends React.Component {
   render() {
     return (
 
-      
+      <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
         <ScrollView keyboardShouldPersistTaps="always" style={{paddingLeft:10,paddingRight:10, height:200}}>
         <View style={styles.container}>
             <Text style={styles.getStartedText}>
@@ -115,16 +115,22 @@ export default class FormCC extends React.Component {
             <InputField
             ref='ci'
             placeholder='Cedula'
-            label='v-'/>
+            label='v-'
+            keyboardType='numeric'
+            />
             <InputField
             ref='tel'
             placeholder='Telefono'
-            label='tel'/>
+            label='tel'
+            keyboardType='phone-pad'
+            />
             <Separator />
             <InputField
             ref='licencia'
             label='#Licencia'
-            placeholder='Numero de licencia'/>
+            placeholder='Numero de licencia'
+            keyboardType='numeric'
+            />
             <DatePickerField ref='fN'
             minimumDate={new Date('1/1/1900')}
             maximumDate={new Date('1/1/2000')}
@@ -147,7 +153,7 @@ export default class FormCC extends React.Component {
                 <Button title={'Guardar'} color="black" onPress={this.guardarConductor } />
           </View>
         </ScrollView>
-
+      </TouchableWithoutFeedback>
     );
   }
 }

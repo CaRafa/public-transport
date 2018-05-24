@@ -1,5 +1,5 @@
 import React from 'react';
-import {Button,Image,Platform, ScrollView,StyleSheet,Text, TouchableOpacity,View, Touchable} from 'react-native';
+import {RefreshControl,Button,Image,Platform, ScrollView,StyleSheet,Text, TouchableOpacity,View, Touchable} from 'react-native';
 import { ListItem } from 'react-native-elements'
 
 export default class TransporteScreen extends React.Component {
@@ -9,7 +9,9 @@ export default class TransporteScreen extends React.Component {
   constructor(props){ 
     super(props)
     this.state = {
-      transporte: []
+      transporte: [],
+      lastRefresh: Date(Date.now()).toString(),
+      refreshing: false,
     }
    }
 
@@ -71,10 +73,30 @@ export default class TransporteScreen extends React.Component {
     });
   }
 
+  // refreshScreen = () => {
+  //   this.setState({ lastRefresh: Date(Date.now()).toString() })
+    
+  // }
+
+  _onRefresh() {
+    this.setState({refreshing: true});
+    this._fetchRoutesAsync()
+    this._fetchTransportesAsync().then(() => {
+      this.setState({refreshing: false});
+    });
+  }
+
   render() {
+
+    
     return (
       <View style={styles.container}>
-         <ScrollView>
+         <ScrollView  refreshControl={
+          <RefreshControl
+            refreshing={this.state.refreshing}
+            onRefresh={this._onRefresh.bind(this)}
+          />
+        } >
             
             <View style={styles.container}>
                   <Text style={styles.tituloPrincipal}>    
@@ -110,7 +132,9 @@ export default class TransporteScreen extends React.Component {
               color="#000"
               />
             </View>
-           
+            {/* <View style={styles.addNew}>
+               <Button onPress={this.refreshScreen} title="Recargar"  color="#000"  />
+            </View> */}
           </ScrollView>
         </View>
     );

@@ -1,5 +1,5 @@
 import React from 'react';
-import {Image,Platform, ScrollView,StyleSheet,Text, TouchableOpacity,View,Button} from 'react-native';
+import {TouchableWithoutFeedback,Keyboard,Image,Platform, ScrollView,StyleSheet,Text, TouchableOpacity,View,Button} from 'react-native';
 import { Form,
     Separator,InputField, LinkField,
     SwitchField, PickerField,DatePickerField,TimePickerField
@@ -52,7 +52,8 @@ export default class FormCT extends React.Component {
           year: this.state.formData.year,
           route: this.addingRoutes,
           placa: this.state.formData.placa,
-          t_type: this.state.formData.t_type
+          t_type: this.state.formData.t_type,
+          active: true
         })
        });
 
@@ -68,7 +69,7 @@ export default class FormCT extends React.Component {
 
   guardarTransporte = () => {
       this.CreateTranAsync();
-      this.props.navigation.navigate('Transportes');
+      this.props.navigation.goBack(null);
   }
 
   agregarRuta = (object, index) => {
@@ -91,7 +92,7 @@ export default class FormCT extends React.Component {
   render() {
     return (
 
-      
+      <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
         <ScrollView keyboardShouldPersistTaps="always" style={{paddingLeft:10,paddingRight:10, height:200}}>
         <View style={styles.container}>
             <Text style={styles.getStartedText}>
@@ -108,7 +109,7 @@ export default class FormCT extends React.Component {
             ref='num'
             label='Numero'
             placeholder='Numero del transporte'
-            
+            keyboardType='numeric'
             />
             <InputField
             multiline={true}
@@ -127,7 +128,9 @@ export default class FormCT extends React.Component {
             placeholder='Placa del transporte'/>
             <InputField
             ref='year'
-            label='Año'/>
+            label='Año'
+            keyboardType='numeric'
+            />
           
           <PickerField ref='t_type'
             label='Tipo de vehiculo'
@@ -163,7 +166,7 @@ export default class FormCT extends React.Component {
                 <Button title={'Guardar'} color="black" onPress={this.guardarTransporte } />
           </View>
         </ScrollView>
-
+        </TouchableWithoutFeedback>
     );
   }
 }

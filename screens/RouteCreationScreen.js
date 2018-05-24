@@ -26,7 +26,9 @@ export default class RouteCreation extends React.Component {
     this.polyline = []
     this.Nparada = 0;
     this.state = { coordsArray: [],
-    pointArray:[] }
+    pointArray:[],
+    ready: false    
+    }
     this.Npolyline = 0;
     this.comDis = 0;
     this.pointsToCompare = []
@@ -74,6 +76,7 @@ export default class RouteCreation extends React.Component {
             this.comDis = this.comDis + (dis*1000)
             this.verify(true);
             this.state.coordsArray[this.Npolyline] = coords;
+            this.setState({ ready: true })
             this.Npolyline = this.Npolyline + 1;
             this.setState({ coordsArray: this.state.coordsArray })
             this.agregarTramo = true;
@@ -160,7 +163,7 @@ checkSelectedPoints(response){
 }
    
    setPolyline = (point) => {
-
+        alert('Parada elegida: '+ point.title);
         this.pointsToCompare.push(point);
         this.polyline[this.Nparada] = point.coordinates.latitude+','+point.coordinates.longitude; 
         
@@ -195,6 +198,12 @@ checkSelectedPoints(response){
         , id: this.id});
     }
    }
+
+   backProgress = () =>{
+    
+    //posible funcion para devolver el progreso de la ruta que se esta creando
+    }
+
  
 //    CreateRutaAsync = async () => {
 //     try {
@@ -233,6 +242,22 @@ checkSelectedPoints(response){
         annotations={this.markers}
         >
 
+        {this.state.ready == true? 
+            <MapView.Callout>
+            <View style={styles.buttonRow}>
+                <View style={styles.button}>
+                    <Ionicons name="ios-checkbox" size={60} style={{marginLeft:30}}  backgroundColor="transparent" onPress={this.GuardarRuta}/>
+                    {/* 
+                        //posible funcion para devolver el progreso de la ruta que se esta creando
+
+                    <Ionicons name="ios-undo" size={60} style={{marginLeft:30}} backgroundColor="transparent" onPress={this.backProgress}/> */}
+                </View>
+            </View>
+        </MapView.Callout>
+            
+            
+            : null   }
+         
              {
               this.paradas.map(el => 
                 el.terminal == true ? <MapView.Marker
@@ -300,13 +325,10 @@ checkSelectedPoints(response){
                 strokeWidth={2}/>
             ))}
 
-         <View style={styles.buttonRow}>
-            <View style={styles.button}>
-                <Ionicons name="ios-checkmark" size={70}  backgroundColor="transparent" onPress={this.GuardarRuta}/>
-            </View>
-       </View>
+         
 
         </MapView>
+        
     );
   }
 

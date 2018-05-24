@@ -11,6 +11,15 @@ console.disableYellowBox = true;
 
 export default class ParadaSetScreen extends React.Component {
 
+  constructor(props){ 
+    super(props)
+    
+    this.state = { 
+    object: false    
+    }
+   
+   }
+
     static navigationOptions = {
         header:null,
         tabBarVisible: false,
@@ -35,7 +44,10 @@ export default class ParadaSetScreen extends React.Component {
             <View style={styles.buttonRow}>
                 <View style={styles.button}>
                     <Ionicons name="ios-locate" size={70} backgroundColor="transparent" onPress={this.fixLocation}/>
-                    <Ionicons name="ios-checkmark" size={90}  backgroundColor="transparent" onPress={this.GuardarParada}/>
+                    {this.state.object == true? 
+                     <Ionicons name="ios-checkmark" size={90}  backgroundColor="transparent" onPress={this.GuardarParada}/>
+                       : null}
+                    
                     <Ionicons name="ios-close"  size={70} backgroundColor="transparent" onPress={this.onRemoveObjectPress  }/>
                 </View>
             </View>
@@ -77,7 +89,7 @@ export default class ParadaSetScreen extends React.Component {
       this.scene.remove(this.threeModel);
       this.noObject = false;
       this.threeModel = null;
-
+      this.setState({ object: false })
     }
   }
 
@@ -92,6 +104,7 @@ export default class ParadaSetScreen extends React.Component {
         object.position.y = -1; 
         this.scene.add(object); 
         this.noObject = true;
+        this.setState({ object: true })
 
     }.bind(this), function(error){
         console.log(error);

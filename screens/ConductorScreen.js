@@ -1,6 +1,6 @@
 
 import React from 'react';
-import {Button,Image,Platform, ScrollView,StyleSheet,Text, TouchableOpacity,View,} from 'react-native';
+import {RefreshControl,Button,Image,Platform, ScrollView,StyleSheet,Text, TouchableOpacity,View,} from 'react-native';
 import { ListItem } from 'react-native-elements'
 
 
@@ -12,8 +12,12 @@ export default class ConductorScreen extends React.Component {
     super(props)
     this.state = {
       transporte: [],
-      conductor:[]
+      conductor:[],
+      lastRefresh: Date(Date.now()).toString(),
+      refreshing: false,
     }
+    
+  
    }
 
    componentDidMount(){
@@ -67,11 +71,30 @@ export default class ConductorScreen extends React.Component {
 
     this.props.navigation.navigate('DetailedDriver',{cond:conductor, trans: transSend, allTrans: this.state.transporte});
   }
+  // refreshScreen() {
+  //   this.setState({ lastRefresh: Date(Date.now()).toString() })
+  //   this._fetchTransportesAsync()
+  //   this._fetchConductoresAsync()
+  // }
+
+  _onRefresh() {
+    this.setState({refreshing: true});
+    this._fetchTransportesAsync()
+    this._fetchConductoresAsync().then(() => {
+      this.setState({refreshing: false});
+    });
+  }
+
 
   render() {
     return (
       <View style={styles.container}>
-        <ScrollView>
+        <ScrollView refreshControl={
+          <RefreshControl
+            refreshing={this.state.refreshing}
+            onRefresh={this._onRefresh.bind(this)}
+          />
+        } >
           <View style={styles.container}>
                   <Text style={styles.tituloPrincipal}>    
                   Conductores
@@ -105,9 +128,9 @@ export default class ConductorScreen extends React.Component {
               color="#000"
               />
             </View>
-          
-           
-  
+            {/* <View style={styles.addNew}>
+               <Button onPress={this.refreshScreen} title="Recargar"  color="#000"  />
+            </View> */}
             </ScrollView>
         </View>
     );

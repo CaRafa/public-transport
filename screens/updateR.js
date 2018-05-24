@@ -1,5 +1,5 @@
 import React from 'react';
-import {Image,Platform, ScrollView,StyleSheet,Text, TouchableOpacity,View,Button} from 'react-native';
+import {TouchableWithoutFeedback,Keyboard,Image,Platform, ScrollView,StyleSheet,Text, TouchableOpacity,View,Button} from 'react-native';
 import { Form,
     Separator,InputField, LinkField,
     SwitchField, PickerField,DatePickerField,TimePickerField
@@ -66,7 +66,7 @@ export default class updateR extends React.Component {
       render() {
         return (
     
-          
+          <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
             <ScrollView keyboardShouldPersistTaps="always" style={{paddingLeft:10,paddingRight:10, height:200}}>
             <View style={styles.container}>
                 <Text style={styles.getStartedText}>
@@ -109,7 +109,7 @@ export default class updateR extends React.Component {
                     <Button title={'Actualizar'} color="black" onPress={this.actualizarRuta } />
               </View>
             </ScrollView>
-    
+            </TouchableWithoutFeedback>
         );
       }
 }

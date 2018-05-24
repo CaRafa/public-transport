@@ -1,5 +1,5 @@
 import React from 'react';
-import {Image,Platform, ScrollView,StyleSheet,Text, TouchableOpacity,View,Button} from 'react-native';
+import {TouchableWithoutFeedback,Keyboard,Image,Platform, ScrollView,StyleSheet,Text, TouchableOpacity,View,Button} from 'react-native';
 import { Form,
     Separator,InputField, LinkField,
     SwitchField, PickerField,DatePickerField,TimePickerField
@@ -46,7 +46,8 @@ export default class updateT extends React.Component {
         },
         body: JSON.stringify({
             description: this.state.formData.des,
-          route: this.addingRoutes,
+            route: this.addingRoutes,
+            active: this.state.formData.status
         })
        });
 
@@ -87,7 +88,7 @@ export default class updateT extends React.Component {
   render() {
     return (
 
-      
+      <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
         <ScrollView keyboardShouldPersistTaps="always" style={{paddingLeft:10,paddingRight:10, height:200}}>
         <View style={styles.container}>
             <Text style={styles.getStartedText}>
@@ -101,9 +102,13 @@ export default class updateT extends React.Component {
           >
           <Separator />
 
-            
+            <SwitchField label={'Estado'}
+              ref={'status'}
+              
+              />
             <InputField
             ref='des'
+            multiline={true}
             placeholder='Descripcion'
             helpText='Algun comentario sobre el transporte' 
             style={{ height: 200} }/>
@@ -126,7 +131,7 @@ export default class updateT extends React.Component {
                 <Button title={'Actualizar'} color="black" onPress={this.updateTransporte } />
           </View>
         </ScrollView>
-
+        </TouchableWithoutFeedback>
     );
   }
 }

@@ -1,5 +1,5 @@
 import React from 'react';
-import {Image,Platform, ScrollView,StyleSheet,Text, TouchableOpacity,View,Button} from 'react-native';
+import {TouchableWithoutFeedback,Keyboard,Image,Platform, ScrollView,StyleSheet,Text, TouchableOpacity,View,Button} from 'react-native';
 import { Form,
     Separator,InputField, LinkField,
     SwitchField, PickerField,DatePickerField,TimePickerField
@@ -17,7 +17,8 @@ export default class updateC extends React.Component {
     this.id = state.params.id
     this.state = {
       formData:{},
-      Transportes:[]
+      Transportes:[],
+      
     }
     
     this.addingTran = []
@@ -88,7 +89,7 @@ export default class updateC extends React.Component {
   render() {
     return (
 
-      
+      <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
         <ScrollView keyboardShouldPersistTaps="always" style={{paddingLeft:10,paddingRight:10, height:200}}>
         <View style={styles.container}>
             <Text style={styles.getStartedText}>
@@ -103,12 +104,16 @@ export default class updateC extends React.Component {
           <Separator />
 
              <SwitchField label={'Estado'}
-              ref={'status'}/>
+              ref={'status'}
+              
+              />
             
             <InputField
             ref='tel'
             placeholder='Telefono'
-            label='Telefono'/>
+            label='Telefono'
+            keyboardType='phone-pad'
+            />
             
             
           <Separator />
@@ -124,7 +129,7 @@ export default class updateC extends React.Component {
                 <Button title={'Actualizar'} color="black" onPress={this.guardarConductor } />
           </View>
         </ScrollView>
-
+        </TouchableWithoutFeedback>
     );
   }
 }

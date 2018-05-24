@@ -127,7 +127,15 @@ obtenerParadas = () => {
             <Text style={styles.getStartedText}>
              Placa:{this.object.licPlate} {"\n"}Marca: {this.object.model}{"\n"}Año: {this.object.year}{"\n"}Informacion relevante: {this.object.description}{"\n"}Tipo de transporte: 
              {this.object.vehType == "TransP"? 'Transporte Pequeño': this.object.vehType == "TransG" ? "Transporte Grande": this.object.vehType == "Mt"? "Moto taxi" : this.object.vehType } 
+             {"\n"} { this.object.active == true? 
+              '- Transporte en servicio'
+            : 
+           
+            ' - Transporte fuera de servicio'
+           
+            }
             </Text>
+            
             <Separator/>
             <Text style={styles.getStartedTextSubtitle}>
               Rutas que cubre:

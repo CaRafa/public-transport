@@ -60,7 +60,7 @@ export default class DetailedDriver extends React.Component {
 
    updateInfo = () => {
 
-     this.props.navigation.navigate('updateC',{transportes: this.allTrans, id: this.object._id});
+     this.props.navigation.navigate('updateC',{transportes: this.allTrans, id: this.object._id, status: this.object.status});
    }
 
    crearHorario = () =>{

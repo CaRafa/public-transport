@@ -1,5 +1,5 @@
 import React from 'react';
-import {Button,Image,Platform, ScrollView,StyleSheet,Text, TouchableOpacity,View,} from 'react-native';
+import {RefreshControl,Button,Image,Platform, ScrollView,StyleSheet,Text, TouchableOpacity,View,} from 'react-native';
 import { Expo, Location, Permissions } from 'expo';
 import { ListItem } from 'react-native-elements'
 
@@ -15,7 +15,9 @@ export default class RutaScreen extends React.Component {
     const {state} = props.navigation;
     this.coordenadas = state.params;
     this.state = {
-      paradas: []
+      paradas: [],
+      lastRefresh: Date(Date.now()).toString(),
+      refreshing: false,
     }
    }
 
@@ -149,14 +151,30 @@ obtenerParadas = () => {
     this.ObtenerUbicacion(2)
   }
 
-  
+  // refreshScreen = () => {
+  //   this.setState({ lastRefresh: Date(Date.now()).toString() })
+  //   this._fetchParadasAsync();
+  //   this._fetchRoutesAsync();
+  // }
+  _onRefresh() {
+    this.setState({refreshing: true});
+    this._fetchParadasAsync();
+    this._fetchRoutesAsync().then(() => {
+      this.setState({refreshing: false});
+    });
+  }
 
   render() {
 
     
       return (
         <View style={styles.container}>
-          <ScrollView>
+          <ScrollView refreshControl={
+          <RefreshControl
+            refreshing={this.state.refreshing}
+            onRefresh={this._onRefresh.bind(this)}
+          />
+        } >
               <View style={styles.container}>
                   <Text style={styles.tituloPrincipal}>    
                   Rutas
@@ -166,10 +184,10 @@ obtenerParadas = () => {
               <View style={styles.listContainer}>
               { !this.state.polylines ? <View style={styles.container}>
                                 <Text style={styles.getStartedText}>    
-                                LOADING!
+                                   LOADING!
                                 </Text>
                             </View>
-                            :
+                         :
              
               
                 this.state.polylines.map((el,i) =>  
@@ -211,7 +229,10 @@ obtenerParadas = () => {
               />
           </View>
   
-        
+          {/* <View style={styles.addNew}>
+               <Button onPress={this.refreshScreen} title="Recargar"  color="#000"  />
+            </View> */}
+
           </ScrollView>
         </View>
       );

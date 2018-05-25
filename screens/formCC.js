@@ -8,7 +8,7 @@ import { Form,
 export default class FormCC extends React.Component {
   static navigationOptions = {
     header: true,
-    title: 'Crear Conductor'
+    title: 'Crear Propietario'
   };
   constructor(props){
     super(props);    
@@ -37,7 +37,7 @@ export default class FormCC extends React.Component {
 
   CreateCondAsync = async () => {
     try {
-      let response = await fetch('http://192.168.1.106:3000/api/conductor',{
+      let response = await fetch('http://192.168.1.6:3000/api/propietario',{
         method: 'POST',
         headers: {
           'Accept': 'application/json',
@@ -50,8 +50,7 @@ export default class FormCC extends React.Component {
             tran: this.addingTran,
             licencia: parseInt(this.state.formData.licencia),
             fN: this.state.formData.fN,
-            tel: this.state.formData.tel,
-            status: true
+            tel: this.state.formData.tel
         })
        });
 
@@ -95,7 +94,7 @@ export default class FormCC extends React.Component {
         <ScrollView keyboardShouldPersistTaps="always" style={{paddingLeft:10,paddingRight:10, height:200}}>
         <View style={styles.container}>
             <Text style={styles.getStartedText}>
-              Agregar un Conductor
+              Agregar un Propietarios
             </Text>
         </View>
         <Form
@@ -107,11 +106,11 @@ export default class FormCC extends React.Component {
           <InputField
             ref='name'
             label='Nombre'
-            placeholder='Nombre del Conductor' />
+            placeholder='Nombre del Propietario' />
           <InputField
             ref='lastName'
             label='Apellido'
-            placeholder='Apellido del Conductor' />
+            placeholder='Apellido del Propietario' />
             <InputField
             ref='ci'
             placeholder='Cedula'
@@ -124,8 +123,8 @@ export default class FormCC extends React.Component {
             label='tel'
             keyboardType='phone-pad'
             />
-            <Separator />
-            <InputField
+            {/* <Separator /> */}
+            {/* <InputField
             ref='licencia'
             label='#Licencia'
             placeholder='Numero de licencia'
@@ -134,7 +133,7 @@ export default class FormCC extends React.Component {
             <DatePickerField ref='fN'
             minimumDate={new Date('1/1/1900')}
             maximumDate={new Date('1/1/2000')}
-            placeholder='Fecha de Nacimiento'/>
+            placeholder='Fecha de Nacimiento'/> */}
           <Separator />
           {/* {this.ready === false ?
             null
@@ -143,8 +142,10 @@ export default class FormCC extends React.Component {
             options={this.state.Transportes}/> 
             } */}
             {/* Esto se busca mejorar */}
+            <Text  style={{marginBottom:20,marginTop:20 }}>Marque los transportes de los cuales es dueño:</Text>
+            
             { this.Transporte.map( (el,index) =>
-              <SwitchField label={parseInt(el.number)+" - "+el.model}
+              <SwitchField label={parseInt(el.number)+" - "+el.model+" - "+el.licPlate}
               ref={parseInt(el.number)}
               onValueChange={this.agregarTran.bind(this,el,index)}/>
             )}

@@ -24,7 +24,7 @@ export default class DetailedDriver extends React.Component {
 
    _fetchRoutesAsync = async () => {
     try {
-      let response = await fetch('http://192.168.1.106:3000/api/ruta',{
+      let response = await fetch('http://192.168.1.6:3000/api/ruta',{
         method: 'GET'});
       let result = await response.json();
       this.setState({routes: result.route});
@@ -78,17 +78,11 @@ export default class DetailedDriver extends React.Component {
             <Text style={styles.getStartedText}>
               CI: {this.object.ci} ,{"\n"}  Telefono: {this.object.cell}
             </Text>
-            { this.object.status == true? <Text style={styles.getStartedText}>
-              conductor activo
-            </Text>: 
-            <Text style={styles.getStartedText}>
-              conductor inactivo
-            </Text>
-            }
+            
 
             
             <Text style={styles.perfilTitle}>
-              Transportes Asignados
+              Transportes
             </Text>
             <View style={styles.listContainer}>
               {
@@ -105,7 +99,7 @@ export default class DetailedDriver extends React.Component {
               }</View>
 
           
-          {this.object.schedule? <View style={styles.seeMore}>
+          {/* {this.object.schedule? <View style={styles.seeMore}>
             <Button
               
               onPress={this.crearHorario}
@@ -121,7 +115,7 @@ export default class DetailedDriver extends React.Component {
               />
             </View>
 
-          }
+          } */}
             <View style={styles.addNew}>
             <Button
               

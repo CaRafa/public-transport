@@ -39,7 +39,7 @@ export default class updateC extends React.Component {
 
   UpdateCondAsync = async () => {
     try {
-      let response = await fetch('http://192.168.1.106:3000/api/conductor/'+this.id,{
+      let response = await fetch('http://192.168.1.6:3000/api/propietario/'+this.id,{
         method: 'PUT',
         headers: {
           'Accept': 'application/json',
@@ -48,7 +48,6 @@ export default class updateC extends React.Component {
         body: JSON.stringify({
             tran: this.addingTran,
             tel: this.state.formData.tel,
-            status: this.state.formData.status,
             data: true
         })
        });
@@ -93,7 +92,7 @@ export default class updateC extends React.Component {
         <ScrollView keyboardShouldPersistTaps="always" style={{paddingLeft:10,paddingRight:10, height:200}}>
         <View style={styles.container}>
             <Text style={styles.getStartedText}>
-              Editar datos del conductor
+              Editar datos del propietario
             </Text>
         </View>
         <Form
@@ -103,10 +102,7 @@ export default class updateC extends React.Component {
           >
           <Separator />
 
-             <SwitchField label={'Estado'}
-              ref={'status'}
-              
-              />
+             
             
             <InputField
             ref='tel'

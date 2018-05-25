@@ -13,14 +13,14 @@ export default class FormCH extends React.Component {
   constructor(props){
     super(props);    
     const {state} = props.navigation;
-    this.transportes = state.params.transportes; 
+    this.rutas = state.params.rutas; 
     this.id = state.params.id
     this.horario = state.params.horario
     this.state = {
       formData:{},
       paradas:[]
     }
-    this.transJson = []
+    this.rutasJson = []
     //this.ready = false;
    this.obtainOptions();
 
@@ -32,14 +32,14 @@ export default class FormCH extends React.Component {
 
    obtainOptions = () => {
        
-    for(var i = 0; i < this.transportes.length; i++){
-        var number = this.transportes[i].number
-        this.transJson.push(this.transportes[i])
-        var aux =  number+' - '+JSON.stringify(this.transportes[i].model)
+    for(var i = 0; i < this.rutas.length; i++){
+        // var number = this.rutas[i].number
+        this.rutasJson.push(this.rutas[i])
+        var aux =  JSON.stringify(this.rutas[i].title)+' - '+Math.round(this.rutas[i].distance/1000)+'Km' 
         this.state.paradas[i+1] = aux;
         this.setState({ paradas: this.state.paradas })
     }
-    this.transJson.push("descanso")
+    this.rutasJson.push("descanso")
     this.state.paradas.push("descanso")
     this.ready = true;
    }
@@ -53,7 +53,7 @@ export default class FormCH extends React.Component {
 
   UpdateHorarioAsync = async () => {
     try {
-      let response = await fetch('http://192.168.1.106:3000/api/conductor/'+this.id,{
+      let response = await fetch('http://192.168.1.6:3000/api/tranporte/'+this.id,{
         method: 'PUT',
         headers: {
           'Accept': 'application/json',
@@ -67,7 +67,8 @@ export default class FormCH extends React.Component {
        });
 
       let result = await response.json();
-      this.setState({result: result.cond});
+      this.setState({result: result.trans});
+      console.log('RESPUESTA PUT', this.state.result)
       this.infoLoaded = true;
 
     } catch(e) {
@@ -81,34 +82,34 @@ export default class FormCH extends React.Component {
   setHorario = () => {
     this.horario = []
     if(this.state.formData.lunes){
-        var aux = {dia: 'lunes', asig: this.transJson[this.state.formData.lunes-1]}
+        var aux = {dia: 'lunes', asig: this.rutasJson[this.state.formData.lunes-1]}
         this.horario.push(aux);
     }
     if(this.state.formData.martes){
-      var aux = {dia: 'martes', asig: this.transJson[this.state.formData.martes-1]}
+      var aux = {dia: 'martes', asig: this.rutasJson[this.state.formData.martes-1]}
         this.horario.push(aux);
     }
     if(this.state.formData.miercoles){
-      var aux = {dia: 'miercoles', asig: this.transJson[this.state.formData.miercoles-1]}
+      var aux = {dia: 'miercoles', asig: this.rutasJson[this.state.formData.miercoles-1]}
         this.horario.push(aux);
     }
     if(this.state.formData.jueves){
-      var aux = {dia: 'jueves', asig: this.transJson[this.state.formData.jueves-1]}
+      var aux = {dia: 'jueves', asig: this.rutasJson[this.state.formData.jueves-1]}
         this.horario.push(aux);
     }
     if(this.state.formData.viernes){
-      var aux = {dia: 'viernes', asig: this.transJson[this.state.formData.viernes-1]}
+      var aux = {dia: 'viernes', asig: this.rutasJson[this.state.formData.viernes-1]}
         this.horario.push(aux);
     }
     if(this.state.formData.sabado){
-      var aux = {dia: 'sabado', asig: this.transJson[this.state.formData.sabado-1]}
+      var aux = {dia: 'sabado', asig: this.rutasJson[this.state.formData.sabado-1]}
         this.horario.push(aux);
     }
     if(this.state.formData.domingo){
-      var aux = {dia: 'domingo', asig: this.transJson[this.state.formData.domingo-1]}
+      var aux = {dia: 'domingo', asig: this.rutasJson[this.state.formData.domingo-1]}
         this.horario.push(aux);
     }
-
+    console.log('HORARIO PARA ACTUALIZAR', this.horario);
     this.UpdateHorarioAsync().then(function(res){
       
     })
@@ -121,23 +122,22 @@ export default class FormCH extends React.Component {
       return (
 
         <ScrollView keyboardShouldPersistTaps="always" style={{paddingLeft:10,paddingRight:10, height:200}}>
-          {this.horario? <Text style={styles.horarioTitle}>
+          {/* {this.horario? <Text style={styles.horarioTitle}>
           Horario
            </Text>: null
 
-          }
+          } */}
 
-          {this.horario? this.horario.map(el => 
-          
-          <Text style={styles.horarioText}>
-            - {el.dia} : {el.asig == "descanso"? "Descanso" : el.asig.model} 
-          </Text>  
-          ) : 
+          {this.horario?  <View style={styles.container}>
+                <Text style={styles.getStartedText}>
+                  Actualizar horario
+                </Text>
+           </View>: 
            <View style={styles.container}>
-           <Text style={styles.getStartedText}>
-             Crear un horario
-           </Text>
-       </View>
+                <Text style={styles.getStartedText}>
+                  Crear un horario
+                </Text>
+           </View>
           }
           <Form
             ref='registrationForm'

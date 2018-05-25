@@ -39,7 +39,7 @@ export default class FormCT extends React.Component {
   CreateTranAsync = async () => {
     console.log('tipo de vehiculo',this.state.formData.t_type );
     try {
-      let response = await fetch('http://192.168.1.106:3000/api/transporte',{
+      let response = await fetch('http://192.168.1.6:3000/api/transporte',{
         method: 'POST',
         headers: {
           'Accept': 'application/json',
@@ -53,7 +53,9 @@ export default class FormCT extends React.Component {
           route: this.addingRoutes,
           placa: this.state.formData.placa,
           t_type: this.state.formData.t_type,
-          active: true
+          active: true,
+          color: this.state.formData.color,
+          seats: this.state.formData.seats,
         })
        });
 
@@ -127,8 +129,17 @@ export default class FormCT extends React.Component {
             label='Placa'
             placeholder='Placa del transporte'/>
             <InputField
+            ref='color'
+            label='Color'
+            placeholder='Color del transporte'/>
+            <InputField
             ref='year'
             label='Año'
+            keyboardType='numeric'
+            />
+            <InputField
+            ref='seats'
+            label='Número de puestos'
             keyboardType='numeric'
             />
           
@@ -145,10 +156,11 @@ export default class FormCT extends React.Component {
           
             
 
-            <Separator />
+            {/* <Separator />
             <Text  style={{marginBottom:20,marginTop:20 }}>Marque las rutas que recorrera este transporte:</Text>
+             */}
             
-            {  this.rutas.map( (el,index) =>
+            {/* {  this.rutas.map( (el,index) =>
               
               
               <SwitchField label={el.title}
@@ -158,7 +170,7 @@ export default class FormCT extends React.Component {
               
             ) 
             
-            }
+            } */}
             
 
           </Form>

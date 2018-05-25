@@ -32,7 +32,7 @@ export default class ConductorScreen extends React.Component {
 
   _fetchTransportesAsync = async () => {
     try {
-      let response = await fetch('http://192.168.1.106:3000/api/transporte',{
+      let response = await fetch('http://192.168.1.6:3000/api/transporte',{
         method: 'GET'});
       let result = await response.json();
       this.setState({transporte: result.transporte}); 
@@ -44,7 +44,7 @@ export default class ConductorScreen extends React.Component {
   
   _fetchConductoresAsync = async () => {
     try {
-      let response = await fetch('http://192.168.1.106:3000/api/conductor',{
+      let response = await fetch('http://192.168.1.6:3000/api/propietario',{
         method: 'GET'});
       let result = await response.json();
       this.setState({conductor: result.conductor});
@@ -97,7 +97,7 @@ export default class ConductorScreen extends React.Component {
         } >
           <View style={styles.container}>
                   <Text style={styles.tituloPrincipal}>    
-                  Conductores
+                  Propietarios
                   </Text>
               </View>
               <View style={styles.listContainer}>
@@ -124,7 +124,7 @@ export default class ConductorScreen extends React.Component {
             <Button
               
               onPress={this.AgregarConductor}
-              title="Agregar un Conductor"
+              title="Agregar un Propietario"
               color="#000"
               />
             </View>

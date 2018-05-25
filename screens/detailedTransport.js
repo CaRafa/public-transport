@@ -28,7 +28,7 @@ export default class DetailedTransport extends React.Component {
 
    _fetchParadasAsync = async () => {
     try {
-      let response = await fetch('http://192.168.1.106:3000/api/parada',{
+      let response = await fetch('http://192.168.1.6:3000/api/parada',{
         method: 'GET'});
       let result = await response.json();
       this.setState({paradas: result.par});
@@ -117,15 +117,26 @@ obtenerParadas = () => {
     this.ObtenerUbicacion(true)
   }
 
+  crearHorario = () =>{
+    this.props.navigation.navigate('FormCH',{rutas: this.allRoutes, id: this.object._id, horario: this.object.schedule});
+   }
+
+   descanso = () => {
+     console.log('descanso');
+   }
+
   render() {
     return (
       <View style={styles.container}>
         <ScrollView>
             <Text style={styles.getStartedTexthead}>
-              Informacion del transporte {this.object.numero}
+              Informacion del transporte {this.object.number}
             </Text>
             <Text style={styles.getStartedText}>
-             Placa:{this.object.licPlate} {"\n"}Marca: {this.object.model}{"\n"}Año: {this.object.year}{"\n"}Informacion relevante: {this.object.description}{"\n"}Tipo de transporte: 
+             Placa:{this.object.licPlate} {"\n"}Marca: {this.object.model}, Color: {this.object.color}{"\n"}
+             Puestos:{this.object.seats} ,Año: {this.object.year}{"\n"}
+             Informacion relevante: {this.object.description}
+             {"\n"}Tipo de transporte:  
              {this.object.vehType == "TransP"? 'Transporte Pequeño': this.object.vehType == "TransG" ? "Transporte Grande": this.object.vehType == "Mt"? "Moto taxi" : this.object.vehType } 
              {"\n"} { this.object.active == true? 
               '- Transporte en servicio'
@@ -136,23 +147,47 @@ obtenerParadas = () => {
             }
             </Text>
             
-            <Separator/>
+            
+            {this.object.schedule?
+            
+            <Separator/> : null}
+            {this.object.schedule?
+            
             <Text style={styles.getStartedTextSubtitle}>
               Rutas que cubre:
-            </Text>
+            </Text> : null}
           
             <View style={styles.listContainer}>
-            {this.routes?
-              this.routes.map((el,i) =>
+            {this.object.schedule?
+              this.object.schedule.map((el,i) =>
                 <ListItem
                 key={i}
-                title={el.title}
-                subtitle={Math.round(el.distance)/1000+"km"}
-                onPress={this.verRutas.bind(this,el)}
+                title={el.dia+' - '+ (el.asig == "descanso"? "Descanso" : el.asig.title)}
+                subtitle={(el.asig == "descanso"? "": Math.round(el.asig.distance)/1000+"km")}
+                onPress={(el.asig == "descanso"? this.descanso: this.verRutas.bind(this,el.asig))}
               />
               ): null
             }
             </View>
+
+            {this.object.schedule? <View style={styles.seeMore}>
+            <Button
+              
+              onPress={this.crearHorario}
+              title="Actualizar Horario"
+              color="#000"
+              />
+            </View>: <View style={styles.addNew}>
+            <Button
+              
+              onPress={this.crearHorario}
+              title="Asignar Horario"
+              color="#000"
+              />
+            </View>
+
+          }
+
             <View style={styles.addNew}>
             <Button
               
@@ -177,6 +212,15 @@ const styles = StyleSheet.create({
     marginLeft: 60,
     marginRight: 60
 
+  },
+  seeMore:{
+    backgroundColor: '#f4f8ff',
+    borderRadius: 16,
+    borderWidth: 1,
+    borderColor: 'grey',
+    marginTop: 35,
+    marginLeft: 60,
+    marginRight: 60
   },
   buttonContainer:{
     backgroundColor: 'white',

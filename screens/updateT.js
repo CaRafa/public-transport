@@ -38,7 +38,7 @@ export default class updateT extends React.Component {
 
   UpdateTranAsync = async () => {
     try {
-      let response = await fetch('http://192.168.1.106:3000/api/tranporte/'+this.object._id,{
+      let response = await fetch('http://192.168.1.6:3000/api/tranporte/'+this.object._id,{
         method: 'PUT',
         headers: {
           'Accept': 'application/json',
@@ -46,8 +46,9 @@ export default class updateT extends React.Component {
         },
         body: JSON.stringify({
             description: this.state.formData.des,
-            route: this.addingRoutes,
-            active: this.state.formData.status
+            // route: this.addingRoutes,
+            active: this.state.formData.status,
+            data: true
         })
        });
 
@@ -116,16 +117,17 @@ export default class updateT extends React.Component {
 
           
             
-          <Separator />
+          {/* <Separator /> */}
           
             {/* Esto se busca mejorar */}
-            { this.routes.map( (el,index) =>
+            {/* { this.routes.map( (el,index) =>
               
               <SwitchField label={el.title}
               ref={el.title}
               onValueChange={this.agregarRuta.bind(this,el,index)}/>
             
-            ) }
+            ) } */}
+
           </Form>
           <View style={styles.addNew}>
                 <Button title={'Actualizar'} color="black" onPress={this.updateTransporte } />

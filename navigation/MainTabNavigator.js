@@ -79,6 +79,9 @@ export const TransportNavigator = StackNavigator({
   DetailedTransport: {
     screen: DetailedTransport,
   },
+  FormCH: {
+    screen: FormCH,
+  },
   updateT: {
     screen: updateT,
   },
@@ -92,9 +95,7 @@ export const ConductorNavigator = StackNavigator({
   FormCC: {
     screen: FormCC,
   },
-  FormCH: {
-    screen: FormCH,
-  },
+  
   DetailedDriver: {
     screen: DetailedDriver,
   },
@@ -117,7 +118,7 @@ export default TabNavigator(
     Rutas: {
       screen: RouteNavigator,
     },
-    Conductores: {
+    Propietarios: {
       screen: ConductorNavigator,
     },
   },
@@ -147,7 +148,7 @@ export default TabNavigator(
                 : 'md-locate';
             break;
 
-            case 'Conductores':
+            case 'Propietarios':
             iconName =
               Platform.OS === 'ios'
                 ? `ios-man${focused ? '' : '-outline'}`

@@ -207,7 +207,7 @@ checkSelectedPoints(response){
  
 //    CreateRutaAsync = async () => {
 //     try {
-//       let response = await fetch('http://192.168.1.106:3000/api/ruta',{
+//       let response = await fetch('http://192.168.1.6:3000/api/ruta',{
 //         method: 'POST',
 //         headers: {
 //           'Accept': 'application/json',

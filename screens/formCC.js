@@ -129,11 +129,11 @@ export default class FormCC extends React.Component {
             label='#Licencia'
             placeholder='Numero de licencia'
             keyboardType='numeric'
-            />
+            />*/}
             <DatePickerField ref='fN'
             minimumDate={new Date('1/1/1900')}
             maximumDate={new Date('1/1/2000')}
-            placeholder='Fecha de Nacimiento'/> */}
+            placeholder='Fecha de Nacimiento'/> 
           <Separator />
           {/* {this.ready === false ?
             null

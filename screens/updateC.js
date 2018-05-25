@@ -8,7 +8,7 @@ import { Form,
 export default class updateC extends React.Component {
   static navigationOptions = {
     header: true,
-    title: 'Modificar Conductor'
+    title: 'Modificar Propietario'
   };
   constructor(props){
     super(props);    

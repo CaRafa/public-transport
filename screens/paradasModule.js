@@ -26,7 +26,7 @@ export default class paradasModule extends React.Component {
 
    _fetchParadasAsync = async () => {
     try {
-      let response = await fetch('http://192.168.1.6:3000/api/parada',{
+      let response = await fetch('http://192.168.1.108:3000/api/parada',{
         method: 'GET'});
       let result = await response.json();
       this.setState({paradas: result.par});
@@ -128,9 +128,9 @@ export default class paradasModule extends React.Component {
                             </View>
                             :
               
-                this.state.paradas.map((el,i) => 
+                this.state.paradas.map((el,index) => 
                 <ListItem
-                    key={i}
+                    key={index}
                     title={el.title}
                     subtitle={el.terminal? 'Terminal': 'Toque y despegue'}
                     onPress={this.verLocation.bind(this,el)}

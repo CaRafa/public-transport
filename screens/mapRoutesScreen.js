@@ -46,23 +46,23 @@ export default class mapRoutes extends React.Component {
             <View>
             {
             this.polylines.map(el => 
-              el.type == "Urb" ?el.route.map(ele =>           
+              el.type == "Urb" ?el.route.map((ele,index) =>           
                                 <MapView.Polyline
-                                key={el._id}
+                                key={index}
                                 coordinates={ele}
                                 strokeColor="#4286f4"
                                 fillColor="rgba(255,0,0,0.5)"
                                 strokeWidth={10}/>   
-            ) : el.type == "subUrb" ?  el.route.map(ele =>           
+            ) : el.type == "subUrb" ?  el.route.map((ele,index) =>           
                                     <MapView.Polyline
-                                    key={el._id}
+                                    key={index}
                                     coordinates={ele}
                                     strokeColor="#ef3eef"
                                     fillColor="rgba(255,0,0,0.5)"
                                     strokeWidth={6}/>   ) :  
-                        el.route.map(ele =>           
+                        el.route.map((ele,index) =>           
                         <MapView.Polyline
-                        key={el._id}
+                        key={index}
                         coordinates={ele}
                         strokeColor="#43ef3e"
                         fillColor="rgba(255,0,0,0.5)"
@@ -72,16 +72,16 @@ export default class mapRoutes extends React.Component {
             </View>
             }
            {
-              this.paradas.map(el => 
+              this.paradas.map((el,index) => 
                 el.terminal == true ? <MapView.Marker
-                    key={el._id}
+                    key={index}
                     coordinate={{latitude: el.coordinates.latitude,
                     longitude: el.coordinates.longitude}}
                     pinColor={'black'}
                  /> : 
                  el.density == "D1"?
                  <MapView.Marker
-                 key={el._id}
+                 key={index}
                  coordinate={{latitude: el.coordinates.latitude,
                  longitude: el.coordinates.longitude}}
                  pinColor={'red'}
@@ -89,7 +89,7 @@ export default class mapRoutes extends React.Component {
                 : 
                  el.density == "D2"?
                  <MapView.Marker
-                 key={el._id}
+                 key={index}
                  coordinate={{latitude: el.coordinates.latitude,
                  longitude: el.coordinates.longitude}}
                  pinColor={'orange'}
@@ -97,7 +97,7 @@ export default class mapRoutes extends React.Component {
                 : 
                  el.density == "D3"?
                  <MapView.Marker
-                 key={el._id}
+                 key={index}
                  coordinate={{latitude: el.coordinates.latitude,
                  longitude: el.coordinates.longitude}}
                  pinColor={'yellow'}
@@ -105,7 +105,7 @@ export default class mapRoutes extends React.Component {
                 : 
                  el.density == "D4"?
                  <MapView.Marker
-                 key={el._id}
+                 key={index}
                  coordinate={{latitude: el.coordinates.latitude,
                  longitude: el.coordinates.longitude}}
                  pinColor={'green'}
@@ -113,14 +113,14 @@ export default class mapRoutes extends React.Component {
                 : 
                  el.density == "D5"?
                  <MapView.Marker
-                 key={el._id}
+                 key={index}
                  coordinate={{latitude: el.coordinates.latitude,
                  longitude: el.coordinates.longitude}}
                  pinColor={'blue'}
                 />  
                 : 
                 <MapView.Marker
-                 key={el._id}
+                 key={index}
                  coordinate={{latitude: el.coordinates.latitude,
                  longitude: el.coordinates.longitude}}
                 />  

@@ -15,16 +15,47 @@ export default class DetailedDriver extends React.Component {
     const {state} = props.navigation;
     this.object = state.params.cond;
     this.trans = state.params.trans
-    this.allTrans = state.params.allTrans
+    this.state = { 
+      object: false    
+      }
+
+    //this.allTrans = state.params.allTrans
 
    }
    componentDidMount(){
     this._fetchRoutesAsync();
+    this._fetchTransportesAsync()
+    
+
    } 
+
+   _fetchTransportesAsync = async () => {
+    try {
+      let response = await fetch('http://192.168.1.108:3000/api/transporte',{
+        method: 'GET'});
+      let result = await response.json();
+      this.setState({transporte: result.transporte});
+      
+
+      if(this.trans){
+        console.log('llego por propietarios')
+        this.setState({object: this.trans});
+      }else{
+        console.log('llego por transportes')
+        this.trans = this.obtainTransports(result.transporte)
+        this.setState({object: this.trans});
+      }
+
+
+    } catch(e) {
+      this.setState({transporte: e});
+    }
+  } 
+
 
    _fetchRoutesAsync = async () => {
     try {
-      let response = await fetch('http://192.168.1.6:3000/api/ruta',{
+      let response = await fetch('http://192.168.1.108:3000/api/ruta',{
         method: 'GET'});
       let result = await response.json();
       this.setState({routes: result.route});
@@ -32,7 +63,24 @@ export default class DetailedDriver extends React.Component {
     } catch(e) {
       this.setState({routes: e});
     }
-  };
+  }
+
+  obtainTransports = (allTrans) =>{
+    console.log('Se llama a la funcion')
+    var trans = [];
+    console.log(allTrans)
+    for(var i = 0; i< allTrans.length; i++){
+      if(this.object._id == allTrans[i].owner){
+        console.log('dueño conseguido');
+        trans.push(allTrans[i])
+      }
+
+
+    }
+
+
+    return trans
+  }
 
   obtainRoutes(obj){
 
@@ -49,18 +97,55 @@ export default class DetailedDriver extends React.Component {
     return aux
   }
 
+
+  obtainSchedule(schedule){
+    var finalSchedule = [];
+    console.log(schedule)
+    schedule.forEach(element => {
+      if(element.asig !== 'descanso'){
+        this.state.routes.forEach(route => {
+          if(route._id == element.asig){
+            finalSchedule.push(
+              {asig:route,
+               dia: element.dia}
+              )
+          }
+          
+        })
+
+        
+      }else{
+        finalSchedule.push(
+          element
+          )
+      }
+
+
+    });
+
+    return finalSchedule
+  }
+
    verAutobus(obj){
        var routes = this.obtainRoutes(obj);
+       if(obj.schedule){
+        console.log(obj.schedule)
+        var schedule = this.obtainSchedule(obj.schedule)
+      }
+
     this.props.navigation.navigate('DetailedTransport', {
       transporte: obj,
-      routes: routes
+      routes: routes,
+      owner: this.object,
+      schedule: schedule,
+      allRoutes: this.state.routes,
     });
 
    }
 
    updateInfo = () => {
 
-     this.props.navigation.navigate('updateC',{transportes: this.allTrans, id: this.object._id, status: this.object.status});
+     this.props.navigation.navigate('updateC',{transportes: this.state.transporte, id: this.object._id, status: this.object.status});
    }
 
    crearHorario = () =>{
@@ -85,8 +170,8 @@ export default class DetailedDriver extends React.Component {
               Transportes
             </Text>
             <View style={styles.listContainer}>
-              {
-                this.trans.map((el,i) => 
+              {this.state.object?
+                this.state.object.map((el,i) => 
                 
                 <ListItem
                 key={i}
@@ -96,7 +181,7 @@ export default class DetailedDriver extends React.Component {
                 onPress={this.verAutobus.bind(this,el)}
               />
               )
-              }</View>
+              : null}</View>
 
           
           {/* {this.object.schedule? <View style={styles.seeMore}>

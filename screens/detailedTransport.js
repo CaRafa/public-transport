@@ -18,7 +18,8 @@ export default class DetailedTransport extends React.Component {
     this.object = state.params.transporte;
     this.allRoutes = state.params.allRoutes
     this.routes = state.params.routes;
-
+    this.owner = state.params.owner;
+    this.schedule = state.params.schedule
    }
 
    componentDidMount(){
@@ -28,7 +29,7 @@ export default class DetailedTransport extends React.Component {
 
    _fetchParadasAsync = async () => {
     try {
-      let response = await fetch('http://192.168.1.6:3000/api/parada',{
+      let response = await fetch('http://192.168.1.108:3000/api/parada',{
         method: 'GET'});
       let result = await response.json();
       this.setState({paradas: result.par});
@@ -125,6 +126,12 @@ obtenerParadas = () => {
      console.log('descanso');
    }
 
+   verOwner = (owner) => {
+     console.log('ver owner',owner);
+     this.props.navigation.navigate('DetailedDriver',{cond:owner})
+   
+    }
+
   render() {
     return (
       <View style={styles.container}>
@@ -135,42 +142,67 @@ obtenerParadas = () => {
             <Text style={styles.getStartedText}>
              Placa:{this.object.licPlate} {"\n"}Marca: {this.object.model}, Color: {this.object.color}{"\n"}
              Puestos:{this.object.seats} ,Año: {this.object.year}{"\n"}
-             Informacion relevante: {this.object.description}
-             {"\n"}Tipo de transporte:  
+             Tipo de transporte:  
              {this.object.vehType == "TransP"? 'Transporte Pequeño': this.object.vehType == "TransG" ? "Transporte Grande": this.object.vehType == "Mt"? "Moto taxi" : this.object.vehType } 
-             {"\n"} { this.object.active == true? 
-              '- Transporte en servicio'
-            : 
-           
-            ' - Transporte fuera de servicio'
-           
-            }
+             {"\n"}
+             Informacion relevante: {this.object.description}
             </Text>
+            <View>
+            { this.object.active == true? 
+            <Text style={styles.active}>
+              - Transporte en servicio </Text>
+            : 
+            <Text style={styles.outOfService}>
+               - Transporte fuera de servicio
+           
+             </Text>}
+            </View>
+
+            {this.owner? 
+              <View>
+                <Text style={styles.getStartedTextSubtitle}>
+                      Dueño de la unidad:
+                    </Text>
+                <Separator/> 
+                 
+                    <ListItem
+                    key={this.owner._id}
+                    title={this.owner.lastName+' , '+ this.owner.name}
+                    subtitle={'C.I: '+this.owner.ci}
+                    onPress={this.verOwner.bind(this,this.owner)}
+                     />    
+              </View>
+            : null
+
+            }
+            {  this.schedule?
             
-            
-            {this.object.schedule?
-            
-            <Separator/> : null}
-            {this.object.schedule?
             
             <Text style={styles.getStartedTextSubtitle}>
-              Rutas que cubre:
-            </Text> : null}
-          
+            Rutas que cubre:
+            </Text>
+              : null
+            }
+           
+            {  this.schedule?
+            
+            
             <View style={styles.listContainer}>
-            {this.object.schedule?
-              this.object.schedule.map((el,i) =>
+            
+              {  this.schedule.map((el,i) =>
                 <ListItem
                 key={i}
                 title={el.dia+' - '+ (el.asig == "descanso"? "Descanso" : el.asig.title)}
                 subtitle={(el.asig == "descanso"? "": Math.round(el.asig.distance)/1000+"km")}
                 onPress={(el.asig == "descanso"? this.descanso: this.verRutas.bind(this,el.asig))}
               />
-              ): null
+              )}
+              </View>
+              : null
             }
-            </View>
+           
 
-            {this.object.schedule? <View style={styles.seeMore}>
+            {  this.schedule? <View style={styles.seeMore}>
             <Button
               
               onPress={this.crearHorario}
@@ -238,7 +270,19 @@ const styles = StyleSheet.create({
     color: 'black',
     lineHeight: 24,
     textAlign: 'center',
-    margin: 40,
+    margin: 15,
+  },
+  active: {
+    fontSize: 17,
+    color: 'green',
+    lineHeight: 24,
+    textAlign: 'center'
+  },
+  outOfService: {
+    fontSize: 17,
+    color: 'red',
+    lineHeight: 24,
+    textAlign: 'center'
   },
   getStartedTexthead: {
     fontSize: 26,

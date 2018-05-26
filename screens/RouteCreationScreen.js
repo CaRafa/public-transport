@@ -207,7 +207,7 @@ checkSelectedPoints(response){
  
 //    CreateRutaAsync = async () => {
 //     try {
-//       let response = await fetch('http://192.168.1.6:3000/api/ruta',{
+//       let response = await fetch('http://192.168.1.108:3000/api/ruta',{
 //         method: 'POST',
 //         headers: {
 //           'Accept': 'application/json',
@@ -259,8 +259,9 @@ checkSelectedPoints(response){
             : null   }
          
              {
-              this.paradas.map(el => 
+              this.paradas.map((el,index) => 
                 el.terminal == true ? <MapView.Marker
+                key={index}
               coordinate={{latitude: el.coordinates.latitude,
               longitude: el.coordinates.longitude}}
               onPress={this.setPolyline.bind(this,el)}
@@ -268,6 +269,7 @@ checkSelectedPoints(response){
               /> : 
               el.density == "D1"?
               <MapView.Marker
+              key={index}
               coordinate={{latitude: el.coordinates.latitude,
               longitude: el.coordinates.longitude}}
               onPress={this.setPolyline.bind(this,el)}
@@ -276,6 +278,7 @@ checkSelectedPoints(response){
              : 
               el.density == "D2"?
               <MapView.Marker
+              key={index}
               coordinate={{latitude: el.coordinates.latitude,
               longitude: el.coordinates.longitude}}
               onPress={this.setPolyline.bind(this,el)}
@@ -284,6 +287,7 @@ checkSelectedPoints(response){
              : 
               el.density == "D3"?
               <MapView.Marker
+              key={index}
               coordinate={{latitude: el.coordinates.latitude,
               longitude: el.coordinates.longitude}}
               onPress={this.setPolyline.bind(this,el)}
@@ -292,6 +296,7 @@ checkSelectedPoints(response){
              : 
               el.density == "D4"?
               <MapView.Marker
+              key={index}
               coordinate={{latitude: el.coordinates.latitude,
               longitude: el.coordinates.longitude}}
               onPress={this.setPolyline.bind(this,el)}
@@ -300,6 +305,7 @@ checkSelectedPoints(response){
              : 
               el.density == "D5"?
               <MapView.Marker
+              key={index}
               coordinate={{latitude: el.coordinates.latitude,
               longitude: el.coordinates.longitude}}
               onPress={this.setPolyline.bind(this,el)}
@@ -307,6 +313,7 @@ checkSelectedPoints(response){
              />  
              : 
              <MapView.Marker
+             key={index}
               coordinate={{latitude: el.coordinates.latitude,
               longitude: el.coordinates.longitude}}
               onPress={this.setPolyline.bind(this,el)}

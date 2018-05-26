@@ -32,7 +32,7 @@ export default class ConductorScreen extends React.Component {
 
   _fetchTransportesAsync = async () => {
     try {
-      let response = await fetch('http://192.168.1.6:3000/api/transporte',{
+      let response = await fetch('http://192.168.1.108:3000/api/transporte',{
         method: 'GET'});
       let result = await response.json();
       this.setState({transporte: result.transporte}); 
@@ -44,7 +44,7 @@ export default class ConductorScreen extends React.Component {
   
   _fetchConductoresAsync = async () => {
     try {
-      let response = await fetch('http://192.168.1.6:3000/api/propietario',{
+      let response = await fetch('http://192.168.1.108:3000/api/propietario',{
         method: 'GET'});
       let result = await response.json();
       this.setState({conductor: result.conductor});
@@ -59,7 +59,8 @@ export default class ConductorScreen extends React.Component {
     
     var taux = conductor.transports;  
     var transSend = [];
-    taux.map(el => {
+    if(taux !== 'none'){
+      taux.map(el => {
         for(var i=0; i < this.state.transporte.length; i++){
           if(this.state.transporte[i]._id == el){
             transSend.push(this.state.transporte[i]);
@@ -68,14 +69,12 @@ export default class ConductorScreen extends React.Component {
         }
       }
     )
+    }
+    
 
-    this.props.navigation.navigate('DetailedDriver',{cond:conductor, trans: transSend, allTrans: this.state.transporte});
+    this.props.navigation.navigate('DetailedDriver',{cond:conductor, trans: transSend});
   }
-  // refreshScreen() {
-  //   this.setState({ lastRefresh: Date(Date.now()).toString() })
-  //   this._fetchTransportesAsync()
-  //   this._fetchConductoresAsync()
-  // }
+  
 
   _onRefresh() {
     this.setState({refreshing: true});

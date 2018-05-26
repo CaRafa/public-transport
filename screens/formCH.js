@@ -53,7 +53,7 @@ export default class FormCH extends React.Component {
 
   UpdateHorarioAsync = async () => {
     try {
-      let response = await fetch('http://192.168.1.6:3000/api/tranporte/'+this.id,{
+      let response = await fetch('http://192.168.1.108:3000/api/tranporte/'+this.id,{
         method: 'PUT',
         headers: {
           'Accept': 'application/json',
@@ -82,31 +82,53 @@ export default class FormCH extends React.Component {
   setHorario = () => {
     this.horario = []
     if(this.state.formData.lunes){
-        var aux = {dia: 'lunes', asig: this.rutasJson[this.state.formData.lunes-1]}
+        var aux = {dia: 'lunes', asig: this.rutasJson[this.state.formData.lunes-1]._id}
+        this.horario.push(aux);
+    }else{
+      var aux = {dia: 'lunes', asig: 'descanso'}
         this.horario.push(aux);
     }
     if(this.state.formData.martes){
-      var aux = {dia: 'martes', asig: this.rutasJson[this.state.formData.martes-1]}
+      var aux = {dia: 'martes', asig: this.rutasJson[this.state.formData.martes-1]._id}
+        this.horario.push(aux);
+    }else{
+      var aux = {dia: 'martes', asig: 'descanso'}
         this.horario.push(aux);
     }
+
     if(this.state.formData.miercoles){
-      var aux = {dia: 'miercoles', asig: this.rutasJson[this.state.formData.miercoles-1]}
+      var aux = {dia: 'miercoles', asig: this.rutasJson[this.state.formData.miercoles-1]._id}
+        this.horario.push(aux);
+    }else{
+      var aux = {dia: 'miercoles', asig: 'descanso'}
         this.horario.push(aux);
     }
     if(this.state.formData.jueves){
-      var aux = {dia: 'jueves', asig: this.rutasJson[this.state.formData.jueves-1]}
+      var aux = {dia: 'jueves', asig: this.rutasJson[this.state.formData.jueves-1]._id}
+        this.horario.push(aux);
+    }else{
+      var aux = {dia: 'jueves', asig: 'descanso'}
         this.horario.push(aux);
     }
     if(this.state.formData.viernes){
-      var aux = {dia: 'viernes', asig: this.rutasJson[this.state.formData.viernes-1]}
+      var aux = {dia: 'viernes', asig: this.rutasJson[this.state.formData.viernes-1]._id}
+        this.horario.push(aux);
+    }else{
+      var aux = {dia: 'viernes', asig: 'descanso'}
         this.horario.push(aux);
     }
     if(this.state.formData.sabado){
-      var aux = {dia: 'sabado', asig: this.rutasJson[this.state.formData.sabado-1]}
+      var aux = {dia: 'sabado', asig: this.rutasJson[this.state.formData.sabado-1]._id}
+        this.horario.push(aux);
+    }else{
+      var aux = {dia: 'sabado', asig: 'descanso'}
         this.horario.push(aux);
     }
     if(this.state.formData.domingo){
-      var aux = {dia: 'domingo', asig: this.rutasJson[this.state.formData.domingo-1]}
+      var aux = {dia: 'domingo', asig: this.rutasJson[this.state.formData.domingo-1]._id}
+        this.horario.push(aux);
+    }else{
+      var aux = {dia: 'domingo', asig: 'descanso'}
         this.horario.push(aux);
     }
     console.log('HORARIO PARA ACTUALIZAR', this.horario);

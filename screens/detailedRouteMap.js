@@ -48,23 +48,23 @@ export default class detailedRouteMap extends React.Component {
             <View>
             {
             
-              this.polylines.type == "Urb" ? this.polylines.route.map(ele =>           
+              this.polylines.type == "Urb" ? this.polylines.route.map((ele,index) =>           
                                 <MapView.Polyline
-                                key={this.polylines._id}
+                                key={index}
                                 coordinates={ele}
                                 strokeColor="#4286f4"
                                 fillColor="rgba(255,0,0,0.5)"
                                 strokeWidth={10}/>   
-            ) : this.polylines.type == "subUrb" ?  this.polylines.route.map(ele =>           
+            ) : this.polylines.type == "subUrb" ?  this.polylines.route.map((ele,index) =>           
                                     <MapView.Polyline
-                                    key={this.polylines._id}
+                                    key={index}
                                     coordinates={ele}
                                     strokeColor="#ef3eef"
                                     fillColor="rgba(255,0,0,0.5)"
                                     strokeWidth={6}/>   ) :  
-                        this.polylines.route.map(ele =>           
+                        this.polylines.route.map((ele,index) =>           
                         <MapView.Polyline
-                        key={this.polylines._id}
+                        key={index}
                         coordinates={ele}
                         strokeColor="#43ef3e"
                         fillColor="rgba(255,0,0,0.5)"
@@ -80,16 +80,16 @@ export default class detailedRouteMap extends React.Component {
             </View>
             }
            {
-              this.paradas.map(el => 
+              this.paradas.map((el,index) => 
                 el.terminal == true ? <MapView.Marker
-                    key={el._id}
+                    key={index}
                     coordinate={{latitude: el.coordinates.latitude,
                     longitude: el.coordinates.longitude}}
                     pinColor={'black'}
                  /> : 
                  el.density == "D1"?
                  <MapView.Marker
-                 key={el._id}
+                 key={index}
                  coordinate={{latitude: el.coordinates.latitude,
                  longitude: el.coordinates.longitude}}
                  pinColor={'red'}
@@ -97,7 +97,7 @@ export default class detailedRouteMap extends React.Component {
                 : 
                  el.density == "D2"?
                  <MapView.Marker
-                 key={el._id}
+                 key={index}
                  coordinate={{latitude: el.coordinates.latitude,
                  longitude: el.coordinates.longitude}}
                  pinColor={'orange'}
@@ -105,7 +105,7 @@ export default class detailedRouteMap extends React.Component {
                 : 
                  el.density == "D3"?
                  <MapView.Marker
-                 key={el._id}
+                 key={index}
                  coordinate={{latitude: el.coordinates.latitude,
                  longitude: el.coordinates.longitude}}
                  pinColor={'yellow'}
@@ -113,7 +113,7 @@ export default class detailedRouteMap extends React.Component {
                 : 
                  el.density == "D4"?
                  <MapView.Marker
-                 key={el._id}
+                 key={index}
                  coordinate={{latitude: el.coordinates.latitude,
                  longitude: el.coordinates.longitude}}
                  pinColor={'green'}
@@ -121,14 +121,14 @@ export default class detailedRouteMap extends React.Component {
                 : 
                  el.density == "D5"?
                  <MapView.Marker
-                 key={el._id}
+                 key={index}
                  coordinate={{latitude: el.coordinates.latitude,
                  longitude: el.coordinates.longitude}}
                  pinColor={'blue'}
                 />  
                 : 
                 <MapView.Marker
-                 key={el._id}
+                 key={index}
                  coordinate={{latitude: el.coordinates.latitude,
                  longitude: el.coordinates.longitude}}
                 />  

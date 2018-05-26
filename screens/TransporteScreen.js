@@ -18,6 +18,7 @@ export default class TransporteScreen extends React.Component {
    componentDidMount(){
     this._fetchRoutesAsync()
     this._fetchTransportesAsync()
+    this._fetchPropietarioAsync()
    }
 
   AgregarTransporte = () => {
@@ -25,9 +26,21 @@ export default class TransporteScreen extends React.Component {
     this.props.navigation.navigate('FormCT', this.state.routes) 
   }
 
+  _fetchPropietarioAsync = async () => {
+    try {
+      let response = await fetch('http://192.168.1.108:3000/api/propietario',{
+        method: 'GET'});
+      let result = await response.json();
+      this.setState({propietario: result.conductor});
+
+    } catch(e) {
+      this.setState({propietario: e});
+    }
+  }
+
   _fetchRoutesAsync = async () => {
     try {
-      let response = await fetch('http://192.168.1.6:3000/api/ruta',{
+      let response = await fetch('http://192.168.1.108:3000/api/ruta',{
         method: 'GET'});
       let result = await response.json();
       this.setState({routes: result.route});
@@ -39,7 +52,7 @@ export default class TransporteScreen extends React.Component {
 
   _fetchTransportesAsync = async () => {
     try {
-      let response = await fetch('http://192.168.1.6:3000/api/transporte',{
+      let response = await fetch('http://192.168.1.108:3000/api/transporte',{
         method: 'GET'});
       let result = await response.json();
       this.setState({transporte: result.transporte});
@@ -64,12 +77,59 @@ export default class TransporteScreen extends React.Component {
     return aux
   }
 
+  obtainOwner(idOwner){
+    var owner;
+    for(var i =0 ; i < this.state.propietario.length; i++){
+        if(this.state.propietario[i]._id == idOwner){
+          owner = this.state.propietario[i]
+        }
+
+    }
+    return owner
+  }
+  obtainSchedule(schedule){
+    var finalSchedule = [];
+    console.log(schedule)
+    schedule.forEach(element => {
+      if(element.asig !== 'descanso'){
+        this.state.routes.forEach(route => {
+          if(route._id == element.asig){
+            finalSchedule.push(
+              {asig:route,
+               dia: element.dia}
+              )
+          }
+          
+        })
+
+        
+      }else{
+        finalSchedule.push(
+          element
+          )
+      }
+
+
+    });
+
+    return finalSchedule
+  }
+
   verDetallado = (transporte) => {
     var routes = this.obtainRoutes(transporte);
+    var owner = this.obtainOwner(transporte.owner);
+    if(transporte.schedule){
+      console.log(transporte.schedule)
+      var schedule = this.obtainSchedule(transporte.schedule)
+    }
+    // console.log('OWNER OBTENIDO',owner)
+
     this.props.navigation.navigate('DetailedTransport', {
       transporte: transporte,
       routes: routes,
-      allRoutes: this.state.routes
+      allRoutes: this.state.routes,
+      owner: owner,
+      schedule: schedule
     });
   }
 
@@ -81,6 +141,7 @@ export default class TransporteScreen extends React.Component {
   _onRefresh() {
     this.setState({refreshing: true});
     this._fetchRoutesAsync()
+    this._fetchPropietarioAsync()
     this._fetchTransportesAsync().then(() => {
       this.setState({refreshing: false});
     });

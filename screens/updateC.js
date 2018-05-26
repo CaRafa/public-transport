@@ -37,16 +37,16 @@ export default class updateC extends React.Component {
   handleFormFocus(e, component){
   }
 
-  UpdateCondAsync = async () => {
+  UpdateCondAsync = async (transportes) => {
     try {
-      let response = await fetch('http://192.168.1.6:3000/api/propietario/'+this.id,{
+      let response = await fetch('http://192.168.1.108:3000/api/propietario/'+this.id,{
         method: 'PUT',
         headers: {
           'Accept': 'application/json',
           'Content-Type': 'application/json'
         },
         body: JSON.stringify({
-            tran: this.addingTran,
+            tran: transportes,
             tel: this.state.formData.tel,
             data: true
         })
@@ -55,6 +55,10 @@ export default class updateC extends React.Component {
       let result = await response.json();
       this.setState({result: result.con});
       this.infoLoaded = true;
+      this.addingTran.forEach(element => {
+        this.UpdateTranAsync(this.id,element)
+      });
+
 
     } catch(e) {
       this.setState({result: e});
@@ -62,9 +66,35 @@ export default class updateC extends React.Component {
   }
   
 
+  UpdateTranAsync = async (owner,_id) => {
+    try {
+      let response = await fetch('http://192.168.1.108:3000/api/tranporte/'+_id,{
+        method: 'PUT',
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            owner: owner
+        })
+       });
+
+      let result = await response.json();
+    } catch(e) {
+      this.setState({result: e});
+    }
+  }
+  
+
   guardarConductor = () => {
-      //this.tran = this.Transporte[parseInt(this.state.formData.route)-1]._id;
-      this.UpdateCondAsync();
+      
+      if(this.addingTran.length == 0){
+        this.UpdateCondAsync('none');
+      }else{
+        this.UpdateCondAsync(this.addingTran);
+      }
+
+     // this.UpdateCondAsync();
       this.props.navigation.goBack(null);
   }
 
@@ -113,10 +143,12 @@ export default class updateC extends React.Component {
             
             
           <Separator />
-          
+          <Text  style={{marginBottom:20,marginTop:20 }}>Marque los transportes de los cuales es dueño:</Text>
+            
             {/* Esto se busca mejorar */}
             { this.Transporte.map( (el,index) =>
               <SwitchField label={parseInt(el.number)+" - "+el.model}
+              key={index}
               ref={parseInt(el.number)}
               onValueChange={this.agregarTran.bind(this,el,index)}/>
             )}

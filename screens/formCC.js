@@ -37,7 +37,7 @@ export default class FormCC extends React.Component {
 
   CreateCondAsync = async () => {
     try {
-      let response = await fetch('http://192.168.1.6:3000/api/propietario',{
+      let response = await fetch('http://192.168.1.108:3000/api/propietario',{
         method: 'POST',
         headers: {
           'Accept': 'application/json',
@@ -57,7 +57,30 @@ export default class FormCC extends React.Component {
       let result = await response.json();
       this.setState({result: result.con});
       this.infoLoaded = true;
+      this.addingTran.forEach(element => {
+        this.UpdateTranAsync(this.state.result,element)
+      });
 
+
+    } catch(e) {
+      this.setState({result: e});
+    }
+  }
+
+  UpdateTranAsync = async (owner,_id) => {
+    try {
+      let response = await fetch('http://192.168.1.108:3000/api/tranporte/'+_id,{
+        method: 'PUT',
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            owner: owner._id
+        })
+       });
+
+      let result = await response.json();
     } catch(e) {
       this.setState({result: e});
     }
@@ -66,6 +89,7 @@ export default class FormCC extends React.Component {
 
   guardarConductor = () => {
       //this.tran = this.Transporte[parseInt(this.state.formData.route)-1]._id;
+      
       this.CreateCondAsync();
       this.props.navigation.goBack(null)
   }
@@ -146,6 +170,7 @@ export default class FormCC extends React.Component {
             
             { this.Transporte.map( (el,index) =>
               <SwitchField label={parseInt(el.number)+" - "+el.model+" - "+el.licPlate}
+              key={index}
               ref={parseInt(el.number)}
               onValueChange={this.agregarTran.bind(this,el,index)}/>
             )}

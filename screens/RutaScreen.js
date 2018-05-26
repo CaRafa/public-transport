@@ -138,7 +138,7 @@ obtenerParadas = () => {
      
     this.getLocationAsync(flag).then(function(response){
     }).catch(function(e) {
-      console.log(e); // "Uh-oh!"
+       //(e); // "Uh-oh!"
     });
 
   }

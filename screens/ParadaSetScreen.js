@@ -107,7 +107,7 @@ export default class ParadaSetScreen extends React.Component {
         this.setState({ object: true })
 
     }.bind(this), function(error){
-        console.log(error);
+         //(error);
     });
   }
 

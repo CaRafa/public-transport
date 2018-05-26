@@ -53,7 +53,7 @@ export default class updateR extends React.Component {
     
         } catch(e) {
           this.setState({result: e});
-          console.log(this.state.result)
+           //(this.state.result)
         }
       }
     

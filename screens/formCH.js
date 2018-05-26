@@ -68,7 +68,7 @@ export default class FormCH extends React.Component {
 
       let result = await response.json();
       this.setState({result: result.trans});
-      console.log('RESPUESTA PUT', this.state.result)
+       //('RESPUESTA PUT', this.state.result)
       this.infoLoaded = true;
 
     } catch(e) {
@@ -131,7 +131,7 @@ export default class FormCH extends React.Component {
       var aux = {dia: 'domingo', asig: 'descanso'}
         this.horario.push(aux);
     }
-    console.log('HORARIO PARA ACTUALIZAR', this.horario);
+     //('HORARIO PARA ACTUALIZAR', this.horario);
     this.UpdateHorarioAsync().then(function(res){
       
     })

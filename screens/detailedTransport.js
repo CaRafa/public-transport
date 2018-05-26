@@ -99,10 +99,10 @@ obtenerParadas = () => {
 
   ObtenerUbicacion = (flag) => {
      
-    console.log('FLAG', flag)
+     //('FLAG', flag)
     this.getLocationAsync(flag).then(function(response){
     }).catch(function(e) {
-      console.log(e); // "Uh-oh!"
+       //(e); // "Uh-oh!"
     });
 
   }
@@ -123,11 +123,11 @@ obtenerParadas = () => {
    }
 
    descanso = () => {
-     console.log('descanso');
+      //('descanso');
    }
 
    verOwner = (owner) => {
-     console.log('ver owner',owner);
+      //('ver owner',owner);
      this.props.navigation.navigate('DetailedDriver',{cond:owner})
    
     }

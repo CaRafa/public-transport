@@ -37,7 +37,7 @@ export default class FormCT extends React.Component {
   }
 
   CreateTranAsync = async () => {
-    console.log('tipo de vehiculo',this.state.formData.t_type );
+     //('tipo de vehiculo',this.state.formData.t_type );
     try {
       let response = await fetch('http://192.168.1.108:3000/api/transporte',{
         method: 'POST',
@@ -50,7 +50,6 @@ export default class FormCT extends React.Component {
           description: this.state.formData.des,
           modelo: this.state.formData.model,
           year: this.state.formData.year,
-          route: this.addingRoutes,
           placa: this.state.formData.placa,
           t_type: this.state.formData.t_type,
           active: true,
@@ -74,22 +73,22 @@ export default class FormCT extends React.Component {
       this.props.navigation.goBack(null);
   }
 
-  agregarRuta = (object, index) => {
-    if(this.addingRoutes.length == 0){
-      this.addingRoutes.push(object._id)
-    }else{
-      var splice = false;
-      for(var i=0; i < this.addingRoutes.length; i++ ){
-        if(this.addingRoutes[i] == object._id){
-          this.addingRoutes.splice(i,1)
-          splice=true;
-        }
-      }
-      if(splice == false){
-          this.addingRoutes.push(object._id)
-      }
-    }
-  }
+  // agregarRuta = (object, index) => {
+  //   if(this.addingRoutes.length == 0){
+  //     this.addingRoutes.push(object._id)
+  //   }else{
+  //     var splice = false;
+  //     for(var i=0; i < this.addingRoutes.length; i++ ){
+  //       if(this.addingRoutes[i] == object._id){
+  //         this.addingRoutes.splice(i,1)
+  //         splice=true;
+  //       }
+  //     }
+  //     if(splice == false){
+  //         this.addingRoutes.push(object._id)
+  //     }
+  //   }
+  // }
   
   render() {
     return (

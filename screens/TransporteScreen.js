@@ -89,7 +89,7 @@ export default class TransporteScreen extends React.Component {
   }
   obtainSchedule(schedule){
     var finalSchedule = [];
-    console.log(schedule)
+     //(schedule)
     schedule.forEach(element => {
       if(element.asig !== 'descanso'){
         this.state.routes.forEach(route => {
@@ -119,10 +119,10 @@ export default class TransporteScreen extends React.Component {
     var routes = this.obtainRoutes(transporte);
     var owner = this.obtainOwner(transporte.owner);
     if(transporte.schedule){
-      console.log(transporte.schedule)
+       //(transporte.schedule)
       var schedule = this.obtainSchedule(transporte.schedule)
     }
-    // console.log('OWNER OBTENIDO',owner)
+    //  //('OWNER OBTENIDO',owner)
 
     this.props.navigation.navigate('DetailedTransport', {
       transporte: transporte,

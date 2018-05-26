@@ -122,16 +122,16 @@ verify(response){
                 this.state.pointArray.push(this.pointsToCompare[0]._id);
                 this.state.pointArray.push(this.pointsToCompare[1]._id);
             }
-        console.log('se agregara este tramo');
+         //('se agregara este tramo');
         this.pointsToCompare.splice(0,1)
-        console.log(this.pointsToCompare);
+         //(this.pointsToCompare);
 
     }else if( this.Npolyline > 0 && response == false ){
-        console.log('existe la ruta 1 y no se agregara este punto');
+         //('existe la ruta 1 y no se agregara este punto');
         this.pointsToCompare.splice(1,1)
     }
     else{
-        console.log('no existe la ruta 1 y no se agregara este tramo');
+         //('no existe la ruta 1 y no se agregara este tramo');
         this.pointsToCompare.splice(0,2)
     }
 
@@ -139,26 +139,26 @@ verify(response){
 
 checkSelectedPoints(response){
     if(response.add && response.num >= 0 ){
-        console.log(this.state.polyline)
-        console.log('Se agrego tramo y existe posicion 1 entonces se limpia solo primera pos');
+         //(this.state.polyline)
+         //('Se agrego tramo y existe posicion 1 entonces se limpia solo primera pos');
         this.polyline.splice(0,1)
-        console.log(this.polyline)
+         //(this.polyline)
         this.Nparada = 1;
     }
     else if( response.add == false && response.num == 0 ){
-        console.log('no se agrego tramo y no existe posicion 1 entonces se limpia ambas pos');
+         //('no se agrego tramo y no existe posicion 1 entonces se limpia ambas pos');
         this.polyline.splice(0,2)
-        console.log(this.polyline)
+         //(this.polyline)
         this.Nparada = 0;
     }
     else if( response.add == false && response.num > 0 ){
-        console.log('no se agrego tramo y  existe posicion 1 entonces se limpia primera pos');
+         //('no se agrego tramo y  existe posicion 1 entonces se limpia primera pos');
         this.polyline.splice(0,1)
-        console.log(this.polyline)
+         //(this.polyline)
         this.Nparada = 1;
 
     }else{
-        console.log('caso no reconocido');
+         //('caso no reconocido');
     }
 }
    
@@ -176,7 +176,7 @@ checkSelectedPoints(response){
                 
                 
             }).catch(function(e){
-                console.log(e);
+                 //(e);
             })
 
             

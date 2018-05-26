@@ -38,10 +38,10 @@ export default class DetailedDriver extends React.Component {
       
 
       if(this.trans){
-        console.log('llego por propietarios')
+         //('llego por propietarios')
         this.setState({object: this.trans});
       }else{
-        console.log('llego por transportes')
+         //('llego por transportes')
         this.trans = this.obtainTransports(result.transporte)
         this.setState({object: this.trans});
       }
@@ -66,12 +66,12 @@ export default class DetailedDriver extends React.Component {
   }
 
   obtainTransports = (allTrans) =>{
-    console.log('Se llama a la funcion')
+     //('Se llama a la funcion')
     var trans = [];
-    console.log(allTrans)
+     //(allTrans)
     for(var i = 0; i< allTrans.length; i++){
       if(this.object._id == allTrans[i].owner){
-        console.log('dueño conseguido');
+         //('dueño conseguido');
         trans.push(allTrans[i])
       }
 
@@ -100,7 +100,7 @@ export default class DetailedDriver extends React.Component {
 
   obtainSchedule(schedule){
     var finalSchedule = [];
-    console.log(schedule)
+     //(schedule)
     schedule.forEach(element => {
       if(element.asig !== 'descanso'){
         this.state.routes.forEach(route => {
@@ -129,7 +129,7 @@ export default class DetailedDriver extends React.Component {
    verAutobus(obj){
        var routes = this.obtainRoutes(obj);
        if(obj.schedule){
-        console.log(obj.schedule)
+         //(obj.schedule)
         var schedule = this.obtainSchedule(obj.schedule)
       }
 

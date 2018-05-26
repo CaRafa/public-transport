@@ -29,7 +29,7 @@ export default class HomeScreen extends React.Component {
               - Esta herramienta esta dirigida para la administración de transportes publicos. En ella se encontrara 3 modulos diferentes divididos en:
               {"\n"} {"\n"}  1) Transportes
               {"\n"} 2) Rutas - Paradas
-              {"\n"}  3) Conductores{"\n"}{"\n"}
+              {"\n"}  3) Propietarios{"\n"}{"\n"}
               En estos modulos se daran opciones para ver, crear y editar cualquiera de los mencionados objetos.{"\n"}
               {"\n"}<Text style={styles.hint}>Si es tu primera vez quizas quieras comenzar dirigiendote a la tab de "Rutas" </Text>
 

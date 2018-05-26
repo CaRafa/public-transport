@@ -95,10 +95,10 @@ export default class paradasModule extends React.Component {
 
   ObtenerUbicacion = (flag) => {
      
-    console.log('FLAG', flag)
+     //('FLAG', flag)
     this.getLocationAsync(flag).then(function(response){
     }).catch(function(e) {
-      console.log(e); // "Uh-oh!"
+       //(e); // "Uh-oh!"
     });
 
   }

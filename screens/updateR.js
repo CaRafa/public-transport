@@ -32,7 +32,7 @@ export default class updateR extends React.Component {
     
       UpdateRutaAsync = async () => {
         try {
-          let response = await fetch('http://192.168.1.108:3000/api/ruta/'+this.object.id ,{
+          let response = await fetch('http://192.168.1.106:3000/api/ruta/'+this.object.id ,{
             method: 'PUT',
             headers: {
               'Accept': 'application/json',

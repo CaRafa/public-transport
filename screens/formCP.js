@@ -31,14 +31,37 @@ export default class FormCP extends React.Component {
   guardarParada = () => {
     
     this.CreateParadaAsync(this.coordinates, this.state.formData)
+    this.UpdateEstadisticaAsync();
     this.props.navigation.navigate('Rutas');
 
 
   }
 
+  UpdateEstadisticaAsync = async () => {
+    try {
+      let response = await fetch('http://192.168.1.106:3000/api/estadistica/5b0abe2379be3b1284a1c3f9' ,{
+        method: 'PUT',
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          nParadas:1,
+        })
+       });
+
+      let result = await response.json();
+      this.setState({result: result.par});
+
+    } catch(e) {
+      this.setState({result: e});
+       //(this.state.result)
+    }
+  }
+
   CreateParadaAsync = async (location, info) => {
     try {
-      let response = await fetch('http://192.168.1.108:3000/api/parada',{
+      let response = await fetch('http://192.168.1.106:3000/api/parada',{
         method: 'POST',
         headers: {
           'Accept': 'application/json',

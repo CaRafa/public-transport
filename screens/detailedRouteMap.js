@@ -54,14 +54,14 @@ export default class detailedRouteMap extends React.Component {
                                 coordinates={ele}
                                 strokeColor="#4286f4"
                                 fillColor="rgba(255,0,0,0.5)"
-                                strokeWidth={10}/>   
+                                strokeWidth={3}/>   
             ) : this.polylines.type == "subUrb" ?  this.polylines.route.map((ele,index) =>           
                                     <MapView.Polyline
                                     key={index}
                                     coordinates={ele}
                                     strokeColor="#ef3eef"
                                     fillColor="rgba(255,0,0,0.5)"
-                                    strokeWidth={6}/>   ) :  
+                                    strokeWidth={3}/>   ) :  
                         this.polylines.route.map((ele,index) =>           
                         <MapView.Polyline
                         key={index}

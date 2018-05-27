@@ -39,7 +39,7 @@ export default class FormCT extends React.Component {
   CreateTranAsync = async () => {
      //('tipo de vehiculo',this.state.formData.t_type );
     try {
-      let response = await fetch('http://192.168.1.108:3000/api/transporte',{
+      let response = await fetch('http://192.168.1.106:3000/api/transporte',{
         method: 'POST',
         headers: {
           'Accept': 'application/json',
@@ -66,10 +66,34 @@ export default class FormCT extends React.Component {
       this.setState({result: e});
     }
   }
+
+  UpdateEstadisticaAsync = async () => {
+    try {
+      let response = await fetch('http://192.168.1.106:3000/api/estadistica/5b0abe2379be3b1284a1c3f9' ,{
+        method: 'PUT',
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          nTransActive:1,
+          flag: false
+        })
+       });
+
+      let result = await response.json();
+      this.setState({esta: result.par});
+
+    } catch(e) {
+      this.setState({result: e});
+       //(this.state.result)
+    }
+  }
   
 
   guardarTransporte = () => {
       this.CreateTranAsync();
+      this.UpdateEstadisticaAsync()
       this.props.navigation.goBack(null);
   }
 

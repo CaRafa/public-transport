@@ -1,16 +1,58 @@
 import React from 'react';
-import {Image,Platform, ScrollView,StyleSheet,Text, TouchableOpacity,View,} from 'react-native';
+import {RefreshControl,Image,Platform, ScrollView,StyleSheet,Text, TouchableOpacity,View,} from 'react-native';
 
 
 export default class HomeScreen extends React.Component {
   static navigationOptions = {
     header: null,
+
   };
+
+  constructor(props){ 
+    super(props)
+    this.state = {
+      estadistica: undefined,
+      refreshing: false,
+    }
+   }
+   
+  componentDidMount(){
+    this._fetchEstadisticaAsync();
+    
+   } 
+
+
+   _fetchEstadisticaAsync = async () => {
+    try {
+      let response = await fetch('http://192.168.1.106:3000/api/estadistica/5b0abe2379be3b1284a1c3f9' ,{
+        method: 'GET'
+       });
+
+      let result = await response.json();
+      this.setState({estadistica: result.est});
+
+    } catch(e) {
+      this.setState({result: e});
+       //(this.state.result)
+    }
+  }
+
+  _onRefresh() {
+    this.setState({refreshing: true});
+    this._fetchEstadisticaAsync().then(() => {
+      this.setState({refreshing: false});
+    });
+  }
 
   render() {
     return (
       <View style={styles.container}>
-         <ScrollView>   
+         <ScrollView refreshControl={
+          <RefreshControl
+            refreshing={this.state.refreshing}
+            onRefresh={this._onRefresh.bind(this)}
+          />
+        }  >   
             <View style={{ justifyContent: 'center',
             alignItems: 'center', marginTop:30}}>
             <Image 
@@ -25,16 +67,21 @@ export default class HomeScreen extends React.Component {
               <Text style={styles.getStartedTitle}>
               Bienvenido.
             </Text>
+            { ! this.state.estadistica ? 
+            <Text style={styles.getStartedTitle}>
+                 Porfavor espere.
+            </Text>
+            
+            :
               <Text style={styles.getStartedText}>
-              - Esta herramienta esta dirigida para la administración de transportes publicos. En ella se encontrara 3 modulos diferentes divididos en:
-              {"\n"} {"\n"}  1) Transportes
-              {"\n"} 2) Rutas - Paradas
-              {"\n"}  3) Propietarios{"\n"}{"\n"}
-              En estos modulos se daran opciones para ver, crear y editar cualquiera de los mencionados objetos.{"\n"}
-              {"\n"}<Text style={styles.hint}>Si es tu primera vez quizas quieras comenzar dirigiendote a la tab de "Rutas" </Text>
+              - Herramienta de administración para el transporte público. Datos relevantes:
+              {"\n"} {"\n"} • Transportes en servicio - {!this.state.estadistica? 'N/A': this.state.estadistica.nTransActive}{"\n"}
+              / Transportes fuera de servicio - {!this.state.estadistica? 'N/A': this.state.estadistica.nTransOut}
+              {"\n"}{"\n"} • Rutas - { ! this.state.estadistica?'N/A': this.state.estadistica.nRutas  }
+              {"\n"}{"\n"} • Paradas -  {!this.state.estadistica? 'N/A':this.state.estadistica.nParadas }{"\n"}{"\n"}
 
             </Text>
-
+            }
             </ScrollView>
       </View>
     );

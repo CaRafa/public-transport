@@ -29,7 +29,7 @@ export default class FormCR extends React.Component {
 
   CreateRutaAsync = async () => {
     try {
-      let response = await fetch('http://192.168.1.108:3000/api/ruta',{
+      let response = await fetch('http://192.168.1.106:3000/api/ruta',{
         method: 'POST',
         headers: {
           'Accept': 'application/json',
@@ -54,8 +54,31 @@ export default class FormCR extends React.Component {
     }
   }
 
+  UpdateEstadisticaAsync = async () => {
+    try {
+      let response = await fetch('http://192.168.1.106:3000/api/estadistica/5b0abe2379be3b1284a1c3f9' ,{
+        method: 'PUT',
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          nRutas:1,
+        })
+       });
+
+      let result = await response.json();
+      this.setState({result: result.par});
+
+    } catch(e) {
+      this.setState({result: e});
+       //(this.state.result)
+    }
+  }
+
   guardarRuta = () => {
       this.CreateRutaAsync();
+      this.UpdateEstadisticaAsync();
       this.props.navigation.navigate('Rutas');
   }
   

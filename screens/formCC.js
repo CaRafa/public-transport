@@ -37,7 +37,7 @@ export default class FormCC extends React.Component {
 
   CreateCondAsync = async () => {
     try {
-      let response = await fetch('http://192.168.1.108:3000/api/propietario',{
+      let response = await fetch('http://192.168.1.106:3000/api/propietario',{
         method: 'POST',
         headers: {
           'Accept': 'application/json',
@@ -69,7 +69,7 @@ export default class FormCC extends React.Component {
 
   UpdateTranAsync = async (owner,_id) => {
     try {
-      let response = await fetch('http://192.168.1.108:3000/api/tranporte/'+_id,{
+      let response = await fetch('http://192.168.1.106:3000/api/tranporte/'+_id,{
         method: 'PUT',
         headers: {
           'Accept': 'application/json',

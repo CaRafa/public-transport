@@ -52,7 +52,7 @@ export default class mapRoutes extends React.Component {
                                 coordinates={ele}
                                 strokeColor="#4286f4"
                                 fillColor="rgba(255,0,0,0.5)"
-                                strokeWidth={10}/>   
+                                strokeWidth={3}/>   
             ) : el.type == "subUrb" ?  el.route.map((ele,index) =>           
                                     <MapView.Polyline
                                     key={index}

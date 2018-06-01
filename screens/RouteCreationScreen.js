@@ -71,7 +71,7 @@ export default class RouteCreation extends React.Component {
         for(var i=0; i< coords.length-1 ; i++ ){
             dis = dis + this.distance(coords[i].latitude, coords[i].longitude, coords[i+1].latitude,coords[i+1].longitude, "K")
           }
-        if(dis*1000 > 200){
+        if(dis*1000 > 300){
 
             this.comDis = this.comDis + (dis*1000)
             this.verify(true);
@@ -85,7 +85,7 @@ export default class RouteCreation extends React.Component {
             return true
         }
         else{
-            alert('Este tramo de la ruta es menor a 200 mts, elija otros puntos.');
+            alert('Este tramo de la ruta es menor a 300 mts, elija otros puntos.');
             this.agregarTramo = false;
             this.verify(false);
             var aux = {add:false , num: this.Npolyline}
@@ -207,7 +207,7 @@ checkSelectedPoints(response){
  
 //    CreateRutaAsync = async () => {
 //     try {
-//       let response = await fetch('http://192.168.1.106:3000/api/ruta',{
+//       let response = await fetch('http://192.168.137.1:3000/api/ruta',{
 //         method: 'POST',
 //         headers: {
 //           'Accept': 'application/json',
@@ -267,43 +267,6 @@ checkSelectedPoints(response){
               onPress={this.setPolyline.bind(this,el)}
               pinColor={'black'}
               /> : 
-              el.density == "D1"?
-              <MapView.Marker
-              key={index}
-              coordinate={{latitude: el.coordinates.latitude,
-              longitude: el.coordinates.longitude}}
-              onPress={this.setPolyline.bind(this,el)}
-              pinColor={'red'}
-             />  
-             : 
-              el.density == "D2"?
-              <MapView.Marker
-              key={index}
-              coordinate={{latitude: el.coordinates.latitude,
-              longitude: el.coordinates.longitude}}
-              onPress={this.setPolyline.bind(this,el)}
-              pinColor={'orange'}
-             />  
-             : 
-              el.density == "D3"?
-              <MapView.Marker
-              key={index}
-              coordinate={{latitude: el.coordinates.latitude,
-              longitude: el.coordinates.longitude}}
-              onPress={this.setPolyline.bind(this,el)}
-              pinColor={'yellow'}
-             />  
-             : 
-              el.density == "D4"?
-              <MapView.Marker
-              key={index}
-              coordinate={{latitude: el.coordinates.latitude,
-              longitude: el.coordinates.longitude}}
-              onPress={this.setPolyline.bind(this,el)}
-              pinColor={'green'}
-             />  
-             : 
-              el.density == "D5"?
               <MapView.Marker
               key={index}
               coordinate={{latitude: el.coordinates.latitude,
@@ -311,13 +274,7 @@ checkSelectedPoints(response){
               onPress={this.setPolyline.bind(this,el)}
               pinColor={'blue'}
              />  
-             : 
-             <MapView.Marker
-             key={index}
-              coordinate={{latitude: el.coordinates.latitude,
-              longitude: el.coordinates.longitude}}
-              onPress={this.setPolyline.bind(this,el)}
-             />  
+            
                 
             )
             }

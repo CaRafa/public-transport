@@ -13,7 +13,8 @@ export default class FormCT extends React.Component {
   constructor(props){
     super(props);    
     const {state} = props.navigation;
-    this.rutas = state.params; 
+    this.object = state.params; 
+    console.log('objeto que llega a form ct', this.object);
     this.state = {
       formData:{},
       paradas:[]
@@ -39,7 +40,7 @@ export default class FormCT extends React.Component {
   CreateTranAsync = async () => {
      //('tipo de vehiculo',this.state.formData.t_type );
     try {
-      let response = await fetch('http://192.168.1.106:3000/api/transporte',{
+      let response = await fetch('http://192.168.137.1:3000/api/transporte',{
         method: 'POST',
         headers: {
           'Accept': 'application/json',
@@ -66,10 +67,42 @@ export default class FormCT extends React.Component {
       this.setState({result: e});
     }
   }
+  CreateTranWithOwnerAsync = async () => {
+     
+    try {
+      let response = await fetch('http://192.168.137.1:3000/api/transporte',{
+        method: 'POST',
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          numero: parseInt(this.state.formData.num),
+          description: this.state.formData.des,
+          modelo: this.state.formData.model,
+          year: this.state.formData.year,
+          placa: this.state.formData.placa,
+          t_type: this.state.formData.t_type,
+          active: true,
+          color: this.state.formData.color,
+          seats: this.state.formData.seats,
+          owner: this.object.owner._id
+        })
+       });
+
+      let result = await response.json();
+      this.setState({result: result.tran});
+      this.infoLoaded = true;
+      this.UpdateEstadisticaAsync()
+      this.updateConductor();
+    } catch(e) {
+      this.setState({result: e});
+    }
+  }
 
   UpdateEstadisticaAsync = async () => {
     try {
-      let response = await fetch('http://192.168.1.106:3000/api/estadistica/5b0abe2379be3b1284a1c3f9' ,{
+      let response = await fetch('http://192.168.137.1:3000/api/estadistica/5b0abe2379be3b1284a1c3f9' ,{
         method: 'PUT',
         headers: {
           'Accept': 'application/json',
@@ -83,18 +116,55 @@ export default class FormCT extends React.Component {
 
       let result = await response.json();
       this.setState({esta: result.par});
-
+      
     } catch(e) {
       this.setState({result: e});
-       //(this.state.result)
     }
   }
   
 
+  updateConductor = async () => {
+    
+    var aux = this.object.owner.transports
+    aux.push(this.state.result._id);
+    try {
+      let response = await fetch('http://192.168.137.1:3000/api/propietario/'+this.object.owner._id,{
+        method: 'PUT',
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            tran: aux,
+            data: true
+        })
+       });
+
+      let result = await response.json();
+      // this.setState({result: result.con});
+      // this.infoLoaded = true;
+     
+     
+    } catch(e) {
+      this.setState({result: e});
+    }
+
+  }
+
   guardarTransporte = () => {
-      this.CreateTranAsync();
-      this.UpdateEstadisticaAsync()
-      this.props.navigation.goBack(null);
+
+     if(this.object){
+        this.CreateTranWithOwnerAsync();
+        this.props.navigation.navigate('Transportes');
+
+        
+      }
+      else{
+        this.CreateTranAsync();
+        this.UpdateEstadisticaAsync()
+        this.props.navigation.goBack(null);
+      }
+
   }
 
   // agregarRuta = (object, index) => {

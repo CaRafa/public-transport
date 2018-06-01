@@ -39,7 +39,7 @@ export default class FormCP extends React.Component {
 
   UpdateEstadisticaAsync = async () => {
     try {
-      let response = await fetch('http://192.168.1.106:3000/api/estadistica/5b0abe2379be3b1284a1c3f9' ,{
+      let response = await fetch('http://192.168.137.1:3000/api/estadistica/5b0abe2379be3b1284a1c3f9' ,{
         method: 'PUT',
         headers: {
           'Accept': 'application/json',
@@ -61,7 +61,7 @@ export default class FormCP extends React.Component {
 
   CreateParadaAsync = async (location, info) => {
     try {
-      let response = await fetch('http://192.168.1.106:3000/api/parada',{
+      let response = await fetch('http://192.168.137.1:3000/api/parada',{
         method: 'POST',
         headers: {
           'Accept': 'application/json',
@@ -72,7 +72,7 @@ export default class FormCP extends React.Component {
           coordinates : location.coords,
           description : info.direccion,
           type: info.type,
-          density: info.density
+          // density: info.density
         })
        });
 
@@ -100,7 +100,7 @@ export default class FormCP extends React.Component {
           <Separator />
           <InputField
             ref='nombre'
-            label='nombre'
+            label='Nombre'
             placeholder='Nombre de la parada'
             helpText={((self)=>{
   
@@ -142,7 +142,6 @@ export default class FormCP extends React.Component {
             multiline={true}
             ref='direccion'
             placeholder='Direccion'
-            helpText='Información basica de la parada' 
             style={{ height: 200} }/>
 
           <Separator />
@@ -150,7 +149,7 @@ export default class FormCP extends React.Component {
             ref="type"
             helpText='Si esta seleccionado la parada es de tipo terminal'/>
 
-            {this.state.formData.type == false? <PickerField ref='density'
+            {/* {this.state.formData.type == false? <PickerField ref='density'
             label='Densidad poblacional'
             options={{
               D1: '0-20%',
@@ -158,7 +157,7 @@ export default class FormCP extends React.Component {
               D3:'40%-60%',
               D4:'60%-80%',
               D5:'80%-100%'
-            }}/> : null}
+            }}/> : null} */}
 
           </Form>
           <View style={styles.addNew}>

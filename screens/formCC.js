@@ -37,7 +37,7 @@ export default class FormCC extends React.Component {
 
   CreateCondAsync = async () => {
     try {
-      let response = await fetch('http://192.168.1.106:3000/api/propietario',{
+      let response = await fetch('http://192.168.137.1:3000/api/propietario',{
         method: 'POST',
         headers: {
           'Accept': 'application/json',
@@ -60,7 +60,7 @@ export default class FormCC extends React.Component {
       this.addingTran.forEach(element => {
         this.UpdateTranAsync(this.state.result,element)
       });
-
+      this.props.navigation.navigate('FormCT',{ formP:true, owner: this.state.result })
 
     } catch(e) {
       this.setState({result: e});
@@ -69,7 +69,7 @@ export default class FormCC extends React.Component {
 
   UpdateTranAsync = async (owner,_id) => {
     try {
-      let response = await fetch('http://192.168.1.106:3000/api/tranporte/'+_id,{
+      let response = await fetch('http://192.168.137.1:3000/api/tranporte/'+_id,{
         method: 'PUT',
         headers: {
           'Accept': 'application/json',
@@ -91,7 +91,7 @@ export default class FormCC extends React.Component {
       //this.tran = this.Transporte[parseInt(this.state.formData.route)-1]._id;
       
       this.CreateCondAsync();
-      this.props.navigation.goBack(null)
+      
   }
 
   agregarTran = (object, index) => {
@@ -118,7 +118,7 @@ export default class FormCC extends React.Component {
         <ScrollView keyboardShouldPersistTaps="always" style={{paddingLeft:10,paddingRight:10, height:200}}>
         <View style={styles.container}>
             <Text style={styles.getStartedText}>
-              Agregar un Propietarios
+              Agregar un Propietario
             </Text>
         </View>
         <Form
@@ -144,7 +144,7 @@ export default class FormCC extends React.Component {
             <InputField
             ref='tel'
             placeholder='Telefono'
-            label='tel'
+            label='Telefono'
             keyboardType='phone-pad'
             />
             {/* <Separator /> */}

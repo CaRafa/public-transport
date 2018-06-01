@@ -31,7 +31,7 @@ export default class DetailedDriver extends React.Component {
 
    _fetchTransportesAsync = async () => {
     try {
-      let response = await fetch('http://192.168.1.106:3000/api/transporte',{
+      let response = await fetch('http://192.168.137.1:3000/api/transporte',{
         method: 'GET'});
       let result = await response.json();
       this.setState({transporte: result.transporte});
@@ -55,7 +55,7 @@ export default class DetailedDriver extends React.Component {
 
    _fetchRoutesAsync = async () => {
     try {
-      let response = await fetch('http://192.168.1.106:3000/api/ruta',{
+      let response = await fetch('http://192.168.137.1:3000/api/ruta',{
         method: 'GET'});
       let result = await response.json();
       this.setState({routes: result.route});
@@ -82,20 +82,20 @@ export default class DetailedDriver extends React.Component {
     return trans
   }
 
-  obtainRoutes(obj){
+  // obtainRoutes(obj){
 
-    var aux = [];
-    for(var i = 0; i < obj.route.length ; i++){
-      for(var j = 0; j < this.state.routes.length; j++){
-          if(obj.route[i] == this.state.routes[j]._id){
-            aux.push(this.state.routes[j]);
-          }
+  //   var aux = [];
+  //   for(var i = 0; i < obj.route.length ; i++){
+  //     for(var j = 0; j < this.state.routes.length; j++){
+  //         if(obj.route[i] == this.state.routes[j]._id){
+  //           aux.push(this.state.routes[j]);
+  //         }
 
-      }
+  //     }
 
-    }
-    return aux
-  }
+  //   }
+  //   return aux
+  // }
 
 
   obtainSchedule(schedule){
@@ -127,7 +127,7 @@ export default class DetailedDriver extends React.Component {
   }
 
    verAutobus(obj){
-       var routes = this.obtainRoutes(obj);
+      //  var routes = this.obtainRoutes(obj);
        if(obj.schedule){
          //(obj.schedule)
         var schedule = this.obtainSchedule(obj.schedule)
@@ -135,7 +135,7 @@ export default class DetailedDriver extends React.Component {
 
     this.props.navigation.navigate('DetailedTransport', {
       transporte: obj,
-      routes: routes,
+      // routes: routes,
       owner: this.object,
       schedule: schedule,
       allRoutes: this.state.routes,

@@ -44,45 +44,13 @@ export default class MapPreview extends React.Component {
               longitude: this.object.coords.longitude}}
               pinColor={'black'}
               /> : 
-              this.object.density == "D1"?
-              <MapView.Marker
-              coordinate={{latitude: this.object.coords.latitude,
-              longitude: this.object.coords.longitude}}
-              pinColor={'red'}
-             />  
-             : 
-              this.object.density == "D2"?
-              <MapView.Marker
-              coordinate={{latitude: this.object.coords.latitude,
-              longitude: this.object.coords.longitude}}
-              pinColor={'orange'}
-             />  
-             : 
-              this.object.density == "D3"?
-              <MapView.Marker
-              coordinate={{latitude: this.object.coords.latitude,
-              longitude: this.object.coords.longitude}}
-              pinColor={'yellow'}
-             />  
-             : 
-              this.object.density == "D4"?
-              <MapView.Marker
-              coordinate={{latitude: this.object.coords.latitude,
-              longitude: this.object.coords.longitude}}
-              pinColor={'green'}
-             />  
-             : 
-              this.object.density == "D5"?
+              
               <MapView.Marker
               coordinate={{latitude: this.object.coords.latitude,
               longitude: this.object.coords.longitude}}
               pinColor={'blue'}
              />  
-             : 
-             <MapView.Marker
-              coordinate={{latitude: this.object.coords.latitude,
-              longitude: this.object.coords.longitude}}
-             />  
+               
                 }
 
         </MapView>

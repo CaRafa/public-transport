@@ -39,7 +39,7 @@ export default class updateC extends React.Component {
 
   UpdateCondAsync = async (transportes) => {
     try {
-      let response = await fetch('http://192.168.1.106:3000/api/propietario/'+this.id,{
+      let response = await fetch('http://192.168.137.1:3000/api/propietario/'+this.id,{
         method: 'PUT',
         headers: {
           'Accept': 'application/json',
@@ -68,7 +68,7 @@ export default class updateC extends React.Component {
 
   UpdateTranAsync = async (owner,_id) => {
     try {
-      let response = await fetch('http://192.168.1.106:3000/api/tranporte/'+_id,{
+      let response = await fetch('http://192.168.137.1:3000/api/tranporte/'+_id,{
         method: 'PUT',
         headers: {
           'Accept': 'application/json',

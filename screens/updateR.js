@@ -8,7 +8,7 @@ import { Form,
 export default class updateR extends React.Component {
     static navigationOptions = {
         header: true,
-        title: 'Update ruta'
+        title: 'Modificar ruta'
       };
       constructor(props){
         super(props);
@@ -32,7 +32,7 @@ export default class updateR extends React.Component {
     
       UpdateRutaAsync = async () => {
         try {
-          let response = await fetch('http://192.168.1.106:3000/api/ruta/'+this.object.id ,{
+          let response = await fetch('http://192.168.137.1:3000/api/ruta/'+this.object.id ,{
             method: 'PUT',
             headers: {
               'Accept': 'application/json',
@@ -88,8 +88,7 @@ export default class updateR extends React.Component {
               <InputField
                 multiline={true}
                 ref='des'
-                placeholder='descripción'
-                helpText='Algun comentario sobre esta ruta' 
+                placeholder='Descripción'
                 style={{ height: 200} }/>
               <Separator />
             
@@ -98,9 +97,9 @@ export default class updateR extends React.Component {
                 label='Tipo de ruta'
                 options={{
                   "": '',
-                  subUrb: 'Sub urbano',
-                  Urb: 'Urbano',
-                  Int:'Inter Urbano'
+                  subUrb: 'Suburbana',
+                  Urb: 'Urbana',
+                  Int:'Interurbana'
                 }}/>
                 
               </Form>

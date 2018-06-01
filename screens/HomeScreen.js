@@ -24,7 +24,7 @@ export default class HomeScreen extends React.Component {
 
    _fetchEstadisticaAsync = async () => {
     try {
-      let response = await fetch('http://192.168.1.106:3000/api/estadistica/5b0abe2379be3b1284a1c3f9' ,{
+      let response = await fetch('http://192.168.137.1:3000/api/estadistica/5b0abe2379be3b1284a1c3f9' ,{
         method: 'GET'
        });
 
@@ -74,11 +74,12 @@ export default class HomeScreen extends React.Component {
             
             :
               <Text style={styles.getStartedText}>
-              - Herramienta de administración para el transporte público. Datos relevantes:
+              - Información del sistema:
+              {"\n"}{"\n"}{"\n"} • Transportes en el sistema - { ! this.state.estadistica?'N/A': (this.state.estadistica.nTransActive+ this.state.estadistica.nTransOut) }
               {"\n"} {"\n"} • Transportes en servicio - {!this.state.estadistica? 'N/A': this.state.estadistica.nTransActive}{"\n"}
-              / Transportes fuera de servicio - {!this.state.estadistica? 'N/A': this.state.estadistica.nTransOut}
-              {"\n"}{"\n"} • Rutas - { ! this.state.estadistica?'N/A': this.state.estadistica.nRutas  }
-              {"\n"}{"\n"} • Paradas -  {!this.state.estadistica? 'N/A':this.state.estadistica.nParadas }{"\n"}{"\n"}
+              • Transportes fuera de servicio - {!this.state.estadistica? 'N/A': this.state.estadistica.nTransOut}
+              {"\n"}{"\n"} • Rutas en el sistema - { ! this.state.estadistica?'N/A': this.state.estadistica.nRutas  }
+              {"\n"}{"\n"} • Paradas en el sistema -  {!this.state.estadistica? 'N/A':this.state.estadistica.nParadas }{"\n"}{"\n"}
 
             </Text>
             }

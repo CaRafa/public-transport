@@ -26,7 +26,7 @@ export default class paradasModule extends React.Component {
 
    _fetchParadasAsync = async () => {
     try {
-      let response = await fetch('http://192.168.1.106:3000/api/parada',{
+      let response = await fetch('http://192.168.137.1:3000/api/parada',{
         method: 'GET'});
       let result = await response.json();
       this.setState({paradas: result.par});

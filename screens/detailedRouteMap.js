@@ -86,52 +86,14 @@ export default class detailedRouteMap extends React.Component {
                     coordinate={{latitude: el.coordinates.latitude,
                     longitude: el.coordinates.longitude}}
                     pinColor={'black'}
-                 /> : 
-                 el.density == "D1"?
-                 <MapView.Marker
-                 key={index}
-                 coordinate={{latitude: el.coordinates.latitude,
-                 longitude: el.coordinates.longitude}}
-                 pinColor={'red'}
-                />  
-                : 
-                 el.density == "D2"?
-                 <MapView.Marker
-                 key={index}
-                 coordinate={{latitude: el.coordinates.latitude,
-                 longitude: el.coordinates.longitude}}
-                 pinColor={'orange'}
-                />  
-                : 
-                 el.density == "D3"?
-                 <MapView.Marker
-                 key={index}
-                 coordinate={{latitude: el.coordinates.latitude,
-                 longitude: el.coordinates.longitude}}
-                 pinColor={'yellow'}
-                />  
-                : 
-                 el.density == "D4"?
-                 <MapView.Marker
-                 key={index}
-                 coordinate={{latitude: el.coordinates.latitude,
-                 longitude: el.coordinates.longitude}}
-                 pinColor={'green'}
-                />  
-                : 
-                 el.density == "D5"?
+                 /> :
                  <MapView.Marker
                  key={index}
                  coordinate={{latitude: el.coordinates.latitude,
                  longitude: el.coordinates.longitude}}
                  pinColor={'blue'}
                 />  
-                : 
-                <MapView.Marker
-                 key={index}
-                 coordinate={{latitude: el.coordinates.latitude,
-                 longitude: el.coordinates.longitude}}
-                />  
+                 
              )
             }
 

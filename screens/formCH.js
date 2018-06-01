@@ -53,7 +53,7 @@ export default class FormCH extends React.Component {
 
   UpdateHorarioAsync = async () => {
     try {
-      let response = await fetch('http://192.168.1.106:3000/api/tranporte/'+this.id,{
+      let response = await fetch('http://192.168.137.1:3000/api/tranporte/'+this.id,{
         method: 'PUT',
         headers: {
           'Accept': 'application/json',

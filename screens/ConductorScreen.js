@@ -32,7 +32,7 @@ export default class ConductorScreen extends React.Component {
 
   _fetchTransportesAsync = async () => {
     try {
-      let response = await fetch('http://192.168.1.106:3000/api/transporte',{
+      let response = await fetch('http://192.168.137.1:3000/api/transporte',{
         method: 'GET'});
       let result = await response.json();
       this.setState({transporte: result.transporte}); 
@@ -44,7 +44,7 @@ export default class ConductorScreen extends React.Component {
   
   _fetchConductoresAsync = async () => {
     try {
-      let response = await fetch('http://192.168.1.106:3000/api/propietario',{
+      let response = await fetch('http://192.168.137.1:3000/api/propietario',{
         method: 'GET'});
       let result = await response.json();
       this.setState({conductor: result.conductor});

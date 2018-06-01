@@ -29,7 +29,7 @@ export default class FormCR extends React.Component {
 
   CreateRutaAsync = async () => {
     try {
-      let response = await fetch('http://192.168.1.106:3000/api/ruta',{
+      let response = await fetch('http://192.168.137.1:3000/api/ruta',{
         method: 'POST',
         headers: {
           'Accept': 'application/json',
@@ -56,7 +56,7 @@ export default class FormCR extends React.Component {
 
   UpdateEstadisticaAsync = async () => {
     try {
-      let response = await fetch('http://192.168.1.106:3000/api/estadistica/5b0abe2379be3b1284a1c3f9' ,{
+      let response = await fetch('http://192.168.137.1:3000/api/estadistica/5b0abe2379be3b1284a1c3f9' ,{
         method: 'PUT',
         headers: {
           'Accept': 'application/json',
@@ -119,8 +119,7 @@ export default class FormCR extends React.Component {
           <InputField
             multiline={true}
             ref='des'
-            placeholder='descripción'
-            helpText='Algun comentario sobre esta ruta' 
+            placeholder='Descripción'
             style={{ height: 200} }/>
           <Separator />
         
@@ -129,9 +128,9 @@ export default class FormCR extends React.Component {
             label='Tipo de ruta'
             options={{
               "": '',
-              subUrb: 'Sub urbano',
-              Urb: 'Urbano',
-              Int:'Inter Urbano'
+              subUrb: 'Suburbana',
+              Urb: 'Urbana',
+              Int:'Interurbana'
             }}/>
             
           </Form>

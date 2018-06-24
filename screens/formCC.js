@@ -1,5 +1,5 @@
 import React from 'react';
-import {TouchableWithoutFeedback,Image,Platform, ScrollView,StyleSheet,Text, TouchableOpacity,View,Button,Keyboard} from 'react-native';
+import {RefreshControl,TouchableWithoutFeedback,Image,Platform, ScrollView,StyleSheet,Text, TouchableOpacity,View,Button,Keyboard} from 'react-native';
 import { Form,
     Separator,InputField, LinkField,
     SwitchField, PickerField,DatePickerField,TimePickerField
@@ -16,7 +16,9 @@ export default class FormCC extends React.Component {
     this.Transporte = state.params; 
     this.state = {
       formData:{},
-      Transportes:[]
+      Transportes: this.Transporte,
+      lastRefresh: Date(Date.now()).toString(),
+      refreshing: false,
     }
     
     this.addingTran = []
@@ -26,7 +28,18 @@ export default class FormCC extends React.Component {
     
    }
 
-  
+   _fetchTransportesAsync = async () => {
+    try {
+      let response = await fetch('http://192.168.137.1:3000/api/transporte',{
+        method: 'GET'});
+      let result = await response.json();
+      this.setState({Transportes: result.transporte}); 
+      
+
+    } catch(e) {
+      this.setState({transporte: e});
+    }
+  }
 
   handleFormChange(formData){ 
     this.setState({formData:formData})
@@ -60,11 +73,18 @@ export default class FormCC extends React.Component {
       this.addingTran.forEach(element => {
         this.UpdateTranAsync(this.state.result,element)
       });
-      this.props.navigation.navigate('FormCT',{ formP:true, owner: this.state.result })
+     
+      this.props.navigation.goBack(null)
+      // this.props.navigation.navigate('FormCT',{ formP:true, owner: this.state.result })
 
     } catch(e) {
       this.setState({result: e});
     }
+  }
+
+  addTransport = () => {
+    this.props.navigation.navigate('FormCT',{ formP:true, owner: this.state.result, key:this.props.navigation.state.key })
+
   }
 
   UpdateTranAsync = async (owner,_id) => {
@@ -110,12 +130,27 @@ export default class FormCC extends React.Component {
       }
     }
   }
+
+  _onRefresh() {
+    this.setState({refreshing: true});
+    // this._fetchTransportesAsync()
+    this._fetchTransportesAsync().then(() => {
+      this.setState({refreshing: false});
+    });
+  }
   
   render() {
     return (
 
       <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
-        <ScrollView keyboardShouldPersistTaps="always" style={{paddingLeft:10,paddingRight:10, height:200}}>
+        <ScrollView refreshControl={
+          <RefreshControl
+            refreshing={this.state.refreshing}
+            onRefresh={this._onRefresh.bind(this)}
+          />
+        } style={{paddingLeft:10,paddingRight:10, height:200}}>
+
+        
         <View style={styles.container}>
             <Text style={styles.getStartedText}>
               Agregar un Propietario
@@ -148,27 +183,17 @@ export default class FormCC extends React.Component {
             keyboardType='phone-pad'
             />
             {/* <Separator /> */}
-            {/* <InputField
-            ref='licencia'
-            label='#Licencia'
-            placeholder='Numero de licencia'
-            keyboardType='numeric'
-            />*/}
+         
             <DatePickerField ref='fN'
             minimumDate={new Date('1/1/1900')}
             maximumDate={new Date('1/1/2000')}
             placeholder='Fecha de Nacimiento'/> 
           <Separator />
-          {/* {this.ready === false ?
-            null
-            :  <PickerField ref='route'
-            label='Transporte asignado'
-            options={this.state.Transportes}/> 
-            } */}
+         
             {/* Esto se busca mejorar */}
             <Text  style={{marginBottom:20,marginTop:20 }}>Marque los transportes de los cuales es dueño:</Text>
             
-            { this.Transporte.map( (el,index) =>
+            { this.state.Transportes.map( (el,index) =>
               <SwitchField label={parseInt(el.number)+" - "+el.model+" - "+el.licPlate}
               key={index}
               ref={parseInt(el.number)}
@@ -177,6 +202,9 @@ export default class FormCC extends React.Component {
           </Form>
           <View style={styles.addNew}>
                 <Button title={'Guardar'} color="black" onPress={this.guardarConductor } />
+          </View>
+          <View style={styles.addNew}>
+                <Button title={'Agregar un transporte'} color="black" onPress={this.addTransport } />
           </View>
         </ScrollView>
       </TouchableWithoutFeedback>

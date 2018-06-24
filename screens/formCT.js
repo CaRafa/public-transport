@@ -86,7 +86,7 @@ export default class FormCT extends React.Component {
           active: true,
           color: this.state.formData.color,
           seats: this.state.formData.seats,
-          owner: this.object.owner._id
+          // owner: this.object.owner._id
         })
        });
 
@@ -94,7 +94,8 @@ export default class FormCT extends React.Component {
       this.setState({result: result.tran});
       this.infoLoaded = true;
       this.UpdateEstadisticaAsync()
-      this.updateConductor();
+      // this.updateConductor();
+
     } catch(e) {
       this.setState({result: e});
     }
@@ -155,8 +156,8 @@ export default class FormCT extends React.Component {
 
      if(this.object){
         this.CreateTranWithOwnerAsync();
-        this.props.navigation.navigate('Transportes');
-
+        // this.props.navigation.navigate('Transportes');
+        this.props.navigation.goBack(null)
         
       }
       else{
@@ -167,22 +168,7 @@ export default class FormCT extends React.Component {
 
   }
 
-  // agregarRuta = (object, index) => {
-  //   if(this.addingRoutes.length == 0){
-  //     this.addingRoutes.push(object._id)
-  //   }else{
-  //     var splice = false;
-  //     for(var i=0; i < this.addingRoutes.length; i++ ){
-  //       if(this.addingRoutes[i] == object._id){
-  //         this.addingRoutes.splice(i,1)
-  //         splice=true;
-  //       }
-  //     }
-  //     if(splice == false){
-  //         this.addingRoutes.push(object._id)
-  //     }
-  //   }
-  // }
+  
   
   render() {
     return (
